@@ -1,0 +1,101 @@
+﻿@model IEnumerable<Pitcher.Models.User>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.UserLastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserFirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserIsLeader)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserContactEmail)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserPhoneNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserAddress)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserPostCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserCountry)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserMobileNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserState)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserLogInName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserPassword)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserLastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserFirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserIsLeader)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserContactEmail)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserPhoneNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserAddress)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserPostCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserCountry)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserMobileNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserState)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserLogInName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserPassword)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
