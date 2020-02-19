@@ -23,7 +23,7 @@ namespace Pitcher
                 var services = scope.ServiceProvider;
                 try
                 {
-                    var context = services.GetRequiredService<SchoolContext>();
+                    var context = services.GetRequiredService<TeamContext>();
                     DbInitializer.Initialize(context);
                 }
                 catch (Exception ex)
