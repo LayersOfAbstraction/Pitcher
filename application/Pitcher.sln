@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pitcher", "ContosoUniversity\Pitcher.csproj", "{8E0B07DD-1A88-472F-A26A-0E0A7148F016}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pitcher", "Pitcher\Pitcher.csproj", "{8E0B07DD-1A88-472F-A26A-0E0A7148F016}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
