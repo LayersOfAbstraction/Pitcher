@@ -17,17 +17,8 @@ namespace Pitcher.Models
         [Required]
         [StringLength(20,ErrorMessage = "Last Name cannot be longer than 20 characters.")]
         [Display(Name = "First Name")]
-        [Column("FirstName")]
-        public string UserFirstMidName { get; set; }
-
-        // [Display(Name = "Full Name")]
-        // public string FullName
-        // {
-        //     get
-        //     {
-        //         return UserLastName + ", " + UserFirstMidName;
-        //     }
-        // }        
+        [Column("UserFirstName")]
+        public string UserFirstName { get; set; }     
         
         [Display(Name = "Is A Leader?")]
         [Column("UserIsLeader")]
@@ -42,7 +33,7 @@ namespace Pitcher.Models
         [StringLength(20,ErrorMessage = "Phone number cannot be longer than 20 characters.")]
         [Display(Name = "Phone Number")]
         [Column("UserPhoneNumber")]
-        public string UserPhoneNumber{get;set;}
+        public long UserPhoneNumber{get;set;}
         
         [StringLength(37,ErrorMessage = "Address cannot be longer than 37 characters.")]
         [Display(Name = "Address")]
@@ -62,7 +53,7 @@ namespace Pitcher.Models
         [StringLength(20,ErrorMessage = "Mobile Number cannot be longer than 20 characters.")]
         [Display(Name = "Mobile Number")]
         [Column("UserMobileNumber")]
-        public int UserMobileNumber {get;set;}
+        public long UserMobileNumber {get;set;}
 
         [StringLength(3,ErrorMessage = "State cannot be longer than 3 characters.")]
         [Display(Name = "State")]
@@ -70,7 +61,7 @@ namespace Pitcher.Models
         public string UserState {get;set;}
 
         [Required]
-        [StringLength(8,ErrorMessage = "Username Cannot be longer than 8 characters.")]
+        [StringLength(18,ErrorMessage = "Username Cannot be longer than 8 characters.")]
         [Display(Name = "Username")]
         [Column("UserLogInName")]
         public string UserLogInName {get;set;}
@@ -80,5 +71,6 @@ namespace Pitcher.Models
         [Display(Name = "Password")]
         [Column("UserPassword")]
         public string UserPassword {get;set;}
+
     }
 }
