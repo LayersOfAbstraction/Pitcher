@@ -30,7 +30,7 @@ namespace Pitcher.Models
                 
         [Required]
         [StringLength(30, MinimumLength = 3, ErrorMessage = "Email address be bettween 3 to 30 characters.")]
-        [DataType(DataType.Text)]
+        [DataType(DataType.EmailAddress)]
         [Display(Name = "Email")]
         [EmailAddress(ErrorMessage = "Invalid Email Address")]
         [Column("UserContactEmail")]
@@ -38,7 +38,7 @@ namespace Pitcher.Models
         
         [StringLength(20, MinimumLength = 5,ErrorMessage = "Phone Number must be bettween 5 to 30 characters." +
             "Advise you input the full international number if user is out of state.")]
-        [DataType(DataType.Text)]
+        [DataType(DataType.PhoneNumber)]
         [Display(Name = "Phone Number")]
         [Column("UserPhoneNumber")]
         public long UserPhoneNumber{get;set;}
@@ -50,7 +50,6 @@ namespace Pitcher.Models
         public string UserAddress{get;set;}
 
         [StringLength(32, MinimumLength = 2, ErrorMessage = "Post Code must be bettween 2 to 32 characters.")]
-        [DataType(DataType.Text)]
         [Display(Name = "Post Code")]
         [Column("UserPostCode")]
         public int UserPostCode {get;set;}
@@ -63,7 +62,7 @@ namespace Pitcher.Models
 
         [StringLength(20, MinimumLength = 5, ErrorMessage = "Mobile Number must be bettween 5 to 20 characters." +
             "Advise you input the full international number if user is out of state.")]
-        [DataType(DataType.Text)]
+        [DataType(DataType.PhoneNumber)]
         [Display(Name = "Mobile Number")]
         [Column("UserMobileNumber")]
         public long UserMobileNumber {get;set;}
