@@ -1,10 +1,11 @@
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
 
 namespace Pitcher.Models
 {
-    public class Registrations
+    public class Registration
     {
         public int ID {get;set;}
         
@@ -12,13 +13,7 @@ namespace Pitcher.Models
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         [Display(Name = "Start Date")]
-        public DateTime UserFirstName { get; set; }
-
-        [Required]
-        [Display(Name = "Is A Leader?")]
-        [Column("UserIsLeader")]
+        [Column("RegistrationDate")]
         public DateTime RegistrationDate {get;set;}
-
-        
     }
 }
