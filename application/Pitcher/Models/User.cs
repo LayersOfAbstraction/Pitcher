@@ -81,7 +81,7 @@ namespace Pitcher.Models
         public string UserLogInName {get;set;}
 
         [Required]
-        [StringLength(30, MinimumLength = 8, ErrorMessage = "* Password Cannot be bettween 8 to 30 characters.")]
+        [StringLength(30, MinimumLength = 8, ErrorMessage = "* Password must be bettween 8 to 30 characters.")]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
         [Column("UserPassword")]
