@@ -18,9 +18,6 @@ namespace Pitcher.Data
             modelBuilder.Entity<User>().ToTable("tblUser");
             modelBuilder.Entity<Registration>().ToTable("tblRegistration");
             modelBuilder.Entity<Job>().ToTable("tblJob");
-
-            modelBuilder.Entity<Registration>()
-                .HasKey(r => new { r.JobID, r.UserID });
         }
     }
 }
