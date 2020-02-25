@@ -31,9 +31,15 @@ namespace Pitcher.Data
 
             var registrations = new Registration[]
             {
+<<<<<<< HEAD
                 new Registration{ID=1, UserID=1, JobID=1, RegistrationDate=DateTime.Parse("2005-09-01")},
                 new Registration{ID=2, UserID=2, JobID=2, RegistrationDate=DateTime.Parse("2004-03-07")},
                 new Registration{ID=3, UserID=3, JobID=3, RegistrationDate=DateTime.Parse("2004-02-13")}
+=======
+                new Registration{ID=1, RegistrationDate=DateTime.Parse("2005-09-01")},
+                new Registration{ID=2, RegistrationDate=DateTime.Parse("2004-03-07")},
+                new Registration{ID=3, RegistrationDate=DateTime.Parse("2004-02-13")}
+>>>>>>> 01b69e31805a9a1b81322306c2e3345e7923ca61
             };
 
             foreach (Registration r in registrations)
