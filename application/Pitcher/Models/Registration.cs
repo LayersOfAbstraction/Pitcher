@@ -13,14 +13,10 @@ namespace Pitcher.Models
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         [Display(Name = "Start Date")]
-        public DateTime UserFirstName { get; set; }
-
-        [Required]
-        [Display(Name = "Is A Leader?")]
-        [Column("UserIsLeader")]
+        [Column("RegistrationDate")]
         public DateTime RegistrationDate {get;set;}
 
-        public User Users {get;set;}
-        public Job Jobs {get;set;}
+        public User User {get;set;}
+        public Job Job {get;set;}
     }
 }
