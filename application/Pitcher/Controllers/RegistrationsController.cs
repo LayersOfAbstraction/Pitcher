@@ -37,7 +37,7 @@ namespace Pitcher.Controllers
             var registration = await _context.Registrations
                 .Include(r => r.Job)
                 .Include(r => r.User)
-                .FirstOrDefaultAsync(m => m.ID == id);
+                .FirstOrDefaultAsync(r => r.ID == id);
             if (registration == null)
             {
                 return NotFound();
@@ -68,7 +68,7 @@ namespace Pitcher.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["JobID"] = new SelectList(_context.Jobs, "ID", "JobTitle", registration.JobID);
-            ViewData["UserID"] = new SelectList(_context.Users, "ID", "UserContactEmail", registration.UserID);
+            ViewData["UserID"] = new SelectList(_context.Users, "ID", "UserFullname", registration.UserID);
             return View(registration);
         }
 
@@ -86,7 +86,7 @@ namespace Pitcher.Controllers
                 return NotFound();
             }
             ViewData["JobID"] = new SelectList(_context.Jobs, "ID", "JobTitle", registration.JobID);
-            ViewData["UserID"] = new SelectList(_context.Users, "ID", "UserContactEmail", registration.UserID);
+            ViewData["UserID"] = new SelectList(_context.Users, "ID", "UserFullname", registration.UserID);
             return View(registration);
         }
 
@@ -123,7 +123,7 @@ namespace Pitcher.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["JobID"] = new SelectList(_context.Jobs, "ID", "JobTitle", registration.JobID);
-            ViewData["UserID"] = new SelectList(_context.Users, "ID", "UserContactEmail", registration.UserID);
+            ViewData["UserID"] = new SelectList(_context.Users, "ID", "UserFullname", registration.UserID);
             return View(registration);
         }
 
