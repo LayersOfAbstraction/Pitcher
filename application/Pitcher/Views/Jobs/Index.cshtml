@@ -1,4 +1,4 @@
-@model IEnumerable<Pitcher.Models.Registration>
+@model IEnumerable<Pitcher.Models.Job>
 
 @{
     ViewData["Title"] = "Index";
@@ -13,13 +13,19 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.RegistrationDate)
+                @Html.DisplayNameFor(model => model.JobTitle)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.User)
+                @Html.DisplayNameFor(model => model.JobDescription)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Job)
+                @Html.DisplayNameFor(model => model.JobStartDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.JobDeadline)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.JobIsComplete)
             </th>
             <th></th>
         </tr>
@@ -28,13 +34,19 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.RegistrationDate)
+                @Html.DisplayFor(modelItem => item.JobTitle)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.User.UserContactEmail)
+                @Html.DisplayFor(modelItem => item.JobDescription)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Job.JobTitle)
+                @Html.DisplayFor(modelItem => item.JobStartDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.JobDeadline)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.JobIsComplete)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
