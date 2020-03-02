@@ -22,8 +22,7 @@ namespace Pitcher.Controllers
         // GET: Jobs
         public async Task<IActionResult> Index()
         {
-            var teamContext = _context.Registrations.Include(r => r.Job).Include(r => r.User);
-            return View(await teamContext.ToListAsync());
+            return View(await _context.Jobs.ToListAsync());
         }
 
         // GET: Jobs/Details/5
@@ -34,23 +33,19 @@ namespace Pitcher.Controllers
                 return NotFound();
             }
 
-            var registration = await _context.Registrations
-                .Include(r => r.Job)
-                .Include(r => r.User)
+            var job = await _context.Jobs
                 .FirstOrDefaultAsync(m => m.ID == id);
-            if (registration == null)
+            if (job == null)
             {
                 return NotFound();
             }
 
-            return View(registration);
+            return View(job);
         }
 
         // GET: Jobs/Create
         public IActionResult Create()
         {
-            ViewData["JobID"] = new SelectList(_context.Jobs, "ID", "JobTitle");
-            ViewData["UserID"] = new SelectList(_context.Users, "ID", "UserContactEmail");
             return View();
         }
 
@@ -59,17 +54,15 @@ namespace Pitcher.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,UserID,JobID,RegistrationDate")] Registration registration)
+        public async Task<IActionResult> Create([Bind("ID,JobTitle,JobDescription,JobStartDate,JobDeadline,JobIsComplete")] Job job)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(registration);
+                _context.Add(job);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["JobID"] = new SelectList(_context.Jobs, "ID", "JobTitle", registration.JobID);
-            ViewData["UserID"] = new SelectList(_context.Users, "ID", "UserContactEmail", registration.UserID);
-            return View(registration);
+            return View(job);
         }
 
         // GET: Jobs/Edit/5
@@ -80,14 +73,12 @@ namespace Pitcher.Controllers
                 return NotFound();
             }
 
-            var registration = await _context.Registrations.FindAsync(id);
-            if (registration == null)
+            var job = await _context.Jobs.FindAsync(id);
+            if (job == null)
             {
                 return NotFound();
             }
-            ViewData["JobID"] = new SelectList(_context.Jobs, "ID", "JobTitle", registration.JobID);
-            ViewData["UserID"] = new SelectList(_context.Users, "ID", "UserContactEmail", registration.UserID);
-            return View(registration);
+            return View(job);
         }
 
         // POST: Jobs/Edit/5
@@ -95,9 +86,9 @@ namespace Pitcher.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,UserID,JobID,RegistrationDate")] Registration registration)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,JobTitle,JobDescription,JobStartDate,JobDeadline,JobIsComplete")] Job job)
         {
-            if (id != registration.ID)
+            if (id != job.ID)
             {
                 return NotFound();
             }
@@ -106,12 +97,12 @@ namespace Pitcher.Controllers
             {
                 try
                 {
-                    _context.Update(registration);
+                    _context.Update(job);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!RegistrationExists(registration.ID))
+                    if (!JobExists(job.ID))
                     {
                         return NotFound();
                     }
@@ -122,9 +113,7 @@ namespace Pitcher.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["JobID"] = new SelectList(_context.Jobs, "ID", "JobTitle", registration.JobID);
-            ViewData["UserID"] = new SelectList(_context.Users, "ID", "UserContactEmail", registration.UserID);
-            return View(registration);
+            return View(job);
         }
 
         // GET: Jobs/Delete/5
@@ -135,16 +124,14 @@ namespace Pitcher.Controllers
                 return NotFound();
             }
 
-            var registration = await _context.Registrations
-                .Include(r => r.Job)
-                .Include(r => r.User)
+            var job = await _context.Jobs
                 .FirstOrDefaultAsync(m => m.ID == id);
-            if (registration == null)
+            if (job == null)
             {
                 return NotFound();
             }
 
-            return View(registration);
+            return View(job);
         }
 
         // POST: Jobs/Delete/5
@@ -152,15 +139,15 @@ namespace Pitcher.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var registration = await _context.Registrations.FindAsync(id);
-            _context.Registrations.Remove(registration);
+            var job = await _context.Jobs.FindAsync(id);
+            _context.Jobs.Remove(job);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool RegistrationExists(int id)
+        private bool JobExists(int id)
         {
-            return _context.Registrations.Any(e => e.ID == id);
+            return _context.Jobs.Any(e => e.ID == id);
         }
     }
 }
