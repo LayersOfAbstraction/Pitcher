@@ -34,6 +34,11 @@ namespace Pitcher.Controllers
             }
 
             var user = await _context.Users
+                //Include navigational properties for User.Registrations and 
+                //User.Job 
+                .Include(u => u.Registrations)
+                    .ThenInclude(r => r.Job)
+                .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (user == null)
             {
