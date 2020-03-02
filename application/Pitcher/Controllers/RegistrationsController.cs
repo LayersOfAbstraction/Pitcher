@@ -59,16 +59,26 @@ namespace Pitcher.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,UserID,JobID,RegistrationDate")] Registration registration)
+        public async Task<IActionResult> Create([Bind("UserID,JobID,RegistrationDate")] Registration registration)
         {
-            if (ModelState.IsValid)
+            try
             {
-                _context.Add(registration);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    _context.Add(registration);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                ViewData["JobID"] = new SelectList(_context.Jobs, "ID", "JobTitle", registration.JobID);
+                ViewData["UserID"] = new SelectList(_context.Users, "ID", "UserFullname", registration.UserID);
             }
-            ViewData["JobID"] = new SelectList(_context.Jobs, "ID", "JobTitle", registration.JobID);
-            ViewData["UserID"] = new SelectList(_context.Users, "ID", "UserFullname", registration.UserID);
+            catch (DbUpdateException /* ex */)
+            {                
+                //Log the error (uncomment ex variable name and write a log.
+                ModelState.AddModelError("", "Unable to save changes. " +
+                "Try again, and if the problem persists " +
+                "see your system administrator.");
+            }
             return View(registration);
         }
 
@@ -93,42 +103,45 @@ namespace Pitcher.Controllers
         // POST: Registrations/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        // COPY AND PASTE THIS METHOD CUSTOMIZATION INTO OTHER CONTROLLERS. Prevents overposting.
+        [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,UserID,JobID,RegistrationDate")] Registration registration)
+        public async Task<IActionResult> EditPost(int? id)
         {
-            if (id != registration.ID)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            var registrationToUpdate = await _context.Registrations.FirstOrDefaultAsync(u => u.ID == id);
+            if(await TryUpdateModelAsync<Registration>(
+                registrationToUpdate,
+                //Empty string is a prefix for form field names.
+                "",
+                r => r.UserID, u => u.JobID, u => u.RegistrationDate))
             {
                 try
-                {
-                    _context.Update(registration);
+                {                    
                     await _context.SaveChangesAsync();
+                    ViewData["JobID"] = new SelectList(_context.Jobs, "ID", "JobTitle", registrationToUpdate.JobID);
+                    ViewData["UserID"] = new SelectList(_context.Users, "ID", "UserFullname", registrationToUpdate.UserID);
+                    return RedirectToAction(nameof(Index));
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (DbUpdateConcurrencyException /* ex */)
                 {
-                    if (!RegistrationExists(registration.ID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    //Log the error (uncomment ex variable name and write a log.)
+                    ModelState.AddModelError("", "Unable to save changes. " +
+                        "Try again, and if the problem persists, " +
+                        "see your system administrator.");
                 }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["JobID"] = new SelectList(_context.Jobs, "ID", "JobTitle", registration.JobID);
-            ViewData["UserID"] = new SelectList(_context.Users, "ID", "UserFullname", registration.UserID);
-            return View(registration);
+            }            
+            return View(registrationToUpdate);       
         }
 
         // GET: Registrations/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        // COPY AND PASTE THIS METHOD CUSTOMIZATION INTO OTHER CONTROLLERS.
+        // Catches delete failures and allows for retry.
+        public async Task<IActionResult> Delete(int? id, bool? saveChangesError = false)
         {
             if (id == null)
             {
@@ -136,26 +149,44 @@ namespace Pitcher.Controllers
             }
 
             var registration = await _context.Registrations
+                .AsNoTracking()
                 .Include(r => r.Job)
                 .Include(r => r.User)
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (registration == null)
             {
-                return NotFound();
+                ViewData["ErrorMessage"] =
+                    "Delete failed. Try again, and if the problem persists " +
+                    "see your system administrator.";
             }
 
             return View(registration);
         }
 
         // POST: Registrations/Delete/5
+        // COPY AND PASTE THIS METHOD CUSTOMIZATION INTO OTHER CONTROLLERS.
+        //Catches delete failures and allows for retry.
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var registration = await _context.Registrations.FindAsync(id);
-            _context.Registrations.Remove(registration);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            if(registration == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            try
+            {
+                _context.Registrations.Remove(registration);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            catch(DbUpdateException /* ex */)
+            {
+                //Log the error (uncomment ex variable name and write a log.)
+                return RedirectToAction(nameof(Delete), new {id = id, saveChangesError = true});
+            }
         }
 
         private bool RegistrationExists(int id)
