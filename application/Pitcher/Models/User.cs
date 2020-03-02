@@ -83,6 +83,8 @@ namespace Pitcher.Models
         [Display(Name = "Password")]
         [Column("UserPassword")]
         public string UserPassword {get;set;}
+        
+        public string UserFullname => string.Format("{0} {1}", UserFirstName, UserLastName);
 
         public ICollection<Registration> Registrations {get;set;}
     }
