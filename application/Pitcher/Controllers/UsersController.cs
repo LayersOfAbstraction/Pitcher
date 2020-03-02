@@ -35,7 +35,7 @@ namespace Pitcher.Controllers
             }
 
             var user = await _context.Users
-                //Include navigational properties for User.Registrations.
+                //Include navigational properties for Registrations and Jobs.
                 .Include(u => u.Registrations)
                     .ThenInclude(r => r.Job)
                 .AsNoTracking()
