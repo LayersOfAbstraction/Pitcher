@@ -12,7 +12,7 @@ namespace Pitcher.Models
         [Required]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        [Display(Name = "Start Date")]
+        [Display(Name = "User Start Date")]
         [Column("RegistrationDate")]
         public DateTime RegistrationDate {get;set;}
 
