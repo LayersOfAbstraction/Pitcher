@@ -27,6 +27,7 @@ namespace Pitcher.Controllers
         }
 
         // GET: Registrations/Details/5
+        // COPY AND PASTE THIS METHOD CUSTOMIZATION INTO OTHER CONTROLLERS.
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -37,6 +38,7 @@ namespace Pitcher.Controllers
             var registration = await _context.Registrations
                 .Include(r => r.Job)
                 .Include(r => r.User)
+                .AsNoTracking()
                 .FirstOrDefaultAsync(r => r.ID == id);
             if (registration == null)
             {
@@ -57,6 +59,7 @@ namespace Pitcher.Controllers
         // POST: Registrations/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // COPY AND PASTE THIS METHOD CUSTOMIZATION INTO OTHER CONTROLLERS. 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("UserID,JobID,RegistrationDate")] Registration registration)
