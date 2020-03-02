@@ -82,6 +82,32 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.UserPassword)
         </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Registrations)
+        </dt>
+        <dd class="col-sm-10">
+            <table class="table">
+                <tr>
+                    <th>Job Title</th>
+                    <th>Registration Date</th>
+                </tr>
+                @* Shows all Jobs for User *@
+                @foreach (var item in Model.Registrations)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Job.JobTitle)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.RegistrationDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Job.JobIsComplete)
+                        </td>
+                    </tr>
+                }
+            </table>
+        </dd>
     </dl>
 </div>
 <div>
