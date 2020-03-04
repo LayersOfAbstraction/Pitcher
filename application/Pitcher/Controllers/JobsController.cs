@@ -20,9 +20,58 @@ namespace Pitcher.Controllers
         }
 
         // GET: Jobs
-        public async Task<IActionResult> Index()
+        // COPY AND PASTE THIS METHOD CUSTOMIZATION INTO OTHER CONTROLLERS. Enables sorting. 
+        public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? pageNumber)
         {
-            return View(await _context.Jobs.ToListAsync());
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["JobTitleSortParm"] = String.IsNullOrEmpty(sortOrder) ? "jobTitle_desc" : "";
+            ViewData["JobStartDateSortParm"] = sortOrder == "JobStartDate" ? "JobStart_date_desc" : "JobStartDate";
+            ViewData["JobDeadlineDateSortParm"] = sortOrder == "JobDeadlineDate" ? "JobDeadline_date_desc" : "JobDeadlineDate";
+            ViewData["CurrentFilter"] = searchString;
+            var jobs = from j in _context.Jobs
+                        select j;
+
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                jobs = jobs.Where(j => j.JobTitle.Contains(searchString)
+                                    || j.JobDescription.Contains(searchString));
+            }
+
+            switch (sortOrder)
+            {
+                case "jobTitle_desc":
+                    jobs = jobs.OrderByDescending(j => j.JobTitle);
+                    break;
+                case "JobStartDate":
+                    jobs = jobs.OrderBy(j => j.JobStartDate);
+                    break;
+                case "JobStart_date_desc":
+                    jobs = jobs.OrderByDescending(j => j.JobStartDate);
+                    break;
+                case "JobDeadline_date_desc":
+                    jobs = jobs.OrderByDescending(j => j.JobDeadline);
+                    break;
+                case "JobDeadlineDate":
+                    jobs = jobs.OrderBy(j => j.JobDeadline);
+                    break;
+                //By default JobTitle is in ascending order when entity is loaded. 
+                default:
+                    jobs = jobs.OrderBy(j => j.JobTitle);
+                    break;                    
+            } 
+
+            int pageSize = 20;
+            return View(await PaginatedList<Job>.CreateAsync(jobs.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 
         // GET: Jobs/Details/5

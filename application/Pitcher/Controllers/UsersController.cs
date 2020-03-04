@@ -20,9 +20,50 @@ namespace Pitcher.Controllers
         }
 
         // GET: Users
-        public async Task<IActionResult> Index()
+        // COPY AND PASTE THIS METHOD CUSTOMIZATION INTO OTHER CONTROLLERS. Enables sorting. 
+        public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? pageNumber)
         {
-            return View(await _context.Users.ToListAsync());
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["LastNameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "LastName_desc" : "";
+            ViewData["FirstNameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "FirstName_desc" : "";
+            ViewData["FirstNameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "FirstName" : "";
+            ViewData["CurrentFilter"] = searchString;
+            var users = from u in _context.Users
+                        select u;
+
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                users = users.Where(u => u.UserLastName.Contains(searchString)
+                                    || u.UserFirstName.Contains(searchString));
+            }
+            
+            switch (sortOrder)
+            {
+                case "FirstName_desc":
+                    users = users.OrderByDescending(u => u.UserFirstName);
+                    break;
+                case "FirstName":
+                    users = users.OrderBy(u => u.UserFirstName);
+                    break;
+                case "LastName_desc":
+                    users = users.OrderByDescending(u => u.UserLastName);
+                    break;
+                default:
+                    users = users.OrderBy(u => u.UserLastName);
+                    break;
+            }            
+            
+            int pageSize = 20;
+            return View(await PaginatedList<User>.CreateAsync(users.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 
         // GET: Users/Details/5
