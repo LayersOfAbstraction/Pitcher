@@ -57,7 +57,7 @@ namespace Pitcher.Controllers
                     break;
             }
             
-            return View(await registrations.ToListAsync());
+            return View(await registrations.AsNoTracking().ToListAsync());
         }
 
         // GET: Registrations/Details/5
