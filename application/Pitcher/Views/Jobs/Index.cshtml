@@ -1,4 +1,4 @@
-@model IEnumerable<Pitcher.Models.Job>
+@model PaginatedList<Pitcher.Models.Job>
 
 @{
     ViewData["Title"] = "Index";
@@ -24,19 +24,19 @@
         <tr>
             <th>
                 @*COPY AND PASTE THIS METHOD CUSTOMIZATION INTO OTHER VIEWS TO ENABLE SORTING.*@
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["JobTitleSortParm"]">@Html.DisplayNameFor(model => model.JobTitle)</a>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["JobTitleSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Job Title</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.JobDescription)
+                Job Description
             </th>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["JobStartDateSortParm"]">@Html.DisplayNameFor(model => model.JobStartDate)</a>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["JobStartDateSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Job Start Date</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["JobDeadlineDateSortParm"]">@Html.DisplayNameFor(model => model.JobDeadline)</a>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["JobDeadlineDateSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Job Deadline)</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.JobIsComplete)
+                Job Is Complete
             </th>
             <th></th>
         </tr>
@@ -68,3 +68,26 @@
 }
     </tbody>
 </table>
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.PageIndex - 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-secondary @prevDisabled"
+   button type="button">
+    Previous
+</a>
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.PageIndex + 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-secondary @nextDisabled"
+   button type="button">
+   
+    Next
+</a>
