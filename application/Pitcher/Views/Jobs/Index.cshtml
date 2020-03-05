@@ -15,11 +15,11 @@
         <p>
             Find by name: <input type="text" name="SearchString" value="@ViewData["currentFilter"]" />
             <input type="submit" value="Search" button type="button" class="btn btn-primary" /> |
-            <a asp-action="Index" button type="button" class="btn btn-primary">Back to Full List </a>
+            <a asp-action="Index">Back to Full List </a>
         </p>
     </div>
 </form>
-<table class="table">
+<table class="table table-hover">
     <thead>
         <tr>
             <th>
@@ -61,7 +61,7 @@
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ID" button type="button" class="btn btn-primary btn-block">Edit</a> 
-                <a asp-action="Details" asp-route-id="@item.ID" button type="button" class="btn btn-primary btn-block">Details</a> 
+                <a asp-action="Details" asp-route-id="@item.ID" button type="button" class="btn btn-info btn-block">Details</a> 
                 <a asp-action="Delete" asp-route-id="@item.ID" button type="button" class="btn btn-primary btn-block">Delete</a>
             </td>
         </tr>

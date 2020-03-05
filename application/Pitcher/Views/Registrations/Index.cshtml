@@ -9,17 +9,30 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
+
+ @*COPY AND PASTE THIS TAG HELPER METHOD TEXTBOX CUSTOMIZATION INTO OTHER VIEWS TO ENABLE SEARCHING.*@
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Find by name: <input type="text" name="SearchString" value="@ViewData["currentFilter"]" />
+            <input type="submit" value="Search" class="btn btn-primary" /> |
+            <a asp-action="Index">Back to Full List</a>
+        </p>
+    </div>
+</form>
+
+<table class="table table-hover">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.RegistrationDate)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["RegDateSortParm"]">@Html.DisplayNameFor(model => model.RegistrationDate)</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.User)
+                @* COPY AND PASTE THIS METHOD CUSTOMIZATION INTO OTHER VIEWS BOUND TO COMPOSITE TABLES. Enables sorting. *@
+                 <a asp-action="Index" asp-route-sortOrder="@ViewData["FullNameSortParam"]">@Html.DisplayNameFor(model => model.User)</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Job)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["JobTitleSortParam"]">@Html.DisplayNameFor(model => model.Job)</a>
             </th>
             <th></th>
         </tr>
@@ -37,9 +50,9 @@
                 @Html.DisplayFor(modelItem => item.Job.JobTitle)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.ID" button type="button" class="btn btn-primary btn-block">Edit</a> 
+                <a asp-action="Details" asp-route-id="@item.ID" button type="button" class="btn btn-info btn-block">Details</a> 
+                <a asp-action="Delete" asp-route-id="@item.ID" button type="button" class="btn btn-primary btn-block">Delete</a>
             </td>
         </tr>
 }

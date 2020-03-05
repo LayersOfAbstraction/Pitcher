@@ -20,10 +20,44 @@ namespace Pitcher.Controllers
         }
 
         // GET: Registrations
-        public async Task<IActionResult> Index()
+        // COPY AND PASTE THIS METHOD CUSTOMIZATION INTO OTHER CONTROLLERS BOUND TO COMPOSITE TABLES. Enables sorting.
+        public async Task<IActionResult> Index(string sortOrder, string searchString)
         {
-            var teamContext = _context.Registrations.Include(r => r.Job).Include(r => r.User);
-            return View(await teamContext.ToListAsync());
+            ViewData["FullNameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "fullName_desc" : "";
+            ViewData["JobTitleSortParam"] = String.IsNullOrEmpty(sortOrder) ? "jobTitle_desc" : "";
+            ViewData["JobTitleSortParam"] = String.IsNullOrEmpty(sortOrder) ? "jobTitle" : "";
+            ViewData["RegDateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
+            ViewData["CurrentFilter"] = searchString;
+            IQueryable <Registration> registrations = _context.Registrations.Include(r => r.Job).Include(r => r.User);
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                registrations = registrations.Where(r => r.User.ToString().Contains(searchString)
+                                    || r.Job.ToString().Contains(searchString));
+            }
+            switch (sortOrder)
+            {
+                case "fullName_desc":
+                    registrations = registrations.OrderByDescending(r => r.User);
+                    break;
+                case "jobTitle_desc":
+                    registrations = registrations.OrderByDescending(r => r.Job);
+                    break;
+                case "jobTitle":
+                registrations = registrations.OrderBy(r => r.Job);
+                    break;
+                case "Date":
+                registrations = registrations.OrderBy(r => r.RegistrationDate);
+                    break;
+                case "date_desc":
+                registrations = registrations.OrderByDescending(r => r.RegistrationDate);
+                    break;
+                //By default FullName is in ascending order when entity is loaded. 
+                default:
+                    registrations = registrations.OrderBy(r => r.User);
+                    break;
+            }
+            
+            return View(await registrations.ToListAsync());
         }
 
         // GET: Registrations/Details/5
