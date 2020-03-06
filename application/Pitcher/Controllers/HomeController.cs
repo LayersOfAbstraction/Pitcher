@@ -35,12 +35,11 @@ namespace Pitcher.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
         
-        //TO DO: GROUP UserCount by JobName. 
         public async Task<ActionResult> About()
         {
             IQueryable<ProjectTotalsGroup> data = 
-                from jobs in _context.Jobs
-                group jobs by jobs.JobTitle into projectGroup
+                from registrations in _context.Registrations
+                group registrations by registrations.Job.JobTitle into projectGroup
                 select new ProjectTotalsGroup()
                 {
                     JobName = projectGroup.Key,
