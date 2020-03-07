@@ -34,12 +34,13 @@ namespace Pitcher.Models
         [DataType(DataType.EmailAddress)]
         [Display(Name = "Email")]
         [Column("UserContactEmail")]
-        public string UserContactEmail{get;set;}        
+        public string UserContactEmail{get;set;}      
         
+        // [Required(AllowEmptyStrings = true)]
         [Display(Name = "Phone Number")]
-        [DataType(DataType.PhoneNumber)]
+        [Phone()]
         [Column("UserPhoneNumber")]
-        public long UserPhoneNumber{get;set;}
+        public string UserPhoneNumber{get;set;}
         
         [StringLength(37,ErrorMessage = "Address cannot be longer than 37 characters.")]
         [DataType(DataType.Text)]
@@ -58,11 +59,11 @@ namespace Pitcher.Models
         [Column("UserCountry")] 
         public string UserCountry {get;set;}
         
-        //This regular expression allows valid mobile numbers throughout the world.
-        [DataType(DataType.PhoneNumber)]
+        
+        [Phone()]
         [Display(Name = "Mobile Number")]
         [Column("UserMobileNumber")]
-        public long UserMobileNumber {get;set;}
+        public string UserMobileNumber {get;set;}
 
         [StringLength(3,ErrorMessage = "State cannot be longer than 3 characters.")]
         [DataType(DataType.Text)]
