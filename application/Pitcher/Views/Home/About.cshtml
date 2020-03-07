@@ -1,7 +1,7 @@
 @model IEnumerable<Pitcher.Models.TeamViewModels.ProjectTotalsGroup>
 
 @{
-    ViewData["Title"] = "Project Body Statistics";
+    ViewData["Title"] = "Project Statistics";
 }
 
 <h2>Poject statistics</h2>
@@ -14,6 +14,9 @@
         <th>
             Staff total
         </th>
+        <th>
+            @* Job Deadline *@
+        </th>
     </tr>
     
     @foreach (var item in Model)
@@ -24,6 +27,9 @@
             </td>
             <td>
                 @item.UserCount
+            </td>
+            <td>
+                @* @Html.DisplayFor(modelItem => item.DeadlineDate) *@
             </td>
         </tr>
     }
