@@ -25,10 +25,10 @@
         <tr>
             <th>
                 @*COPY AND PASTE THIS METHOD CUSTOMIZATION INTO OTHER VIEWS TO ENABLE SORTING.*@
-               <a asp-action="Index" asp-route-sortOrder="@ViewData["LastNameSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Last Name</a>
+               <a asp-action="Index" asp-route-sortOrder="@ViewData["LastNameSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">First Name</a>
             </th>
             <th>
-               <a asp-action="Index" asp-route-sortOrder="@ViewData["FirstNameSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">First Name</a>
+               <a asp-action="Index" asp-route-sortOrder="@ViewData["FirstNameSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Last Name</a>
             </th>
             <th>
                 User Is Leader
@@ -67,10 +67,10 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.UserLastName)
+                @Html.DisplayFor(modelItem => item.UserFirstName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.UserFirstName)
+                @Html.DisplayFor(modelItem => item.UserLastName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.UserIsLeader)
