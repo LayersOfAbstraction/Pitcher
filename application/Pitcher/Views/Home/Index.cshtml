@@ -31,6 +31,16 @@
                             <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="About">Project Statistics</a>
                         </li>                         
                     </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li><a asp-controller="Users" asp-action="Logout">Logout</a></li>
+                        }    
+                        else
+                        {
+                            <li><a asp-controller="Users" asp-action="Login">Login</a></li>
+                        }
+                    </ul>
                 </div>
             </div>
         </nav>
