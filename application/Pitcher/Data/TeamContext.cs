@@ -19,5 +19,7 @@ namespace Pitcher.Data
             modelBuilder.Entity<Registration>().ToTable("tblRegistration");
             modelBuilder.Entity<Job>().ToTable("tblJob");
         }
+        
+        public DbSet<Pitcher.Models.Problem> Problem { get; set; }
     }
 }
