@@ -33,9 +33,13 @@
                     </ul>
                 </div>
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <ul class="navbar-nav mr-auto">
+                    <ul class="navbar-nav mr-auto navbar-right">
+                        @* TODO: FORMAT THE LI TO BE INLINE WITH ME OTHER BOOTSTRAP COMPONENTS IN THE DIV ABOVE *@
                         @if (User.Identity.IsAuthenticated)
                         {
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-controller="Users" asp-action="Profile">@User.Identity.Name's account info</a>                                
+                            </li>
                             <li class="nav-item">
                                 <a id="qsLogoutBtn" class="nav-link text-white" asp-controller="Users" asp-action="Logout">Logout</a>
                             </li>
@@ -47,7 +51,7 @@
                             </li>
                         }
                     </ul>
-                </div>  
+                </div>
             </div>
         </nav>
     </header>
