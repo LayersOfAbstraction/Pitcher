@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Pitcher.Data;
 using Pitcher.Models;
-
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -56,6 +56,17 @@ namespace Pitcher.Controllers
         public IActionResult AccessDenied()
         {
             return View();
+        }
+
+        [Authorize]
+        public IActionResult Profile()
+        {
+            return View(new UserProfileViewModel()
+            {
+                UserSocialLoginName = User.Identity.Name,
+                UserSocialLoginEmail = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value,
+                UserSocialLoginProfileImage = User.Claims.FirstOrDefault(c => c.Type == "picture")?.Value
+            });
         }
 
         // GET: Users
