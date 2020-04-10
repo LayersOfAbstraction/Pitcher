@@ -64,7 +64,8 @@ namespace Pitcher
                 // Set the correct name claim type
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    NameClaimType = "Name"
+                    NameClaimType = "Name",
+                    RoleClaimType = "https://schemas.Aussie_Tenant.com"
                 }; 
 
                 // Set the callback path, so Auth0 will call back to http://localhost:3000/callback
