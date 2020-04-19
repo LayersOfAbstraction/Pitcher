@@ -84,6 +84,11 @@ namespace Pitcher.Models
         [Display(Name = "Password")]
         [Column("UserPassword")]
         public string UserPassword {get;set;}
+
+        [DataType(DataType.Password)]
+        [Display(Name = "Profile Image")]
+        [Column("UserProfileImage")]
+        public string UserProfileImage { get; set; }
         
         public string UserFullname => string.Format("{0} {1}", UserFirstName, UserLastName);
 

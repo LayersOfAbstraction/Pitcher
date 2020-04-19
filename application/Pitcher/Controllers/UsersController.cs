@@ -60,11 +60,11 @@ namespace Pitcher.Controllers
         [Authorize]
         public IActionResult Profile()
         {
-            return View(new UserProfileViewModel()
+            return View(new User()
             {
-                UserSocialLoginName = User.Identity.Name,
-                UserSocialLoginEmail = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value,
-                UserSocialLoginProfileImage = User.Claims.FirstOrDefault(c => c.Type == "picture")?.Value
+                UserLogInName = User.Identity.Name,
+                UserContactEmail = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value,
+                UserProfileImage = User.Claims.FirstOrDefault(c => c.Type == "picture")?.Value
             });
         }
 
@@ -207,7 +207,7 @@ namespace Pitcher.Controllers
                 userToUpdate,
                 //Empty string is a prefix for form field names.
                 "",
-                u => u.UserFirstName, u => u.UserLastName, u => u.UserFullname, u => u.UserIsLeader,
+                u => u.UserProfileImage, u => u.UserFirstName, u => u.UserLastName, u => u.UserFullname, u => u.UserIsLeader,
                 u => u.UserContactEmail, u => u.UserPhoneNumber, u => u.UserAddress,
                 u => u.UserPostCode, u => u.UserCountry, u => u.UserMobileNumber,
                 u => u.UserState, u => u.UserLogInName, u => u.UserPassword))
