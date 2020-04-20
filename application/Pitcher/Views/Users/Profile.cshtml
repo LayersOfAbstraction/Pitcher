@@ -1,0 +1,26 @@
+@model Pitcher.Models.User
+@{
+  ViewData["Title"] = "User Profile";
+}
+<table>
+    <tr>
+      <td>
+        <h2>@ViewData["Title"]</h2>
+      </td>
+    </tr>
+    <tr>
+      <td><img src="@Model.UserProfileImage"
+             alt="User Social Login Profile Image" class="img-rounded img-responsive" />
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <p>Welcome @Model.UserLogInName. Here are the claims associated with your account</p>                
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <p><i class="glyphicon glyphicon-envelope"></i> @Model.UserContactEmail</p>
+      </td>
+    </tr>
+</table>

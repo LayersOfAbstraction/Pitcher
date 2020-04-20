@@ -57,7 +57,12 @@ namespace Pitcher.Controllers
             return View();
         }
 
-        [Authorize]
+        
+        [Authorize]        
+        /// <summary>
+        /// Displays user profile.
+        /// </summary>
+        /// <returns>Info about user who logged in</returns>
         public IActionResult Profile()
         {
             return View(new User()
