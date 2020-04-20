@@ -9,6 +9,7 @@ using Pitcher.Models.TeamViewModels;
 using System;
 using Microsoft.AspNetCore.Authentication;
 using System.Globalization;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Pitcher.Controllers
 {
@@ -61,7 +62,7 @@ namespace Pitcher.Controllers
         //GROUP users by tblRegistration.Job.JobID.
         //COUNT Users.
         //DISPLAY Deadlines.
-        //COUNT Problems.
+        //COUNT Problems.        
         public async Task<ActionResult> About()
         {
             IQueryable<ProjectTotalsGroup> data = 
