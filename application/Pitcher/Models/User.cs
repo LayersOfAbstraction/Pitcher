@@ -30,7 +30,7 @@ namespace Pitcher.Models
         public bool UserIsLeader{get;set;}
                 
         [Required]
-        [StringLength(30, MinimumLength = 3, ErrorMessage = "Email address be bettween 3 to 30 characters.")]
+        [StringLength(30, MinimumLength = 3, ErrorMessage = "Email address must be bettween 3 to 30 characters.")]
         [DataType(DataType.EmailAddress)]
         [Display(Name = "Email")]
         [Column("UserContactEmail")]
