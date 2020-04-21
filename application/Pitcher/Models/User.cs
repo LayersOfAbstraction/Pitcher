@@ -85,7 +85,7 @@ namespace Pitcher.Models
         [Column("UserPassword")]
         public string UserPassword {get;set;}
 
-        [DataType(DataType.Password)]
+        [DataType(DataType.Text)]
         [Display(Name = "Profile Image")]
         [Column("UserProfileImage")]
         public string UserProfileImage { get; set; }
