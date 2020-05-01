@@ -1,4 +1,4 @@
-@model Pitcher.Models.User
+@model Pitcher.Models.AuthenticationServiceUserProfile
 @{
   ViewData["Title"] = "User Profile";
 }
@@ -15,12 +15,12 @@
     </tr>
     <tr>
       <td>
-        <p>Welcome @Model.UserLogInName. Here are the claims associated with your account</p>                
+        @* <p>Welcome @Model.UserLogInName. Here are the claims associated with your account</p>                 *@
       </td>
     </tr>
     <tr>
       <td>
-        <p><i class="glyphicon glyphicon-envelope"></i> @Model.UserContactEmail</p>
+        <p><i class="glyphicon glyphicon-envelope"></i> @Model.UserEmailAddress</p>
       </td>
     </tr>
 </table>
