@@ -76,5 +76,10 @@ namespace Pitcher.Controllers
                 };
             return View(await data.AsNoTracking().ToListAsync());  
         }
+
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
     }
 }
