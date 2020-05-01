@@ -23,11 +23,7 @@ namespace Pitcher.Models
         [DataType(DataType.Text)]
         [Display(Name = "Last Name")]
         [Column("UserLastName")]
-        public string UserLastName { get; set; }  
-        
-        [Display(Name = "Is A Leader?")]        
-        [Column("UserIsLeader")]
-        public bool UserIsLeader{get;set;}
+        public string UserLastName { get; set; }        
                 
         [Required]
         [StringLength(30, MinimumLength = 3, ErrorMessage = "Email address must be bettween 3 to 30 characters.")]
@@ -69,26 +65,7 @@ namespace Pitcher.Models
         [DataType(DataType.Text)]
         [Display(Name = "State")]
         [Column("UserState")]
-        public string UserState {get;set;}
-
-        [Required]
-        [DataType(DataType.Text)]
-        [StringLength(16, MinimumLength = 3,ErrorMessage = "Username must be bettween 1 to 16 characters.")]
-        [Display(Name = "Username")]
-        [Column("UserLogInName")]
-        public string UserLogInName {get;set;}
-
-        [Required]
-        [StringLength(30, MinimumLength = 8, ErrorMessage = "Password must be bettween 8 to 30 characters.")]
-        [DataType(DataType.Password)]
-        [Display(Name = "Password")]
-        [Column("UserPassword")]
-        public string UserPassword {get;set;}
-
-        [DataType(DataType.Text)]
-        [Display(Name = "Profile Image")]
-        [Column("UserProfileImage")]
-        public string UserProfileImage { get; set; }
+        public string UserState {get;set;}           
         
         public string UserFullname => string.Format("{0} {1}", UserFirstName, UserLastName);
 
