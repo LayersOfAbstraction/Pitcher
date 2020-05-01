@@ -18,10 +18,10 @@ namespace Pitcher.Data
 
             var users = new User[]
             {
-                new User{ UserFirstName="Carson",UserLastName="Alexander",UserIsLeader=false,UserContactEmail="calex51@gmail.com",UserPhoneNumber="61071800671518",UserAddress="54 Yankee st Runcorn",UserPostCode="4113",UserCountry="Australia",UserMobileNumber="0476162089",UserState="QLD",UserLogInName="BioGlands",UserPassword=")Bstd..%E=)_(:7"},
-                new User{ UserFirstName="Alonso",UserLastName="Meredith",UserIsLeader=true,UserContactEmail="am15@hotmail.com",UserPhoneNumber="61038002222",UserAddress="34 Webster Dandenong Park",UserPostCode="3175",UserCountry="Australia",UserMobileNumber="0423162085",UserState="VIC",UserLogInName="Bioshock32",UserPassword=")Bc--..3E=*_!j2"},
-                new User{ UserFirstName="Arturo",UserLastName="Anand",UserIsLeader=true,UserContactEmail="aa01@live.com",UserPhoneNumber="61028004278",UserAddress="72 Doug Rd Wakevale",UserPostCode="3115",UserCountry="Australia",UserMobileNumber="0423162085",UserState="VIC",UserLogInName="IdaSurvior",UserPassword="8w7n9$xY{#'i6w:ud-<.9fFDCU<-Gh"},
-                new User{ UserFirstName="Gytis",UserLastName="Barzdukas",UserIsLeader=false,UserContactEmail="gytisB@gmail.com", UserPhoneNumber="61027104224",UserAddress="156 Barnett Rd",UserPostCode="4060",UserCountry="Austraila",UserMobileNumber="0469162074",UserState="VIC",UserLogInName="AppleOfEve2",UserPassword="Ug`25R:E+-=A'o(*#"},                         
+                new User{ UserFirstName="Carson",UserLastName="Alexander",UserContactEmail="jnash486+test1@gmail.com",UserPhoneNumber="61071800671518",UserAddress="54 Yankee st Runcorn",UserPostCode="4113",UserCountry="Australia",UserMobileNumber="0476162089",UserState="QLD"},
+                new User{ UserFirstName="Alonso",UserLastName="Meredith",UserContactEmail="jnash486+am15@gmail.com",UserPhoneNumber="61038002222",UserAddress="34 Webster Dandenong Park",UserPostCode="3175",UserCountry="Australia",UserMobileNumber="0423162085",UserState="VIC"},
+                new User{ UserFirstName="Arturo",UserLastName="Anand",UserContactEmail="jnash486+aa01@gmail.com",UserPhoneNumber="61028004278",UserAddress="72 Doug Rd Wakevale",UserPostCode="3115",UserCountry="Australia",UserMobileNumber="0423162085",UserState="VIC"},
+                new User{ UserFirstName="Gytis",UserLastName="Barzdukas",UserContactEmail="	jnash486+gytisB@gmail.com", UserPhoneNumber="61027104224",UserAddress="156 Barnett Rd",UserPostCode="4060",UserCountry="Austraila",UserMobileNumber="0469162074",UserState="VIC"},                         
             };
 
             foreach (User u in users)
