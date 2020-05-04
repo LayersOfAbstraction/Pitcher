@@ -41,5 +41,7 @@ namespace Pitcher.Models
         public bool JobIsComplete{get;set;}
 
         public ICollection<Registration> Registrations {get;set;}
+
+        
     }
 }
