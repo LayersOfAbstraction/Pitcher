@@ -58,7 +58,7 @@ namespace Pitcher.Controllers
         //TO DO: Group user count by Job title with current deadline and problem count.
         //GET Users.
         //Get Job Title
-        //SELECT all users where ID = tblRegistration.JobID and tblProblem = Problem.ProblemID and tblRegistration.Job.JobDeadline = tblJobs.JobID.
+        //SELECT all users where ID = tblRegistration.JobID and tblProblem = Problem.ID and tblRegistration.Job.JobDeadline = tblJobs.JobID.
         //GROUP users by tblRegistration.Job.JobID.
         //COUNT Users.
         //DISPLAY Deadlines.
