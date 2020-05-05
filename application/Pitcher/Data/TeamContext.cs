@@ -11,15 +11,19 @@ namespace Pitcher.Data
 
         public DbSet<User> Users { get; set; }
         public DbSet<Registration> Registrations {get;set;}
-        public DbSet<Job> Jobs {get;set;}        
+        public DbSet<Job> Jobs {get;set;}     
+
+        public DbSet<Problem> Problem { get; set; }   
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>().ToTable("tblUser");
             modelBuilder.Entity<Registration>().ToTable("tblRegistration");
             modelBuilder.Entity<Job>().ToTable("tblJob");
+            modelBuilder.Entity<Problem>().ToTable("tblProblem");
+            modelBuilder.Entity<Chat>().ToTable("tblChat");
         }
         
-        public DbSet<Pitcher.Models.Problem> Problem { get; set; }
+        
     }
 }
