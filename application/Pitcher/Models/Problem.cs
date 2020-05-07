@@ -10,8 +10,6 @@ namespace Pitcher.Models
         public int ID {get;set;}
 
         public int JobID {get;set;}
-
-        public int RegistrationID {get;set;}
         
         [Required]
         [StringLength(180, MinimumLength = 2, ErrorMessage = "Problem Title must be bettween 2 to 20 characters.")]
@@ -48,7 +46,6 @@ namespace Pitcher.Models
         [Column("ProblemComplete")]        
         public bool ProblemComplete {get;set;}
         
-        public Registration Registration {get;set;}
         public Job Job {get;set;}
 
         public ICollection<Chat> Chat {get;set;}
