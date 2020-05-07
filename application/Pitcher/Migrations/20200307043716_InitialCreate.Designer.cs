@@ -10,8 +10,8 @@ using Pitcher.Data;
 namespace Pitcher.Migrations
 {
     [DbContext(typeof(TeamContext))]
-    [Migration("20200419104647_UserProfileImage_On_Users")]
-    partial class UserProfileImage_On_Users
+    [Migration("20200307043716_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -48,49 +48,6 @@ namespace Pitcher.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("tblJob");
-                });
-
-            modelBuilder.Entity("Pitcher.Models.Problem", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("JobID");
-
-                    b.Property<bool>("ProblemComplete")
-                        .HasColumnName("ProblemComplete");
-
-                    b.Property<string>("ProblemDescription")
-                        .IsRequired()
-                        .HasColumnName("ProblemDescription")
-                        .HasMaxLength(255);
-
-                    b.Property<string>("ProblemFileAttachments")
-                        .HasColumnName("ProblemFileAttachments");
-
-                    b.Property<int>("ProblemSeverity")
-                        .HasColumnName("ProblemSeverity");
-
-                    b.Property<DateTime>("ProblemStartDate")
-                        .HasColumnName("ProblemStartDate");
-
-                    b.Property<string>("ProblemTitle")
-                        .IsRequired()
-                        .HasColumnName("ProblemTitle")
-                        .HasMaxLength(180);
-
-                    b.Property<int>("RegistrationID");
-
-                    b.Property<int?>("UserID");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("JobID");
-
-                    b.HasIndex("UserID");
-
-                    b.ToTable("Problem");
                 });
 
             modelBuilder.Entity("Pitcher.Models.Registration", b =>
@@ -152,7 +109,7 @@ namespace Pitcher.Migrations
                         .HasColumnName("UserLogInName")
                         .HasMaxLength(16);
 
-                    b.Property<string>("UserMobileNumber")
+                    b.Property<long>("UserMobileNumber")
                         .HasColumnName("UserMobileNumber");
 
                     b.Property<string>("UserPassword")
@@ -160,14 +117,11 @@ namespace Pitcher.Migrations
                         .HasColumnName("UserPassword")
                         .HasMaxLength(30);
 
-                    b.Property<string>("UserPhoneNumber")
+                    b.Property<long>("UserPhoneNumber")
                         .HasColumnName("UserPhoneNumber");
 
                     b.Property<string>("UserPostCode")
                         .HasColumnName("UserPostCode");
-
-                    b.Property<string>("UserProfileImage")
-                        .HasColumnName("UserProfileImage");
 
                     b.Property<string>("UserState")
                         .HasColumnName("UserState")
@@ -176,18 +130,6 @@ namespace Pitcher.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("tblUser");
-                });
-
-            modelBuilder.Entity("Pitcher.Models.Problem", b =>
-                {
-                    b.HasOne("Pitcher.Models.Job", "Job")
-                        .WithMany()
-                        .HasForeignKey("JobID")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Pitcher.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserID");
                 });
 
             modelBuilder.Entity("Pitcher.Models.Registration", b =>

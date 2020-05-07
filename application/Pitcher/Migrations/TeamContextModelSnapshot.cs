@@ -3,23 +3,45 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Pitcher.Data;
 
 namespace Pitcher.Migrations
 {
     [DbContext(typeof(TeamContext))]
-    [Migration("20200419104647_UserProfileImage_On_Users")]
-    partial class UserProfileImage_On_Users
+    partial class TeamContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("Pitcher.Models.Chat", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ChatDescription")
+                        .IsRequired()
+                        .HasColumnName("ChatDescription")
+                        .HasMaxLength(255);
+
+                    b.Property<string>("ChatPublishDate")
+                        .IsRequired()
+                        .HasColumnName("ProblemStartDate");
+
+                    b.Property<int>("ProblemID");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("ProblemID");
+
+                    b.ToTable("tblChat");
+                });
 
             modelBuilder.Entity("Pitcher.Models.Job", b =>
                 {
@@ -80,17 +102,11 @@ namespace Pitcher.Migrations
                         .HasColumnName("ProblemTitle")
                         .HasMaxLength(180);
 
-                    b.Property<int>("RegistrationID");
-
-                    b.Property<int?>("UserID");
-
                     b.HasKey("ID");
 
                     b.HasIndex("JobID");
 
-                    b.HasIndex("UserID");
-
-                    b.ToTable("Problem");
+                    b.ToTable("tblProblem");
                 });
 
             modelBuilder.Entity("Pitcher.Models.Registration", b =>
@@ -139,35 +155,19 @@ namespace Pitcher.Migrations
                         .HasColumnName("UserFirstName")
                         .HasMaxLength(20);
 
-                    b.Property<bool>("UserIsLeader")
-                        .HasColumnName("UserIsLeader");
-
                     b.Property<string>("UserLastName")
                         .IsRequired()
                         .HasColumnName("UserLastName")
                         .HasMaxLength(30);
 
-                    b.Property<string>("UserLogInName")
-                        .IsRequired()
-                        .HasColumnName("UserLogInName")
-                        .HasMaxLength(16);
-
                     b.Property<string>("UserMobileNumber")
                         .HasColumnName("UserMobileNumber");
-
-                    b.Property<string>("UserPassword")
-                        .IsRequired()
-                        .HasColumnName("UserPassword")
-                        .HasMaxLength(30);
 
                     b.Property<string>("UserPhoneNumber")
                         .HasColumnName("UserPhoneNumber");
 
                     b.Property<string>("UserPostCode")
                         .HasColumnName("UserPostCode");
-
-                    b.Property<string>("UserProfileImage")
-                        .HasColumnName("UserProfileImage");
 
                     b.Property<string>("UserState")
                         .HasColumnName("UserState")
@@ -178,16 +178,20 @@ namespace Pitcher.Migrations
                     b.ToTable("tblUser");
                 });
 
+            modelBuilder.Entity("Pitcher.Models.Chat", b =>
+                {
+                    b.HasOne("Pitcher.Models.Problem", "Problem")
+                        .WithMany("Chat")
+                        .HasForeignKey("ProblemID")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("Pitcher.Models.Problem", b =>
                 {
                     b.HasOne("Pitcher.Models.Job", "Job")
-                        .WithMany()
+                        .WithMany("Problems")
                         .HasForeignKey("JobID")
                         .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Pitcher.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserID");
                 });
 
             modelBuilder.Entity("Pitcher.Models.Registration", b =>

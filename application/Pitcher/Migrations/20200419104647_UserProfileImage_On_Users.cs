@@ -29,7 +29,7 @@ namespace Pitcher.Migrations
                 name: "Problem",
                 columns: table => new
                 {
-                    ProblemID = table.Column<int>(nullable: false)
+                    ID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     JobID = table.Column<int>(nullable: false),
                     RegistrationID = table.Column<int>(nullable: false),
@@ -43,7 +43,7 @@ namespace Pitcher.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Problem", x => x.ProblemID);
+                    table.PrimaryKey("PK_Problem", x => x.ID);
                     table.ForeignKey(
                         name: "FK_Problem_tblJob_JobID",
                         column: x => x.JobID,
