@@ -26,7 +26,7 @@ namespace Pitcher.Models
         public string ProblemDescription {get;set;}
 
         [Required]
-        [DataType(DataType.Date)]//AUTO INSERT.
+        [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         [Display(Name = " Problem Start Date")]
         [Column("ProblemStartDate")]
@@ -38,7 +38,9 @@ namespace Pitcher.Models
         public string ProblemFileAttachments {get;set;}
 
         [Required]
-        [Display(Name = "Problem Severity")]        
+        [Display(Name = "Problem Severity")] 
+        [Range(1,5, ErrorMessage
+             = "Problem Severity value for {0} must be between {1} and {2}.")]       
         [Column("ProblemSeverity")]
         public int ProblemSeverity {get;set;}
 
