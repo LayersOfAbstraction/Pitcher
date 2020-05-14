@@ -13,7 +13,7 @@ namespace Pitcher.Data
         public DbSet<Registration> Registrations {get;set;}
         public DbSet<Job> Jobs {get;set;}     
 
-        public DbSet<Problem> Problem { get; set; }   
+        public DbSet<Problem> Problems { get; set; }   
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

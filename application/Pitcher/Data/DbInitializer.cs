@@ -64,7 +64,7 @@ namespace Pitcher.Data
 
             foreach (Problem p in problems)
             {
-                context.Problem.Add(p);
+                context.Problems.Add(p);
             }
             context.SaveChanges();
         }
