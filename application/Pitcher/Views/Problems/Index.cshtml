@@ -1,4 +1,4 @@
-@model IEnumerable<Pitcher.Models.Problem>
+@model PaginatedList<Pitcher.Models.Problem>
 
 @{
     ViewData["Title"] = "Index";
@@ -27,13 +27,13 @@
                 <a asp-action="Index" asp-route-sortOrder="@ViewData["ProblemTitleSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Problem Title</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ProblemDescription)
+                Problem Description
             </th>
             <th>
                  <a asp-action="Index" asp-route-sortOrder="@ViewData["ProblemStartDateSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Problem Start Date</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ProblemFileAttachments)
+                ProblemFile Attachments
             </th>
             <th>
                 <a asp-action="Index" asp-route-sortOrder="@ViewData["ProblemSeveritySortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">ProblemSeverity</a>
@@ -42,7 +42,7 @@
                 <a asp-action="Index" asp-route-sortOrder="@ViewData["ProblemCompleteSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">ProblemComplete</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Job)
+                Job
             </th>
             <th></th>
         </tr>
