@@ -49,7 +49,7 @@ namespace Pitcher.Controllers
 
             switch (sortOrder)
             {
-                case "jobTitle_desc":
+                case "JobTitle_desc":
                     jobs = jobs.OrderByDescending(j => j.JobTitle);
                     break;
                 case "JobStartDate":

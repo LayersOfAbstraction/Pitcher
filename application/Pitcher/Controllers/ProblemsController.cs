@@ -20,13 +20,67 @@ namespace Pitcher.Controllers
         }
 
         // GET: Problems
-        public async Task<IActionResult> Index()
+        // COPY AND PASTE THIS METHOD CUSTOMIZATION INTO OTHER CONTROLLERS. Enables sorting. 
+        public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? pageNumber)
         {
-            var teamContext = _context.Problem.Include(p => p.Job);
-            return View(await teamContext.ToListAsync());
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["ProblemTitleSortParm"] = String.IsNullOrEmpty(sortOrder) ? "problemTitle_desc" : "";
+            ViewData["ProblemStartDateSortParm"] = sortOrder == "ProblemStartDate" ? "ProblemStartDate_desc" : "ProblemStartDate";
+            ViewData["ProblemSeveritySortParm"] = sortOrder == "ProblemSeverity" ? "ProblemSeverity_desc" : "ProblemSeverity";
+            ViewData["ProblemCompleteSortParm"] = sortOrder == "ProblemComplete" ? "ProblemComplete_desc" : "ProblemComplete";            
+            ViewData["CurrentFilter"] = searchString;
+            var problems = from p in _context.Problems
+                            select p;
+            
+            if(searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            if(!String.IsNullOrEmpty(searchString))
+            {
+                problems = problems.Where(p => p.ProblemTitle.Contains(searchString)
+                                            || p.ProblemDescription.Contains(searchString));
+            }
+
+            switch (sortOrder)
+            {
+                case "ProblemTitle_desc":
+                    problems = problems.OrderByDescending(p => p.ProblemTitle);
+                    break;
+                case "ProblemStartDate":
+                    problems = problems.OrderBy(p => p.ProblemStartDate);                    
+                    break;
+                case "ProblemStartDate_desc":
+                    problems = problems.OrderBy(p => p.ProblemStartDate);                    
+                    break;
+                case "ProblemSeverity":
+                    problems = problems.OrderBy(p => p.ProblemSeverity);
+                    break;
+                case "ProblemSeverity_desc":
+                    problems = problems.OrderByDescending(p => p.ProblemSeverity);
+                    break;   
+                case "ProblemCompleteSortParm":
+                    problems = problems.OrderBy(p => p.ProblemComplete);
+                    break;
+                case "ProblemCompleteSortParm_desc":
+                    problems = problems.OrderByDescending(p => p.ProblemComplete);
+                    break; 
+                default:
+                    problems = problems.OrderBy(p => p.ProblemTitle);
+                    break;                 
+            }
+
+            int pageSize = 20;            
+            return View(await PaginatedList<Problem>.CreateAsync(problems.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 
         // GET: Problems/Details/5
+        // COPY AND PASTE THIS METHOD CUSTOMIZATION INTO OTHER CONTROLLERS.  
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,8 +88,8 @@ namespace Pitcher.Controllers
                 return NotFound();
             }
 
-            var problem = await _context.Problem
-                .Include(p => p.Job)
+            var problem = await _context.Problems
+                .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (problem == null)
             {
@@ -59,13 +113,24 @@ namespace Pitcher.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ID,JobID,RegistrationID,ProblemTitle,ProblemDescription,ProblemStartDate,ProblemFileAttachments,ProblemSeverity,ProblemComplete")] Problem problem)
         {
-            if (ModelState.IsValid)
+            try
             {
-                _context.Add(problem);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    _context.Add(problem);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                ViewData["JobID"] = new SelectList(_context.Jobs, "ID", "JobTitle", problem.JobID);
+                return View(problem);
             }
-            ViewData["JobID"] = new SelectList(_context.Jobs, "ID", "JobTitle", problem.JobID);
+            catch(DbUpdateException /* ex */)
+            {
+                //Log the error (uncomment ex variable name and write a log).
+                ModelState.AddModelError("", "Unable to save changes. " +
+                "Try again, and if the problem persists " +
+                "See your system administrator.");
+            }
             return View(problem);
         }
 
@@ -77,7 +142,7 @@ namespace Pitcher.Controllers
                 return NotFound();
             }
 
-            var problem = await _context.Problem.FindAsync(id);
+            var problem = await _context.Problems.FindAsync(id);
             if (problem == null)
             {
                 return NotFound();
@@ -130,7 +195,7 @@ namespace Pitcher.Controllers
                 return NotFound();
             }
 
-            var problem = await _context.Problem
+            var problem = await _context.Problems
                 .Include(p => p.Job)
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (problem == null)
@@ -146,15 +211,15 @@ namespace Pitcher.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var problem = await _context.Problem.FindAsync(id);
-            _context.Problem.Remove(problem);
+            var problem = await _context.Problems.FindAsync(id);
+            _context.Problems.Remove(problem);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool ProblemExists(int id)
         {
-            return _context.Problem.Any(e => e.ID == id);
+            return _context.Problems.Any(e => e.ID == id);
         }
     }
 }
