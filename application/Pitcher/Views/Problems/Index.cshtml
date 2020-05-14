@@ -9,26 +9,37 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
+ @*COPY AND PASTE THIS TAG HELPER METHOD TEXTBOX CUSTOMIZATION INTO OTHER VIEWS TO ENABLE SEARCHING.*@
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Find by name: <input type="text" name="SearchString" value="@ViewData["currentFilter"]" />
+            <input type="submit" value="Search" button type="button" class="btn btn-primary" /> |
+            <a asp-action="Index">Back to Full List </a>
+        </p>
+    </div>
+</form>
+<table class="table table-hover">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.ProblemTitle)
+                @*COPY AND PASTE THIS METHOD CUSTOMIZATION INTO OTHER VIEWS TO ENABLE SORTING.*@
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["ProblemTitleSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Problem Title</a>
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.ProblemDescription)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ProblemStartDate)
+                 <a asp-action="Index" asp-route-sortOrder="@ViewData["ProblemStartDateSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Problem Start Date</a>
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.ProblemFileAttachments)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ProblemSeverity)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["ProblemSeveritySortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">ProblemSeverity</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ProblemComplete)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["ProblemCompleteSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">ProblemComplete</a>
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Job)
