@@ -48,7 +48,7 @@ namespace Pitcher.Data
             {
                 new Job{JobTitle="Eskate Tracker",JobDescription="A fitness tracker designed for inline skaters.",JobStartDate=DateTime.Parse("2004-03-07"),JobDeadline=DateTime.Parse("2003-12-07"),JobIsComplete=false},
                 new Job{JobTitle="FTDC",JobDescription="A windows desktop app that renames files with time and date.",JobStartDate=DateTime.Parse("2004-03-07"),JobDeadline=DateTime.Parse("2003-08-07"),JobIsComplete=false},
-                new Job{JobTitle="Pitcher",JobDescription="This app.",JobStartDate=DateTime.Parse("2020/02/10"),JobDeadline=DateTime.Parse("2020-07-2"), JobIsComplete=false}                                                              
+                new Job{JobTitle="Pitcher",JobDescription="A Picture viewer to replace the default Windows picture viewer.",JobStartDate=DateTime.Parse("2020-02-10"),JobDeadline=DateTime.Parse("2020-07-2"), JobIsComplete=false}                                                              
             };
 
             foreach (Job j in jobs)
