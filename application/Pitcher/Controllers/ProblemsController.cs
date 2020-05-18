@@ -30,6 +30,7 @@ namespace Pitcher.Controllers
             ViewData["ProblemCompleteSortParm"] = sortOrder == "ProblemComplete" ? "ProblemComplete_desc" : "ProblemComplete";            
             ViewData["CurrentFilter"] = searchString;
             var problems = from p in _context.Problems
+                            .Include(p => p.Job)
                             select p;
             
             if(searchString != null)

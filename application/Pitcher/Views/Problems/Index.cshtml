@@ -1,10 +1,10 @@
 @model PaginatedList<Pitcher.Models.Problem>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Problems";
 }
 
-<h1>Index</h1>
+<h1>Problems</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -50,6 +50,9 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ID)
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ProblemTitle)
             </td>
