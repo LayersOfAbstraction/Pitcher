@@ -19,7 +19,7 @@ namespace Pitcher.Models
         public string ProblemTitle {get;set;}
 
         [Required]
-        [StringLength(255, MinimumLength = 2, ErrorMessage = "Problem Title must be bettween 2 to 255 characters.")]
+        [StringLength(int.MaxValue, MinimumLength = 5, ErrorMessage = "Problem Title must be at least 5 characters.")]
         [DataType(DataType.Text)]
         [Display(Name = "Problem Description")]
         [Column("ProblemDescription")]

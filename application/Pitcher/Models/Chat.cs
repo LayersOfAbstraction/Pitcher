@@ -11,7 +11,7 @@ namespace Pitcher.Models
         public int ProblemID {get;set;}
 
         [Required]
-        [StringLength(255, MinimumLength = 3, ErrorMessage = "Chat Description must be bettween 255 to 3 characters.")]
+        [StringLength(int.MaxValue, MinimumLength = 3, ErrorMessage = "Chat Description must be bettween 255 to 3 characters.")]
         [DataType(DataType.Text)]
         [Display(Name = "Description")]
         [Column("ChatDescription")]
