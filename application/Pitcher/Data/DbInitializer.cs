@@ -59,7 +59,7 @@ namespace Pitcher.Data
 
             var problems = new Problem[]
             {
-                new Problem{JobID=1,ProblemTitle="Can't ouput creation date in long format",ProblemDescription="filename I am trying to move. The problem I am having though is it only outputs the seconds including AM or PM to the file.",ProblemStartDate=DateTime.Parse("2004-03-07"),ProblemFileAttachments="blah",ProblemSeverity=5,ProblemComplete=true}                
+                new Problem{ProblemTitle="Can't ouput creation date in long format",ProblemDescription="filename I am trying to move. The problem I am having though is it only outputs the seconds including AM or PM to the file.",ProblemStartDate=DateTime.Parse("2004-03-07"),ProblemFileAttachments="blah",ProblemSeverity=5,ProblemComplete=true}                
             };
 
             foreach (Problem p in problems)

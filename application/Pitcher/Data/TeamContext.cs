@@ -1,5 +1,6 @@
 using Pitcher.Models;
 using Microsoft.EntityFrameworkCore;
+using Pitcher.Models.TeamViewModels;
 
 namespace Pitcher.Data
 {
@@ -14,6 +15,8 @@ namespace Pitcher.Data
         public DbSet<Job> Jobs {get;set;}     
 
         public DbSet<Problem> Problems { get; set; }   
+
+        public DbSet<Result> Results {get;set;}
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -22,8 +25,10 @@ namespace Pitcher.Data
             modelBuilder.Entity<Job>().ToTable("tblJob");
             modelBuilder.Entity<Problem>().ToTable("tblProblem");
             modelBuilder.Entity<Chat>().ToTable("tblChat");
-        }
-        
-        
+            modelBuilder.Entity<Result>().ToTable("tblResult");
+
+            modelBuilder.Entity<Result>()
+                .HasKey(r => new { r.JobID, r.ProblemID});
+        }        
     }
 }
