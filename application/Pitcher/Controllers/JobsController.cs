@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Pitcher.Data;
 using Pitcher.Models;
+using Pitcher.Models.TeamViewModels;
 
 namespace Pitcher.Controllers
 {
@@ -76,7 +77,7 @@ namespace Pitcher.Controllers
 
         // GET: Jobs/Details/5
         // COPY AND PASTE THIS METHOD CUSTOMIZATION INTO OTHER CONTROLLERS.  
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? id/*, int? problemID*/)
         {
             if (id == null)
             {

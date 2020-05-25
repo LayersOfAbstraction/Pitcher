@@ -42,6 +42,6 @@ namespace Pitcher.Models
 
         public ICollection<Registration> Registrations {get;set;}
 
-        public ICollection<Problem> Problems {get;set;}
+        public ICollection<Result> Results {get;set;}
     }
 }

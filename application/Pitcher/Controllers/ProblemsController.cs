@@ -20,20 +20,19 @@ namespace Pitcher.Controllers
         }
 
         // GET: Problems
-        // COPY AND PASTE THIS METHOD CUSTOMIZATION INTO OTHER CONTROLLERS. Enables sorting. 
         public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? pageNumber)
         {
             ViewData["CurrentSort"] = sortOrder;
-            ViewData["ProblemTitleSortParm"] = String.IsNullOrEmpty(sortOrder) ? "problemTitle_desc" : "";
+            ViewData["ProblemIDSortParm"] = String.IsNullOrEmpty(sortOrder) ? "ProblemID_desc" : "";
+            ViewData["ProblemTitleSortParm"] = String.IsNullOrEmpty(sortOrder) ? "ProblemTitle_desc" : "";
             ViewData["ProblemStartDateSortParm"] = sortOrder == "ProblemStartDate" ? "ProblemStartDate_desc" : "ProblemStartDate";
             ViewData["ProblemSeveritySortParm"] = sortOrder == "ProblemSeverity" ? "ProblemSeverity_desc" : "ProblemSeverity";
             ViewData["ProblemCompleteSortParm"] = sortOrder == "ProblemComplete" ? "ProblemComplete_desc" : "ProblemComplete";            
             ViewData["CurrentFilter"] = searchString;
             var problems = from p in _context.Problems
-                            .Include(p => p.Job)
+                            //.Include(p => p.Result)
                             select p;
-            
-            if(searchString != null)
+                        if(searchString != null)
             {
                 pageNumber = 1;
             }
@@ -50,6 +49,9 @@ namespace Pitcher.Controllers
 
             switch (sortOrder)
             {
+                case "ProblemID_desc":
+                    problems = problems.OrderByDescending(p => p.ID);
+                    break;
                 case "ProblemTitle_desc":
                     problems = problems.OrderByDescending(p => p.ProblemTitle);
                     break;
@@ -81,7 +83,6 @@ namespace Pitcher.Controllers
         }
 
         // GET: Problems/Details/5
-        // COPY AND PASTE THIS METHOD CUSTOMIZATION INTO OTHER CONTROLLERS.  
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -90,7 +91,6 @@ namespace Pitcher.Controllers
             }
 
             var problem = await _context.Problems
-                .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (problem == null)
             {
@@ -103,7 +103,6 @@ namespace Pitcher.Controllers
         // GET: Problems/Create
         public IActionResult Create()
         {
-            ViewData["JobID"] = new SelectList(_context.Jobs, "ID", "JobTitle");
             return View();
         }
 
@@ -112,25 +111,13 @@ namespace Pitcher.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,JobID,RegistrationID,ProblemTitle,ProblemDescription,ProblemStartDate,ProblemFileAttachments,ProblemSeverity,ProblemComplete")] Problem problem)
+        public async Task<IActionResult> Create([Bind("ID,ProblemTitle,ProblemDescription,ProblemStartDate,ProblemFileAttachments,ProblemSeverity,ProblemComplete")] Problem problem)
         {
-            try
+            if (ModelState.IsValid)
             {
-                if (ModelState.IsValid)
-                {
-                    _context.Add(problem);
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
-                }
-                ViewData["JobID"] = new SelectList(_context.Jobs, "ID", "JobTitle", problem.JobID);
-                return View(problem);
-            }
-            catch(DbUpdateException /* ex */)
-            {
-                //Log the error (uncomment ex variable name and write a log).
-                ModelState.AddModelError("", "Unable to save changes. " +
-                "Try again, and if the problem persists " +
-                "See your system administrator.");
+                _context.Add(problem);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
             }
             return View(problem);
         }
@@ -148,7 +135,6 @@ namespace Pitcher.Controllers
             {
                 return NotFound();
             }
-            ViewData["JobID"] = new SelectList(_context.Jobs, "ID", "JobTitle", problem.JobID);
             return View(problem);
         }
 
@@ -157,7 +143,7 @@ namespace Pitcher.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,JobID,RegistrationID,ProblemTitle,ProblemDescription,ProblemStartDate,ProblemFileAttachments,ProblemSeverity,ProblemComplete")] Problem problem)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,ProblemTitle,ProblemDescription,ProblemStartDate,ProblemFileAttachments,ProblemSeverity,ProblemComplete")] Problem problem)
         {
             if (id != problem.ID)
             {
@@ -184,7 +170,6 @@ namespace Pitcher.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["JobID"] = new SelectList(_context.Jobs, "ID", "JobTitle", problem.JobID);
             return View(problem);
         }
 
@@ -197,7 +182,6 @@ namespace Pitcher.Controllers
             }
 
             var problem = await _context.Problems
-                .Include(p => p.Job)
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (problem == null)
             {
