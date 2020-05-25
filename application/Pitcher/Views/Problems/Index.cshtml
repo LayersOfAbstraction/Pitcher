@@ -4,7 +4,7 @@
     ViewData["Title"] = "Problems";
 }
 
-<h1>Problems</h1>
+<h1>Index</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -26,17 +26,13 @@
                 <a asp-action="Index" asp-route-sortOrder="@ViewData["ProblemIDSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Problem ID</a>
             </th>
             <th>
-                @*COPY AND PASTE THIS METHOD CUSTOMIZATION INTO OTHER VIEWS TO ENABLE SORTING.*@
                 <a asp-action="Index" asp-route-sortOrder="@ViewData["ProblemTitleSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Problem Title</a>
             </th>
             <th>
-                Problem Description
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["ProblemStartDateSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Problem Start Date</a>
             </th>
             <th>
-                 <a asp-action="Index" asp-route-sortOrder="@ViewData["ProblemStartDateSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Problem Start Date</a>
-            </th>
-            <th>
-                ProblemFile Attachments
+                Problem File Attachments
             </th>
             <th>
                 <a asp-action="Index" asp-route-sortOrder="@ViewData["ProblemSeveritySortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">ProblemSeverity</a>
@@ -44,15 +40,11 @@
             <th>
                 <a asp-action="Index" asp-route-sortOrder="@ViewData["ProblemCompleteSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">ProblemComplete</a>
             </th>
-            <th>
-                Job
-            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) 
-{
+@foreach (var item in Model) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.ID)
@@ -76,22 +68,17 @@
                 @Html.DisplayFor(modelItem => item.ProblemComplete)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Job.JobTitle)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.ID" button type="button" class="btn btn-primary btn-block" >Edit</a> 
+                <a asp-action="Details" asp-route-id="@item.ID" button type="button" class="btn btn-info btn-block">Details</a> 
+                <a asp-action="Delete" asp-route-id="@item.ID" button type="button" class="btn btn-primary btn-block">Delete</a>
             </td>
         </tr>}
     </tbody>
 </table>
-
 @{
     var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
     var nextDisabled = !Model.HasNextPage ? "disabled" : "";
 }
-
 <a asp-action="Index"
    asp-route-sortOrder="@ViewData["CurrentSort"]"
    asp-route-pageNumber="@(Model.PageIndex - 1)"
