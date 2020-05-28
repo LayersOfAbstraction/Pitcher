@@ -4,7 +4,7 @@
     ViewData["Title"] = "Problems";
 }
 
-<h1>Index</h1>
+<h1>Problems</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -29,6 +29,9 @@
                 <a asp-action="Index" asp-route-sortOrder="@ViewData["ProblemTitleSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Problem Title</a>
             </th>
             <th>
+                Description
+            </th>
+            <th>
                 <a asp-action="Index" asp-route-sortOrder="@ViewData["ProblemStartDateSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Problem Start Date</a>
             </th>
             <th>
@@ -39,6 +42,9 @@
             </th>
             <th>
                 <a asp-action="Index" asp-route-sortOrder="@ViewData["ProblemCompleteSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">ProblemComplete</a>
+            </th>
+            <th>
+                Job Title
             </th>
             <th></th>
         </tr>
@@ -66,6 +72,13 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ProblemComplete)
+            </td>
+            <td>
+                @foreach (var title in item.Result)
+                {
+                    @Html.DisplayFor(modelItem => title.Job.JobTitle)
+                    <br />
+                }
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ID" button type="button" class="btn btn-primary btn-block" >Edit</a> 
