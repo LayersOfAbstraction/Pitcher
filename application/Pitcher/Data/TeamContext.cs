@@ -28,7 +28,15 @@ namespace Pitcher.Data
             modelBuilder.Entity<Result>().ToTable("tblResult");
 
             modelBuilder.Entity<Result>()
-                .HasKey(r => new { r.JobID, r.ProblemID});
+                .HasKey(bc => new { bc.JobID, bc.ProblemID });
+            modelBuilder.Entity<Result>()
+                .HasOne(bc => bc.Job)
+                .WithMany(b => b.Results)
+                .HasForeignKey(bc => bc.JobID);
+            modelBuilder.Entity<Result>()
+                .HasOne(bc => bc.Problem)
+                .WithMany(c => c.Result)
+                .HasForeignKey(bc => bc.ProblemID);
         }        
     }
 }
