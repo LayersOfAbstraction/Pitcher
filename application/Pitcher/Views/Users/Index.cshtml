@@ -25,31 +25,31 @@
         <tr>
             <th>
                 @*COPY AND PASTE THIS METHOD CUSTOMIZATION INTO OTHER VIEWS TO ENABLE SORTING.*@
-               <a asp-action="Index" asp-route-sortOrder="@ViewData["LastNameSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">First Name</a>
+               <a asp-action="Index" asp-route-sortOrder="@ViewData["FirstNameSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">First Name</a>
             </th>
             <th>
-               <a asp-action="Index" asp-route-sortOrder="@ViewData["FirstNameSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Last Name</a>
+               <a asp-action="Index" asp-route-sortOrder="@ViewData["LastNameSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Last Name</a>
             </th>        
             <th>
-                Email
+               <a asp-action="Index" asp-route-sortOrder="@ViewData["UserEmailSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Email</a>
             </th>
             <th>
-                Phone
+               <a asp-action="Index" asp-route-sortOrder="@ViewData["UserPhoneNumberSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Phone</a>
             </th>
             <th>
-                Address
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["UserAddressSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Address</a>
             </th>
             <th>
-                Post Code
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["UserPostCodeSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Post Code</a>
             </th>
             <th>
-                Country
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["UserCountrySortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Country</a>
             </th>
             <th>
-                Mobile Number
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["MobileNumberSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Mobile Number</a>
             </th>
             <th>
-                State
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["UserStateSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">State</a>
             </th>
             <th></th>
         </tr>
