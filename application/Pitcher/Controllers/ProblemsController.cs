@@ -23,16 +23,20 @@ namespace Pitcher.Controllers
         public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? pageNumber)
         {
             ViewData["CurrentSort"] = sortOrder;
-            ViewData["ProblemIDSortParm"] = String.IsNullOrEmpty(sortOrder) ? "ProblemID_desc" : "";
-            ViewData["ProblemTitleSortParm"] = String.IsNullOrEmpty(sortOrder) ? "ProblemTitle_desc" : "";
+            ViewData["ProblemIDSortParm"]  = sortOrder == "ProblemID" ? "ProblemID_desc" : "ProblemID";
+            ViewData["ProblemTitleSortParm"] = sortOrder == "ProblemTitle" ? "ProblemTitle_desc" : "ProblemTitle";
             ViewData["ProblemStartDateSortParm"] = sortOrder == "ProblemStartDate" ? "ProblemStartDate_desc" : "ProblemStartDate";
             ViewData["ProblemSeveritySortParm"] = sortOrder == "ProblemSeverity" ? "ProblemSeverity_desc" : "ProblemSeverity";
-            ViewData["ProblemCompleteSortParm"] = sortOrder == "ProblemComplete" ? "ProblemComplete_desc" : "ProblemComplete";            
+            ViewData["ProblemCompleteSortParm"] = sortOrder == "ProblemComplete" ? "ProblemComplete_desc" : "ProblemComplete";          
             ViewData["CurrentFilter"] = searchString;
-            var problems = from p in _context.Problems
-                            //.Include(p => p.Result)
-                            select p;
-                        if(searchString != null)
+            
+            //READ RELATED DATA HERE
+            var problems = from p in _context.Problems 
+                            .Include(p => p.Result)
+                                .ThenInclude(j => j.Job)                                                     
+                                select p;
+            //END OF READ RELATED DATA
+            if(searchString != null)
             {
                 pageNumber = 1;
             }
@@ -55,11 +59,14 @@ namespace Pitcher.Controllers
                 case "ProblemTitle_desc":
                     problems = problems.OrderByDescending(p => p.ProblemTitle);
                     break;
+                case "ProblemTitle":
+                    problems = problems.OrderBy(p => p.ProblemTitle);
+                    break;
                 case "ProblemStartDate":
                     problems = problems.OrderBy(p => p.ProblemStartDate);                    
                     break;
                 case "ProblemStartDate_desc":
-                    problems = problems.OrderBy(p => p.ProblemStartDate);                    
+                    problems = problems.OrderByDescending(p => p.ProblemStartDate);                    
                     break;
                 case "ProblemSeverity":
                     problems = problems.OrderBy(p => p.ProblemSeverity);
@@ -67,14 +74,14 @@ namespace Pitcher.Controllers
                 case "ProblemSeverity_desc":
                     problems = problems.OrderByDescending(p => p.ProblemSeverity);
                     break;   
-                case "ProblemCompleteSortParm":
+                case "ProblemComplete":
                     problems = problems.OrderBy(p => p.ProblemComplete);
                     break;
-                case "ProblemCompleteSortParm_desc":
+                case "ProblemComplete_desc":
                     problems = problems.OrderByDescending(p => p.ProblemComplete);
                     break; 
                 default:
-                    problems = problems.OrderBy(p => p.ProblemTitle);
+                    problems = problems.OrderBy(p => p.ID);
                     break;                 
             }
 

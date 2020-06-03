@@ -25,7 +25,7 @@ namespace Pitcher.Controllers
         public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? pageNumber)
         {
             ViewData["CurrentSort"] = sortOrder;
-            ViewData["JobTitleSortParm"] = String.IsNullOrEmpty(sortOrder) ? "jobTitle_desc" : "";
+            ViewData["JobTitleSortParm"] = sortOrder == "JobStartDate" ? "JobTitle_desc" : "JobStartDate";
             ViewData["JobStartDateSortParm"] = sortOrder == "JobStartDate" ? "JobStart_date_desc" : "JobStartDate";
             ViewData["JobDeadlineDateSortParm"] = sortOrder == "JobDeadlineDate" ? "JobDeadline_date_desc" : "JobDeadlineDate";
             ViewData["CurrentFilter"] = searchString;
