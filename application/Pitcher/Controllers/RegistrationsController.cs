@@ -24,8 +24,8 @@ namespace Pitcher.Controllers
         public async Task<IActionResult> Index(string sortOrder, string searchString)
         {
             ViewData["FullNameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "fullName_desc" : "";
-            ViewData["JobTitleSortParam"] = String.IsNullOrEmpty(sortOrder) ? "jobTitle_desc" : "";
-            ViewData["JobTitleSortParam"] = String.IsNullOrEmpty(sortOrder) ? "jobTitle" : "";
+            // ViewData["JobTitleSortParam"] = String.IsNullOrEmpty(sortOrder) ? "jobTitle_desc" : "";
+            ViewData["JobTitleSortParam"] = sortOrder == "jobTitle" ? "jobTitle_desc" : "jobTitle";
             ViewData["RegDateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
             ViewData["CurrentFilter"] = searchString;
             IQueryable <Registration> registrations = _context.Registrations.Include(r => r.Job).Include(r => r.User);
@@ -42,18 +42,18 @@ namespace Pitcher.Controllers
                 case "jobTitle_desc":
                     registrations = registrations.OrderByDescending(r => r.Job);
                     break;
-                case "jobTitle":
-                registrations = registrations.OrderBy(r => r.Job);
-                    break;
                 case "Date":
                 registrations = registrations.OrderBy(r => r.RegistrationDate);
                     break;
                 case "date_desc":
-                registrations = registrations.OrderByDescending(r => r.RegistrationDate);
+                    registrations = registrations.OrderByDescending(r => r.RegistrationDate);
+                    break;
+                case "jobTitle":
+                    registrations = registrations.OrderBy(r => r.User);
                     break;
                 //By default FullName is in ascending order when entity is loaded. 
                 default:
-                    registrations = registrations.OrderBy(r => r.User);
+                    registrations = registrations.OrderBy(r => r.Job);
                     break;
             }
             
