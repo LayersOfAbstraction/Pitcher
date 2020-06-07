@@ -50,7 +50,7 @@ namespace Pitcher.Controllers
         public IActionResult Create()
         {
             ViewData["JobID"] = new SelectList(_context.Jobs, "ID", "JobTitle");
-            ViewData["ProblemID"] = new SelectList(_context.Problems, "ID", "ProblemDescription");
+            ViewData["ProblemID"] = new SelectList(_context.Problems, "ID", "ProblemTitle");
             return View();
         }
 
@@ -68,7 +68,7 @@ namespace Pitcher.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["JobID"] = new SelectList(_context.Jobs, "ID", "JobTitle", result.JobID);
-            ViewData["ProblemID"] = new SelectList(_context.Problems, "ID", "ProblemDescription", result.ProblemID);
+            ViewData["ProblemID"] = new SelectList(_context.Problems, "ID", "ProblemTitle", result.ProblemID);
             return View(result);
         }
 
@@ -86,7 +86,7 @@ namespace Pitcher.Controllers
                 return NotFound();
             }
             ViewData["JobID"] = new SelectList(_context.Jobs, "ID", "JobTitle", result.JobID);
-            ViewData["ProblemID"] = new SelectList(_context.Problems, "ID", "ProblemDescription", result.ProblemID);
+            ViewData["ProblemID"] = new SelectList(_context.Problems, "ID", "ProblemTitle", result.ProblemID);
             return View(result);
         }
 
@@ -123,7 +123,7 @@ namespace Pitcher.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["JobID"] = new SelectList(_context.Jobs, "ID", "JobTitle", result.JobID);
-            ViewData["ProblemID"] = new SelectList(_context.Problems, "ID", "ProblemDescription", result.ProblemID);
+            ViewData["ProblemID"] = new SelectList(_context.Problems, "ID", "ProblemTitle", result.ProblemID);
             return View(result);
         }
 
