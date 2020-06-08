@@ -21,14 +21,24 @@ namespace Pitcher.Controllers
 
         // GET: Registrations
         // COPY AND PASTE THIS METHOD CUSTOMIZATION INTO OTHER CONTROLLERS BOUND TO COMPOSITE TABLES. Enables sorting.
-        public async Task<IActionResult> Index(string sortOrder, string searchString)
+        public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? pageNumber)
         {
-            ViewData["FullNameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "fullName_desc" : "";
-            // ViewData["JobTitleSortParam"] = String.IsNullOrEmpty(sortOrder) ? "jobTitle_desc" : "";
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["FullNameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "fullName_desc" : "";           
             ViewData["JobTitleSortParam"] = sortOrder == "jobTitle" ? "jobTitle_desc" : "jobTitle";
             ViewData["RegDateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
             ViewData["CurrentFilter"] = searchString;
             IQueryable <Registration> registrations = _context.Registrations.Include(r => r.Job).Include(r => r.User);
+
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
             if (!String.IsNullOrEmpty(searchString))
             {
                 registrations = registrations.Where(r => r.User.ToString().Contains(searchString)
@@ -56,8 +66,8 @@ namespace Pitcher.Controllers
                     registrations = registrations.OrderBy(r => r.Job);
                     break;
             }
-            
-            return View(await registrations.AsNoTracking().ToListAsync());
+            int pageSize = 20;
+            return View(await  PaginatedList<Registration>.CreateAsync(registrations.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 
         // GET: Registrations/Details/5
