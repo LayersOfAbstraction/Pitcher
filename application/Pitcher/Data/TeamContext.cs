@@ -27,8 +27,8 @@ namespace Pitcher.Data
             modelBuilder.Entity<Chat>().ToTable("tblChat");
             modelBuilder.Entity<Result>().ToTable("tblResult");
 
-            modelBuilder.Entity<Result>()
-                .HasKey(bc => new { bc.JobID, bc.ProblemID });
+            // modelBuilder.Entity<Result>()
+                // .HasKey(bc => new { bc.JobID, bc.ProblemID });
             modelBuilder.Entity<Result>()
                 .HasOne(bc => bc.Job)
                 .WithMany(b => b.Results)
