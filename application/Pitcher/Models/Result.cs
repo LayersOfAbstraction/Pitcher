@@ -7,6 +7,7 @@ namespace Pitcher.Models
 {
     public class Result
     {        
+        [Key]
         public int ID {get;set;}
         public int JobID {get;set;}
         
