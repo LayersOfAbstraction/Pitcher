@@ -20,13 +20,52 @@ namespace Pitcher.Controllers
         }
 
         // GET: Results
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? pageNumber)
         {
-            var teamContext = _context.Results.Include(r => r.Job).Include(r => r.Problem);
-            return View(await teamContext.ToListAsync());
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["JobTitleSortParam"] = sortOrder == "jobTitle" ? "jobTitle_desc" : "jobTitle";
+            ViewData["ProblemTitleSortParam"] = sortOrder == "problemTitle" ? "jobTitle_desc" : "problemTitle";
+            ViewData["CurrentFilter"] = searchString;
+            IQueryable <Result> results = _context.Results.Include(r => r.Job).Include(r => r.Problem);
+            
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                results = results.Where(r => r.Job.ToString().Contains(searchString)
+                                    || r.Problem.ToString().Contains(searchString));
+            }
+            
+           switch (sortOrder)
+            {
+                case "problemTitle":
+                    results = results.OrderBy(r => r.Problem);
+                    break;
+                case "problemTitle_desc":
+                    results = results.OrderByDescending(r => r.Problem);
+                    break;
+                case "jobTitle_desc":
+                    results = results.OrderByDescending(r => r.Job);
+                    break;
+                //By default FullName is in ascending order when entity is loaded. 
+                default:
+                    results = results.OrderBy(r => r.Job);
+                    break;   
+                    
+            }
+                int pageSize = 20;
+                return View(await  PaginatedList<Result>.CreateAsync(results.AsNoTracking(), pageNumber ?? 1, pageSize));   
         }
 
         // GET: Results/Details/5
+        // COPY AND PASTE THIS METHOD CUSTOMIZATION INTO OTHER CONTROLLERS.
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -37,7 +76,8 @@ namespace Pitcher.Controllers
             var result = await _context.Results
                 .Include(r => r.Job)
                 .Include(r => r.Problem)
-                .FirstOrDefaultAsync(m => m.JobID == id);
+                .AsNoTracking()
+                .FirstOrDefaultAsync(r => r.ID == id);
             if (result == null)
             {
                 return NotFound();
@@ -50,7 +90,7 @@ namespace Pitcher.Controllers
         public IActionResult Create()
         {
             ViewData["JobID"] = new SelectList(_context.Jobs, "ID", "JobTitle");
-            ViewData["ProblemID"] = new SelectList(_context.Problems, "ID", "ProblemDescription");
+            ViewData["ProblemID"] = new SelectList(_context.Problems, "ID", "ProblemTitle");
             return View();
         }
 
@@ -59,16 +99,26 @@ namespace Pitcher.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,JobID,ProblemID")] Result result)
+        public async Task<IActionResult> Create([Bind("JobID,ProblemID")] Result result)
         {
-            if (ModelState.IsValid)
+            try
             {
-                _context.Add(result);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    _context.Add(result);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                ViewData["JobID"] = new SelectList(_context.Jobs, "ID", "JobTitle", result.JobID);
+                ViewData["ProblemID"] = new SelectList(_context.Problems, "ID", "ProblemTitle", result.ProblemID);
             }
-            ViewData["JobID"] = new SelectList(_context.Jobs, "ID", "JobTitle", result.JobID);
-            ViewData["ProblemID"] = new SelectList(_context.Problems, "ID", "ProblemDescription", result.ProblemID);
+            catch (DbUpdateException /* ex */)
+            {                
+                //Log the error (uncomment ex variable name and write a log.
+                ModelState.AddModelError("", "Unable to save changes. " +
+                "Try again, and if the problem persists " +
+                "see your system administrator.");
+            }
             return View(result);
         }
 
@@ -86,45 +136,46 @@ namespace Pitcher.Controllers
                 return NotFound();
             }
             ViewData["JobID"] = new SelectList(_context.Jobs, "ID", "JobTitle", result.JobID);
-            ViewData["ProblemID"] = new SelectList(_context.Problems, "ID", "ProblemDescription", result.ProblemID);
+            ViewData["ProblemID"] = new SelectList(_context.Problems, "ID", "ProblemTitle", result.ProblemID);
             return View(result);
         }
 
         // POST: Results/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        // COPY AND PASTE THIS METHOD CUSTOMIZATION INTO OTHER CONTROLLERS. Prevents overposting.
+        [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,JobID,ProblemID")] Result result)
+        public async Task<IActionResult> EditPost(int? id)
         {
-            if (id != result.JobID)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            var resultToUpdate = await _context.Results.FirstOrDefaultAsync(u => u.ID == id);
+            if (await TryUpdateModelAsync<Result>(
+                resultToUpdate,
+                //Empty string is a prefix for form field names.
+                "",
+                r => r.JobID, r => r.ProblemID))
             {
                 try
                 {
-                    _context.Update(result);
-                    await _context.SaveChangesAsync();
+                    await _context.SaveChangesAsync();                    
+                    ViewData["JobID"] = new SelectList(_context.Jobs, "ID", "JobTitle", resultToUpdate.JobID);
+                    ViewData["ProblemID"] = new SelectList(_context.Problems, "ID", "ProblemTitle", resultToUpdate.ProblemID);
+                    return RedirectToAction(nameof(Index));
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (DbUpdateConcurrencyException /* ex */)
                 {
-                    if (!ResultExists(result.JobID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                    //Log the error (uncomment ex variable name and write a log.)
+                    ModelState.AddModelError("", "Unable to save changes. " +
+                        "Try again, and if the problem persists, " +
+                        "see your system administrator.");
+                }                
             }
-            ViewData["JobID"] = new SelectList(_context.Jobs, "ID", "JobTitle", result.JobID);
-            ViewData["ProblemID"] = new SelectList(_context.Problems, "ID", "ProblemDescription", result.ProblemID);
-            return View(result);
+            return View(resultToUpdate);  
         }
 
         // GET: Results/Delete/5
@@ -136,12 +187,15 @@ namespace Pitcher.Controllers
             }
 
             var result = await _context.Results
+                .AsNoTracking()
                 .Include(r => r.Job)
                 .Include(r => r.Problem)
                 .FirstOrDefaultAsync(m => m.JobID == id);
             if (result == null)
             {
-                return NotFound();
+                ViewData["ErrorMessage"] =
+                    "Delete failed. Try again, and if the problem persists " +
+                    "see your system administrator.";
             }
 
             return View(result);
@@ -153,14 +207,28 @@ namespace Pitcher.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var result = await _context.Results.FindAsync(id);
-            _context.Results.Remove(result);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            if(result == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            try
+            {
+
+                _context.Results.Remove(result);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            catch(DbUpdateException /* ex */)
+            {
+                //Log the error (uncomment ex variable name and write a log.)
+                return RedirectToAction(nameof(Delete), new {id = id, saveChangesError = true});
+            }
         }
 
         private bool ResultExists(int id)
         {
-            return _context.Results.Any(e => e.JobID == id);
+            return _context.Results.Any(e => e.ID == id);
         }
     }
 }
