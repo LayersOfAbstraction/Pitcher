@@ -59,7 +59,7 @@
                 @Html.DisplayFor(modelItem => item.ProblemTitle)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ProblemDescription)
+                <span style="white-space: pre-line">@Html.DisplayFor(modelItem => item.ProblemDescription)</span>
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ProblemStartDate)
@@ -92,6 +92,7 @@
     var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
     var nextDisabled = !Model.HasNextPage ? "disabled" : "";
 }
+
 <a asp-action="Index"
    asp-route-sortOrder="@ViewData["CurrentSort"]"
    asp-route-pageNumber="@(Model.PageIndex - 1)"
