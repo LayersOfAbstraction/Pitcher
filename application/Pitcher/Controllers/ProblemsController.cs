@@ -85,7 +85,7 @@ namespace Pitcher.Controllers
                     break;                 
             }
 
-            int pageSize = 20;            
+            int pageSize = 5;            
             return View(await PaginatedList<Problem>.CreateAsync(problems.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 
