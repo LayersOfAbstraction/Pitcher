@@ -1,7 +1,7 @@
 @model IEnumerable<Pitcher.Models.Result>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Results";
 }
 
 <h1>Index</h1>
@@ -9,17 +9,26 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
+
+ @*COPY AND PASTE THIS TAG HELPER METHOD TEXTBOX CUSTOMIZATION INTO OTHER VIEWS TO ENABLE SEARCHING.*@
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Find by name: <input type="text" name="SearchString" value="@ViewData["currentFilter"]" />
+            <input type="submit" value="Search" class="btn btn-primary" /> |
+            <a asp-action="Index">Back to Full List</a>
+        </p>
+    </div>
+</form>
+
+<table class="table table-hover">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.ID)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["JobTitleSortParam"]">@Html.DisplayNameFor(model => model.Job)</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Job)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Problem)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["ProblemTitleSortParam"]">@Html.DisplayNameFor(model => model.Problem)</a>
             </th>
             <th></th>
         </tr>
@@ -28,20 +37,16 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.ID)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.Job.JobTitle)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Problem.ProblemTitle)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                <a asp-action="Edit" asp-route-id="@item.ID" button type="button" class="btn btn-primary btn-block">Edit</a> 
+                <a asp-action="Details" asp-route-id="@item.ID" button type="button" class="btn btn-info btn-block">Details</a> 
+                <a asp-action="Delete" asp-route-id="@item.ID" button type="button" class="btn btn-primary btn-block">Delete</a>
             </td>
-        </tr>
-}
+        </tr>}
     </tbody>
 </table>
