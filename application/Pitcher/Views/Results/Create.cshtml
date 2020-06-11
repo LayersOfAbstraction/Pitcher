@@ -18,7 +18,8 @@
             </div>
             <div class="form-group">
                 <label asp-for="Problem" class="control-label"></label>
-                <select asp-for="ProblemID" class ="form-control" asp-items="ViewBag.ProblemID"></select>
+                <input asp-for="ProblemID" class="form-control"/>
+                <span asp-validation-for="ProblemID" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
