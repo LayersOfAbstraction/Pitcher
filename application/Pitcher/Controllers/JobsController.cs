@@ -28,6 +28,7 @@ namespace Pitcher.Controllers
             ViewData["JobTitleSortParm"] = sortOrder == "JobStartDate" ? "JobTitle_desc" : "JobStartDate";
             ViewData["JobStartDateSortParm"] = sortOrder == "JobStartDate" ? "JobStart_date_desc" : "JobStartDate";
             ViewData["JobDeadlineDateSortParm"] = sortOrder == "JobDeadlineDate" ? "JobDeadline_date_desc" : "JobDeadlineDate";
+            ViewData["JobIsCompleteSortParm"] = sortOrder == "JobIsComplete" ? "JobIsComplete_desc" : "JobIsComplete";
             ViewData["CurrentFilter"] = searchString;
             var jobs = from j in _context.Jobs
                         select j;
@@ -65,6 +66,12 @@ namespace Pitcher.Controllers
                 case "JobDeadlineDate":
                     jobs = jobs.OrderBy(j => j.JobDeadline);
                     break;
+                case "JobIsComplete_desc":
+                    jobs = jobs.OrderByDescending(j => j.JobIsComplete);
+                    break;   
+                case "JobIsComplete":
+                    jobs = jobs.OrderBy(j => j.JobIsComplete);
+                    break;   
                 //By default JobTitle is in ascending order when entity is loaded. 
                 default:
                     jobs = jobs.OrderBy(j => j.JobTitle);
