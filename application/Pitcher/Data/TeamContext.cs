@@ -26,17 +26,6 @@ namespace Pitcher.Data
             modelBuilder.Entity<Problem>().ToTable("tblProblem");
             modelBuilder.Entity<Chat>().ToTable("tblChat");
             modelBuilder.Entity<Result>().ToTable("tblResult");
-
-            // modelBuilder.Entity<Result>()
-                // .HasKey(bc => new { bc.JobID, bc.ProblemID });
-            modelBuilder.Entity<Result>()
-                .HasOne(bc => bc.Job)
-                .WithMany(b => b.Results)
-                .HasForeignKey(bc => bc.JobID);
-            modelBuilder.Entity<Result>()
-                .HasOne(bc => bc.Problem)
-                .WithMany(c => c.Result)
-                .HasForeignKey(bc => bc.ProblemID);
         }        
     }
 }
