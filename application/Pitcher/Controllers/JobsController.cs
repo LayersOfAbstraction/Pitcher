@@ -22,83 +22,45 @@ namespace Pitcher.Controllers
 
         // GET: Jobs
         // COPY AND PASTE THIS METHOD CUSTOMIZATION INTO OTHER CONTROLLERS. Enables sorting. 
-        public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? pageNumber)
+        public IActionResult Index()
         {
-            ViewData["CurrentSort"] = sortOrder;
-            ViewData["JobTitleSortParm"] = sortOrder == "JobStartDate" ? "JobTitle_desc" : "JobStartDate";
-            ViewData["JobStartDateSortParm"] = sortOrder == "JobStartDate" ? "JobStart_date_desc" : "JobStartDate";
-            ViewData["JobDeadlineDateSortParm"] = sortOrder == "JobDeadlineDate" ? "JobDeadline_date_desc" : "JobDeadlineDate";
-            ViewData["JobIsCompleteSortParm"] = sortOrder == "JobIsComplete" ? "JobIsComplete_desc" : "JobIsComplete";
-            ViewData["CurrentFilter"] = searchString;
-            var jobs = from j in _context.Jobs
-                        select j;
-
-            if (searchString != null)
-            {
-                pageNumber = 1;
-            }
-            else
-            {
-                searchString = currentFilter;
-            }
-
-
-            if (!String.IsNullOrEmpty(searchString))
-            {
-                jobs = jobs.Where(j => j.JobTitle.Contains(searchString)
-                                    || j.JobDescription.Contains(searchString));
-            }
-
-            switch (sortOrder)
-            {
-                case "JobTitle_desc":
-                    jobs = jobs.OrderByDescending(j => j.JobTitle);
-                    break;
-                case "JobStartDate":
-                    jobs = jobs.OrderBy(j => j.JobStartDate);
-                    break;
-                case "JobStart_date_desc":
-                    jobs = jobs.OrderByDescending(j => j.JobStartDate);
-                    break;
-                case "JobDeadline_date_desc":
-                    jobs = jobs.OrderByDescending(j => j.JobDeadline);
-                    break;
-                case "JobDeadlineDate":
-                    jobs = jobs.OrderBy(j => j.JobDeadline);
-                    break;
-                case "JobIsComplete_desc":
-                    jobs = jobs.OrderByDescending(j => j.JobIsComplete);
-                    break;   
-                case "JobIsComplete":
-                    jobs = jobs.OrderBy(j => j.JobIsComplete);
-                    break;   
-                //By default JobTitle is in ascending order when entity is loaded. 
-                default:
-                    jobs = jobs.OrderBy(j => j.JobTitle);
-                    break;                    
-            } 
-
-            int pageSize = 20;
-            return View(await PaginatedList<Job>.CreateAsync(jobs.AsNoTracking(), pageNumber ?? 1, pageSize));
+            return View();
         }
+
+        public IActionResult GetAllJobs()
+        {
+            return Json(_context.Jobs.ToList());
+        }
+
+        public IActionResult GetAllProblemByJobId(int? ID)
+        {
+            if (ID == null)
+            {
+                return NotFound();
+            }
+            var resultlist = _context.Results.Where(r => r.JobID == ID).ToList();
+            var problemlist = new List<Problem>();
+            resultlist.ForEach(r =>
+            {
+                r.Problem = _context.Problems.Find(r.ProblemID);
+                if (r.Problem != null)
+                { 
+                    problemlist.Add(r.Problem); 
+                }
+            });
+            return Json(problemlist);
+        }
+
 
         // GET: Jobs/Details/5
         // COPY AND PASTE THIS METHOD CUSTOMIZATION INTO OTHER CONTROLLERS.  
-        public async Task<IActionResult> Details(int? id/*, int? problemID*/)
+        public IActionResult Details(int? ID)
         {
-            if (id == null)
+            if (ID == null)
             {
                 return NotFound();
             }
-
-            var job = await _context.Jobs
-                .AsNoTracking()
-                .FirstOrDefaultAsync(m => m.ID == id);
-            if (job == null)
-            {
-                return NotFound();
-            }
-
+            var job = _context.Jobs.Find(ID);
             return View(job);
         }
 
