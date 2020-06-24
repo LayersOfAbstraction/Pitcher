@@ -44,13 +44,10 @@ namespace Pitcher.Controllers
             {
                 r.Problem = _context.Problems.Find(r.ProblemID);
                 if (r.Problem != null)
-                { 
-                    problemlist.Add(r.Problem); 
-                }
+                { problemlist.Add(r.Problem); }
             });
             return Json(problemlist);
         }
-
 
         // GET: Jobs/Details/5
         // COPY AND PASTE THIS METHOD CUSTOMIZATION INTO OTHER CONTROLLERS.  
