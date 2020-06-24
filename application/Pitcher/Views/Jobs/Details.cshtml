@@ -1,45 +1,87 @@
 @model Pitcher.Models.Job
-
+@using Pitcher.Models
+@{ 
+    var problem = new Problem();
+}
 @{
     ViewData["Title"] = "Details";
 }
-<div>
-    <h4>Job</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.JobTitle)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.JobTitle)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.JobDescription)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.JobDescription)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.JobStartDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.JobStartDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.JobDeadline)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.JobDeadline)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.JobIsComplete)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.JobIsComplete)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.ID">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+
+<h1>Details</h1>
+<table id="CurrentJobTable" class="table">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.ID)</th>
+            <th>@Html.DisplayNameFor(model => model.JobTitle)</th>
+            <th>@Html.DisplayNameFor(model => model.JobDescription)</th>
+            <th>@Html.DisplayNameFor(model => model.JobStartDate)</th>
+            <th>@Html.DisplayNameFor(model => model.JobDeadline)</th>
+            <th>@Html.DisplayNameFor(model => model.JobIsComplete)</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>@Html.DisplayTextFor(model => model.ID)</td>
+            <td>@Html.DisplayTextFor(model => model.JobTitle)</td>
+            <td>@Html.DisplayTextFor(model => model.JobDescription)</td>
+            <td>@Html.DisplayTextFor(model => model.JobStartDate)</td>
+            <td>@Html.DisplayTextFor(model => model.JobDeadline)</td>
+            <td>@Html.DisplayTextFor(model => model.JobIsComplete)</td>
+        </tr>
+    </tbody>
+</table>
+<table id="ProblemsTable" class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(problemmodel => problem.ID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(problemmodel => problem.ProblemTitle)
+            </th>
+            <th>
+                @Html.DisplayNameFor(problemmodel => problem.ProblemDescription)
+            </th>
+            <th>
+                @Html.DisplayNameFor(problemmodel => problem.ProblemStartDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(problemmodel => problem.ProblemFileAttachments)
+            </th>
+            <th>
+                @Html.DisplayNameFor(problemmodel => problem.ProblemSeverity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(problemmodel => problem.ProblemComplete)
+            </th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+@section scripts{
+    <script src="~/js/jquery.dataTables.min.js"></script>
+    <script>
+        var id=@Model.ID;
+        $('#ProblemsTable').DataTable({
+                "ajax": {
+                'type': 'get',
+                'data': { ID: id},
+                'dataType': "json",
+                "url": "@Url.Action("GetAllProblemByJobId")",
+                "dataSrc": function (result) {
+                    return result;
+                    }
+                },
+            "columns": [
+                { "data": "ID"},
+                { "data": "ProblemTitle"},
+                { "data": "ProblemDescription"},
+                { "data": "ProblemStartDate"},
+                { "data": "ProblemFileAttachments"},
+                { "data": "ProblemSeverity" },
+                { "data": "ProblemComplete" }
+                ]
+        });
+    </script>
+}
