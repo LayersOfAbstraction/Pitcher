@@ -65,8 +65,10 @@
                 {
                     "data": null,
                     "render": function (value) {
-                        return '<a href="/Jobs/Details/' + value.ID + '">Details</a> ' 
-                            + '<a href="/Jobs/Edit/' + value.ID + '">Edit </a>' 
+                        return '<a href="/Jobs/Details/' + value.ID + '">Details</a> <br> '
+                            
+                            + '<a href="/Jobs/Edit/' + value.ID + '">Edit </a> <br> ' 
+                            
                             + '<a href="/Jobs/Delete/' + value.ID + '">Delete</a>';
                     }
                 }
