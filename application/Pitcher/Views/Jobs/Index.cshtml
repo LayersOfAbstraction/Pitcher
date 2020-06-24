@@ -2,7 +2,11 @@
 @{
     ViewData["Title"] = "Jobs";
 }   
-<h1>Index</h1>
+<h1>Jobs</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
 <table id="jobTable" class="table">
     <thead>
         <tr>
@@ -61,7 +65,9 @@
                 {
                     "data": null,
                     "render": function (value) {
-                        return '<a href="/Jobs/Details/' + value.ID + '">Details</a>';
+                        return '<a href="/Jobs/Details/' + value.ID + '">Details</a> ' 
+                            + '<a href="/Jobs/Edit/' + value.ID + '">Edit </a>' 
+                            + '<a href="/Jobs/Delete/' + value.ID + '">Delete</a>';
                     }
                 }
                 ]
