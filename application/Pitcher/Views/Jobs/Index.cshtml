@@ -65,11 +65,11 @@
                 {
                     "data": null,
                     "render": function (value) {
-                        return '<a href="/Jobs/Details/' + value.ID + '">Details</a> <br> '
+                        return '<a href="/Jobs/Details/' + value.ID + '"button type="button" class="btn btn-primary btn-block">Details</a> <br> '
                             
-                            + '<a href="/Jobs/Edit/' + value.ID + '">Edit </a> <br> ' 
+                            + '<a href="/Jobs/Edit/' + value.ID + '"button type="button" class="btn btn-info btn-block">Edit </a> <br> ' 
                             
-                            + '<a href="/Jobs/Delete/' + value.ID + '">Delete</a>';
+                            + '<a href="/Jobs/Delete/' + value.ID + '"button type="button" class="btn btn-primary btn-block">Delete</a>';
                     }
                 }
                 ]
