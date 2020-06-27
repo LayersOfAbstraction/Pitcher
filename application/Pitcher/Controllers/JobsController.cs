@@ -34,18 +34,9 @@ namespace Pitcher.Controllers
 
         public IActionResult GetAllProblemByJobId(int? ID)
         {
-            if (ID == null)
-            {
-                return NotFound();
-            }
-            var resultlist = _context.Results.Where(r => r.JobID == ID).ToList();
-            var problemlist = new List<Problem>();
-            resultlist.ForEach(r =>
-            {
-                r.Problem = _context.Problems.Find(r.ProblemID);
-                if (r.Problem != null)
-                { problemlist.Add(r.Problem); }
-            });
+            if (ID == null) return NotFound();
+            
+            var problemlist = _context.Results.Where(r => r.JobID == ID).Select(r => r.Problem).ToList();
             return Json(problemlist);
         }
 
