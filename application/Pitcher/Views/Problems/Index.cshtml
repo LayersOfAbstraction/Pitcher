@@ -1,111 +1,83 @@
-@model PaginatedList<Pitcher.Models.Problem>
 
+@model Pitcher.Models.Problem
 @{
     ViewData["Title"] = "Problems";
-}
-
+}   
 <h1>Problems</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
 </p>
- @*COPY AND PASTE THIS TAG HELPER METHOD TEXTBOX CUSTOMIZATION INTO OTHER VIEWS TO ENABLE SEARCHING.*@
-<form asp-action="Index" method="get">
-    <div class="form-actions no-color">
-        <p>
-            Find by name: <input type="text" name="SearchString" value="@ViewData["currentFilter"]" />
-            <input type="submit" value="Search" button type="button" class="btn btn-primary" /> |
-            <a asp-action="Index">Back to Full List </a>
-        </p>
-    </div>
-</form>
-<table class="table table-hover">
+<table id="problemTable" class="table">
     <thead>
         <tr>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["ProblemIDSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Problem ID</a>
+                @Html.DisplayNameFor(model => model.ID)
             </th>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["ProblemTitleSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Problem Title</a>
+                @Html.DisplayNameFor(model => model.ProblemTitle)
             </th>
             <th>
-                Description
+                <span style="white-space: pre-line">@Html.DisplayNameFor(model => model.ProblemDescription)</span>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["ProblemStartDateSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Problem Start Date</a>
+                @Html.DisplayNameFor(model => model.ProblemStartDate)
             </th>
             <th>
-                Problem File Attachments
+                @Html.DisplayNameFor(model => model.ProblemFileAttachments)
             </th>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["ProblemSeveritySortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">ProblemSeverity</a>
+                @Html.DisplayNameFor(model => model.ProblemSeverity)
             </th>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["ProblemCompleteSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">ProblemComplete</a>
+                @Html.DisplayNameFor(model => model.ProblemComplete)
             </th>
             <th>
-                Job Title
             </th>
-            <th></th>
         </tr>
     </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProblemTitle)
-            </td>
-            <td>
-                <span style="white-space: pre-line">@Html.DisplayFor(modelItem => item.ProblemDescription)</span>
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProblemStartDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProblemFileAttachments)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProblemSeverity)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProblemComplete)
-            </td>
-            <td>
-                @foreach (var title in item.Result)
-                {
-                    @Html.DisplayFor(modelItem => title.Job.JobTitle)
-                    <br />
-                }
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ID" button type="button" class="btn btn-primary btn-block" >Edit</a> 
-                <a asp-action="Details" asp-route-id="@item.ID" button type="button" class="btn btn-info btn-block">Details</a> 
-                <a asp-action="Delete" asp-route-id="@item.ID" button type="button" class="btn btn-primary btn-block">Delete</a>
-            </td>
-        </tr>}
-    </tbody>
+    <tbody></tbody>
 </table>
-@{
-    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
-    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+@section scripts{ 
+    <script src="~/js/jquery.dataTables.min.js"></script>
+    <script>
+        var oTable = $('#problemTable').DataTable({
+                "ajax": {
+                type: 'get',
+                'dataType': "json",
+                "url": "@Url.Action("GetAllProblems")",
+                "dataSrc": function (result) {
+                    return result;
+                    }
+                },
+            "columns": [
+                { "data": "ID"},
+                { "data": "ProblemTitle"},
+                { "data": "ProblemDescription"},
+                { "data": "ProblemStartDate"},
+                { "data": "ProblemFileAttachments"},
+                { "data": "ProblemSeverity"},
+                {
+                    "data": "ProblemIsComplete",
+                    "render": function (data) {
+                        if (data) {
+                            return "IsComplete";
+                        } else {
+                            return "Not Complete";
+                        }
+                    }
+                },
+                {
+                    "data": null,
+                    "render": function (value) {
+                        return '<a href="/Problems/Details/' + value.ID + '"button type="button" class="btn btn-primary btn-block">Details</a> <br> '
+                            
+                            + '<a href="/Problems/Edit/' + value.ID + '"button type="button" class="btn btn-info btn-block">Edit </a> <br> ' 
+                            
+                            + '<a href="/Problems/Delete/' + value.ID + '"button type="button" class="btn btn-primary btn-block">Delete</a>';
+                    }
+                }
+                ]
+        });
+    </script>
 }
-
-<a asp-action="Index"
-   asp-route-sortOrder="@ViewData["CurrentSort"]"
-   asp-route-pageNumber="@(Model.PageIndex - 1)"
-   asp-route-currentFilter="@ViewData["CurrentFilter"]"
-   class="btn btn-secondary @prevDisabled"
-   button type="button">
-    Previous
-</a>
-<a asp-action="Index"
-   asp-route-sortOrder="@ViewData["CurrentSort"]"
-   asp-route-pageNumber="@(Model.PageIndex + 1)"
-   asp-route-currentFilter="@ViewData["CurrentFilter"]"
-   class="btn btn-secondary @nextDisabled"
-   button type="button">   
-    Next
-</a>
