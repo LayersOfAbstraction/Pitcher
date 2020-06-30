@@ -20,74 +20,16 @@ namespace Pitcher.Controllers
         }
 
         // GET: Problems
-        public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? pageNumber)
+        public IActionResult Index()
         {
-            ViewData["CurrentSort"] = sortOrder;
-            ViewData["ProblemIDSortParm"]  = sortOrder == "ProblemID" ? "ProblemID_desc" : "ProblemID";
-            ViewData["ProblemTitleSortParm"] = sortOrder == "ProblemTitle" ? "ProblemTitle_desc" : "ProblemTitle";
-            ViewData["ProblemStartDateSortParm"] = sortOrder == "ProblemStartDate" ? "ProblemStartDate_desc" : "ProblemStartDate";
-            ViewData["ProblemSeveritySortParm"] = sortOrder == "ProblemSeverity" ? "ProblemSeverity_desc" : "ProblemSeverity";
-            ViewData["ProblemCompleteSortParm"] = sortOrder == "ProblemComplete" ? "ProblemComplete_desc" : "ProblemComplete";          
-            ViewData["CurrentFilter"] = searchString;
-            
-            //READ RELATED DATA HERE
-            var problems = from p in _context.Problems 
-                            .Include(p => p.Result)
-                                .ThenInclude(j => j.Job)                                                     
-                                select p;
-            //END OF READ RELATED DATA
-            if(searchString != null)
-            {
-                pageNumber = 1;
-            }
-            else
-            {
-                searchString = currentFilter;
-            }
-
-            if(!String.IsNullOrEmpty(searchString))
-            {
-                problems = problems.Where(p => p.ProblemTitle.Contains(searchString)
-                                            || p.ProblemDescription.Contains(searchString));
-            }
-
-            switch (sortOrder)
-            {
-                case "ProblemID_desc":
-                    problems = problems.OrderByDescending(p => p.ID);
-                    break;
-                case "ProblemTitle_desc":
-                    problems = problems.OrderByDescending(p => p.ProblemTitle);
-                    break;
-                case "ProblemTitle":
-                    problems = problems.OrderBy(p => p.ProblemTitle);
-                    break;
-                case "ProblemStartDate":
-                    problems = problems.OrderBy(p => p.ProblemStartDate);                    
-                    break;
-                case "ProblemStartDate_desc":
-                    problems = problems.OrderByDescending(p => p.ProblemStartDate);                    
-                    break;
-                case "ProblemSeverity":
-                    problems = problems.OrderBy(p => p.ProblemSeverity);
-                    break;
-                case "ProblemSeverity_desc":
-                    problems = problems.OrderByDescending(p => p.ProblemSeverity);
-                    break;   
-                case "ProblemComplete":
-                    problems = problems.OrderBy(p => p.ProblemComplete);
-                    break;
-                case "ProblemComplete_desc":
-                    problems = problems.OrderByDescending(p => p.ProblemComplete);
-                    break; 
-                default:
-                    problems = problems.OrderBy(p => p.ID);
-                    break;                 
-            }
-
-            int pageSize = 5;            
-            return View(await PaginatedList<Problem>.CreateAsync(problems.AsNoTracking(), pageNumber ?? 1, pageSize));
+            return View();
         }
+
+        public IActionResult GetAllProblems()
+        {
+            return Json(_context.Problems.ToList());
+        }
+
 
         // GET: Problems/Details/5
         public async Task<IActionResult> Details(int? id)
