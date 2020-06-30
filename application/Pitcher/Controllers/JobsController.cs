@@ -31,10 +31,13 @@ namespace Pitcher.Controllers
         {
             return Json(_context.Jobs.ToList());
         }
-
+        //Hello Word
         public IActionResult GetAllProblemByJobId(int? ID)
         {
-            if (ID == null) return NotFound();
+            if (ID == null)
+            {
+                return NotFound();
+            } 
             
             var problemlist = _context.Results.Where(r => r.JobID == ID).Select(r => r.Problem).ToList();
             return Json(problemlist);
