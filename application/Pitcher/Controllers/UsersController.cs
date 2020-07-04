@@ -76,104 +76,14 @@ namespace Pitcher.Controllers
         // GET: Users
         // COPY AND PASTE THIS METHOD CUSTOMIZATION INTO OTHER CONTROLLERS. Enables sorting.        
         [Authorize(Roles = "admin")]
-        public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? pageNumber)
+        public IActionResult Index()
         {
-            ViewData["CurrentSort"] = sortOrder;
-            ViewData["LastNameSortParm"] = sortOrder == "UserLastName" ? "LastName_desc" : "UserLastName";
-            ViewData["FirstNameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "FirstName_desc" : "";
-            ViewData["UserEmailSortParm"] = sortOrder == "UserContactEmail" ? "UserContactEmail_desc" : "UserContactEmail";
-            ViewData["UserPhoneNumberParm"] = sortOrder == "UserPhoneNumber" ? "UserPhoneNumber_desc" : "UserPhoneNumber";
-            ViewData["UserAddressSortParm"] = sortOrder == "UserAddress" ? "UserAddress_desc" : "UserAddress";
-            ViewData["UserPostCodeSortParm"] = sortOrder == "UserPostCode" ? "UserPostCode_desc" : "UserPostCode";
-            ViewData["UserCountrySortParm"] = sortOrder == "UserCountry" ? "UserCountry_desc" : "UserCountry";
-            ViewData["UserMobileNumberSortParm"] = sortOrder == "UserMobileNumber" ? "UserMobileNumber_desc" : "UserMobileNumber";
-            ViewData["UserStateSortParm"] = sortOrder == "UserState" ? "UserState_desc" : "UserState";
-            ViewData["CurrentFilter"] = searchString;
-            var users = from u in _context.Users
-                        select u;
+            return View();
+        }
 
-            if (searchString != null)
-            {
-                pageNumber = 1;
-            }
-            else
-            {
-                searchString = currentFilter;
-            }
-
-            if (!String.IsNullOrEmpty(searchString))
-            {
-                users = users.Where(u => u.UserLastName.Contains(searchString)
-                                    || u.UserFirstName.Contains(searchString)
-                                    || u.UserContactEmail.Contains(searchString)
-                                    || u.UserPhoneNumber.Contains(searchString)
-                                    || u.UserAddress.Contains(searchString)
-                                    || u.UserPostCode.Contains(searchString)
-                                    || u.UserCountry.Contains(searchString)
-                                    || u.UserMobileNumber.Contains(searchString)
-                                    || u.UserState.Contains(searchString));
-            }
-            
-            switch (sortOrder)
-            {
-                case "FirstName_desc":
-                    users = users.OrderByDescending(u => u.UserFirstName);
-                    break;
-                case "LastName_desc":
-                    users = users.OrderByDescending(u => u.UserLastName);
-                    break;                
-                case "UserLastName":
-                    users = users.OrderBy(u => u.UserLastName);
-                    break;
-                case "UserContactEmail":
-                    users = users.OrderBy(u => u.UserContactEmail);
-                    break;
-                case "UserContactEmail_desc":
-                    users = users.OrderByDescending(u => u.UserContactEmail);
-                    break;
-                case "UserPhoneNumber":
-                    users = users.OrderBy(u => u.UserPhoneNumber);
-                    break;
-                case "UserPhoneNumber_desc":
-                    users = users.OrderByDescending(u => u.UserPhoneNumber);
-                    break;           
-                case "UserAddress":
-                    users = users.OrderBy(u => u.UserAddress);
-                    break;
-                case "UserAddress_desc":
-                    users = users.OrderByDescending(u => u.UserAddress);
-                    break;
-                case "UserPostCode":
-                    users = users.OrderBy(u => u.UserPostCode);
-                    break;
-                case "UserPostCode_desc":
-                    users = users.OrderByDescending(u => u.UserPostCode);
-                    break;        
-                case "UserCountry":
-                    users = users.OrderBy(u => u.UserCountry);
-                    break;
-                case "UserCountry_desc":
-                    users = users.OrderByDescending(u => u.UserCountry);
-                    break; 
-                case "UserMobileNumber":
-                    users = users.OrderBy(u => u.UserMobileNumber);
-                    break; 
-                case "UserMobileNumber_desc":
-                    users = users.OrderByDescending(u => u.UserMobileNumber);
-                    break; 
-                case "UserState":
-                    users = users.OrderBy(u => u.UserState);
-                    break;
-                case "UserState_desc":
-                    users = users.OrderByDescending(u => u.UserState);
-                    break;
-                default:
-                    users = users.OrderBy(u => u.UserFirstName);
-                    break;
-            }            
-            
-            int pageSize = 20;
-            return View(await PaginatedList<User>.CreateAsync(users.AsNoTracking(), pageNumber ?? 1, pageSize));
+        public IActionResult GetAllUsers()
+        {
+            return Json(_context.Users.ToList());
         }
 
         // GET: Users/Details/5
