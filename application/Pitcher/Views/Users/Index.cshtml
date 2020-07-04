@@ -1,4 +1,4 @@
-﻿@model PaginatedList<Pitcher.Models.User>
+﻿@model Pitcher.Models.User
 
 @{
     ViewData["Title"] = "Users";
@@ -9,110 +9,76 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
- @*COPY AND PASTE THIS TAG HELPER METHOD TEXTBOX CUSTOMIZATION INTO OTHER VIEWS TO ENABLE SEARCHING.*@
-<form asp-action="Index" method="get">
-    <div class="form-actions no-color">
-        <p>
-            Find by name: <input type="text" name="SearchString" value="@ViewData["currentFilter"]" />
-            <input type="submit" value="Search" button type="button" class="btn btn-primary" /> |
-            <a asp-action="Index" >Back to Full List </a>
-        </p>
-    </div>
-</form>
 
-<table class="table table-hover">
+<table id="userTable" class="table table-hover">
     <thead>
         <tr>
             <th>
-                @*COPY AND PASTE THIS METHOD CUSTOMIZATION INTO OTHER VIEWS TO ENABLE SORTING.*@
-               <a asp-action="Index" asp-route-sortOrder="@ViewData["FirstNameSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">First Name</a>
-            </th>
-            <th>
-               <a asp-action="Index" asp-route-sortOrder="@ViewData["LastNameSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Last Name</a>
+               @Html.DisplayNameFor(model => model.UserFirstName)
             </th>        
             <th>
-               <a asp-action="Index" asp-route-sortOrder="@ViewData["UserEmailSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Email</a>
+               @Html.DisplayNameFor(model => model.UserLastName)
             </th>
             <th>
-               <a asp-action="Index" asp-route-sortOrder="@ViewData["UserPhoneNumberSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Phone</a>
+               @Html.DisplayNameFor(model => model.UserContactEmail)
             </th>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["UserAddressSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Address</a>
+               @Html.DisplayNameFor(model => model.UserPhoneNumber)
             </th>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["UserPostCodeSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Post Code</a>
+                @Html.DisplayNameFor(model => model.UserAddress)
             </th>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["UserCountrySortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Country</a>
+                @Html.DisplayNameFor(model => model.UserPostCode)
             </th>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["MobileNumberSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Mobile Number</a>
+                @Html.DisplayNameFor(model => model.UserCountry)
             </th>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["UserStateSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">State</a>
+                @Html.DisplayNameFor(model => model.UserMobileNumber)
             </th>
-            <th></th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserState)
+            </th>
+            <th>                
+            </th>
         </tr>
     </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserFirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserLastName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserContactEmail)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserPhoneNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserAddress)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserPostCode)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserCountry)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserMobileNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserState)
-            </td>  
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ID" button type="button" class="btn btn-primary btn-block" >Edit</a> 
-                <a asp-action="Details" asp-route-id="@item.ID" button type="button" class="btn btn-info btn-block">Details</a> 
-                <a asp-action="Delete" asp-route-id="@item.ID" button type="button" class="btn btn-primary btn-block">Delete</a>
-            </td>
-        </tr>
+    <tbody></tbody>
+</table>    
+@section scripts{ 
+    <script src="~/js/jquery.dataTables.min.js"></script>
+    <script>
+        var oTable = $('#userTable').DataTable({
+                "ajax": {
+                type: 'get',
+                'dataType': "json",
+                "url": "@Url.Action("GetAllUsers")",
+                "dataSrc": function (result) {
+                    return result;
+                    }
+                },
+            "columns": [
+                { "data": "UserFirstName"},
+                { "data": "UserLastName"},
+                { "data": "UserContactEmail"},
+                { "data": "UserPhoneNumber"},
+                { "data": "UserAddress"},
+                { "data": "UserPostCode"},
+                { "data": "UserCountry"},
+                { "data": "UserMobileNumber"},
+                { "data": "UserState"},
+                {
+                    "data": null,
+                    "render": function (value) {
+                        return '<a href="/Problems/Details/' + value.ID + '"button type="button" class="btn btn-primary btn-block">Details</a> <br> '
+                            
+                            + '<a href="/Problems/Edit/' + value.ID + '"button type="button" class="btn btn-info btn-block">Edit </a> <br> ' 
+                            
+                            + '<a href="/Problems/Delete/' + value.ID + '"button type="button" class="btn btn-primary btn-block">Delete</a>';
+                    }
+                }
+                ]
+        });
+    </script>
 }
-    </tbody>
-</table>
-
-@{
-    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
-    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
-}
-
-<a asp-action="Index"
-   asp-route-sortOrder="@ViewData["CurrentSort"]"
-   asp-route-pageNumber="@(Model.PageIndex - 1)"
-   asp-route-currentFilter="@ViewData["CurrentFilter"]"
-   class="btn btn-secondary @prevDisabled"
-   button type="button">
-    Previous
-</a>
-<a asp-action="Index"
-   asp-route-sortOrder="@ViewData["CurrentSort"]"
-   asp-route-pageNumber="@(Model.PageIndex + 1)"
-   asp-route-currentFilter="@ViewData["CurrentFilter"]"
-   class="btn btn-secondary @nextDisabled"
-   button type="button">
-   
-    Next
-</a>
