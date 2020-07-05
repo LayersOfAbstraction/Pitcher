@@ -7,7 +7,7 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table id="jobTable" class="table">
+<table id="jobTable" class="table table-hover">
     <thead>
         <tr>
             <th>
@@ -56,7 +56,7 @@
                     "data": "JobIsComplete",
                     "render": function (data) {
                         if (data) {
-                            return "IsComplete";
+                            return "Is Complete";
                         } else {
                             return "Not Complete";
                         }
