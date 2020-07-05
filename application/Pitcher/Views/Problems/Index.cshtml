@@ -8,7 +8,7 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table id="problemTable" class="table">
+<table id="problemTable" class="table table-hover">
     <thead>
         <tr>
             <th>
@@ -58,10 +58,10 @@
                 { "data": "ProblemFileAttachments"},
                 { "data": "ProblemSeverity"},
                 {
-                    "data": "ProblemIsComplete",
+                    "data": "ProblemComplete",
                     "render": function (data) {
                         if (data) {
-                            return "IsComplete";
+                            return "Is Complete";
                         } else {
                             return "Not Complete";
                         }
