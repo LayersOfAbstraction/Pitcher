@@ -18,7 +18,8 @@ namespace Pitcher.Controllers
 {
     public class HomeController : Controller
     {
-        string userSessionEmail; 
+        string _userSessionEmail; 
+
         User _objUser = new User();
         
         private readonly TeamContext _context;
@@ -32,13 +33,14 @@ namespace Pitcher.Controllers
         {            
             if(User.Identity.IsAuthenticated)
             {
-                userSessionEmail = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+                //Store Auth0 email
+                _userSessionEmail = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
                 string[] strArrSqlDbEmails = new string[1];
                 strArrSqlDbEmails[0] = _objUser.UserContactEmail;
                 
                 foreach(string email in strArrSqlDbEmails)
                 {
-                    if(_objUser.UserContactEmail == userSessionEmail)
+                    if(_objUser.UserContactEmail == _userSessionEmail)
                     {
                         string accessToken = await HttpContext.GetTokenAsync("access_token");
         
