@@ -14,8 +14,10 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Pitcher.Controllers
 {
+    
     public class UsersController : Controller
     {
+        
         private readonly TeamContext _context;
 
         public UsersController(TeamContext context)
