@@ -9,19 +9,13 @@ using Pitcher.Models.TeamViewModels;
 using System;
 using Microsoft.AspNetCore.Authentication;
 using System.Globalization;
-using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using System.Collections.Generic;
 
 namespace Pitcher.Controllers
 {
     public class HomeController : Controller
     {
-        string _userSessionEmail; 
-
-        User _objUser = new User();
-        
         private readonly TeamContext _context;
 
         public HomeController(TeamContext context)
@@ -30,34 +24,18 @@ namespace Pitcher.Controllers
         }
 
         public async Task<IActionResult> Index()
-        {            
+        {
             if(User.Identity.IsAuthenticated)
             {
-                //Store Auth0 email
-                _userSessionEmail = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-                string[] strArrSqlDbEmails = new string[1];
-                strArrSqlDbEmails[0] = _objUser.UserContactEmail;
-                
-                foreach(string email in strArrSqlDbEmails)
-                {
-                    if(_objUser.UserContactEmail == _userSessionEmail)
-                    {
-                        string accessToken = await HttpContext.GetTokenAsync("access_token");
-        
-                        // if you need to check the Access Token expiration time, use this value
-                        // provided on the authorization response and stored.
-                        // do not attempt to inspect/decode the access token
-                        DateTime accessTokenExpiresAt = DateTime.Parse(
-                            await HttpContext.GetTokenAsync("expires_at"), 
-                            CultureInfo.InvariantCulture,
-                            DateTimeStyles.RoundtripKind);
-                            
-                        string idToken = await HttpContext.GetTokenAsync("id_token");
-
-                        // Now you can use them. For more info on when and how to use the
-                        // Access Token and ID Token, see https://auth0.com/docs/tokens
-                    }
-                }               
+                string accessToken = await HttpContext.GetTokenAsync("access_token");
+                // if you need to check the Access Token expiration time, use this value
+                // provided on the authorization response and stored.
+                // do not attempt to inspect/decode the access token
+                DateTime accessTokenExpiresAt = DateTime.Parse(
+                    await HttpContext.GetTokenAsync("expires_at"), 
+                    CultureInfo.InvariantCulture,
+                    DateTimeStyles.RoundtripKind);                    
+                string idToken = await HttpContext.GetTokenAsync("id_token");         
             }
             return View();
         }
@@ -93,11 +71,6 @@ namespace Pitcher.Controllers
                     //DeadlineDate = projectGroup,
                 };
             return View(await data.AsNoTracking().ToListAsync());  
-        }
-
-        public IActionResult AccessDenied()
-        {
-            return View();
         }
     }
 }
