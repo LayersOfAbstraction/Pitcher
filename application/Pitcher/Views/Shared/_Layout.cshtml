@@ -34,11 +34,12 @@
                         <li class="nav-item">
                             <a class="nav-link text-white" asp-area="" asp-controller="Problems" asp-action="Index">Problems</a>
                         </li>                                              
-                        
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-area="" asp-controller="Users" asp-action="Index">Users</a>
-                        </li>
-                        
+                        @if (User.Identity.IsAuthenticated && User.IsInRole("admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-area="" asp-controller="Users" asp-action="Index">Users</a>
+                            </li>  
+                        }                        
                         <li class="nav-item">
                             <a class="nav-link text-white" asp-area="" asp-controller="Jobs" asp-action="Index">Jobs</a>
                         </li>   
