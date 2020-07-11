@@ -53,12 +53,6 @@ namespace Pitcher.Controllers
         {
             return View();
         }
-
-        public IActionResult AccessDenied()
-        {
-            return View();
-        }
-
         
         [Authorize]        
         /// <summary>
@@ -75,11 +69,17 @@ namespace Pitcher.Controllers
             });
         }
 
-        // GET: Users
-        // COPY AND PASTE THIS METHOD CUSTOMIZATION INTO OTHER CONTROLLERS. Enables sorting.        
+    
         [Authorize(Roles = "admin")]
         public IActionResult Index()
         {
+            //PROBLEM: Display all user profile values, email,name and role.
+            //EXTRACT claim from token.
+            foreach(var value in User.Claims.ToList())
+            {
+                //TODO: Display a list of names.
+            }
+            string userSessionEmail = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
             return View();
         }
 
