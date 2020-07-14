@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
+using Auth0.ManagementApi;
 
 
 namespace Pitcher.Controllers
@@ -73,11 +74,15 @@ namespace Pitcher.Controllers
         [Authorize(Roles = "admin")]
         public IActionResult Index()
         {
-            //PROBLEM: Display all user profile values, email,name and role.
+            //PROBLEM: get all user profile values, email,name and role.
             //EXTRACT claim from token.
-            foreach(var value in User.Claims.ToList())
+            //CREATE
+            foreach(var profile in User.Claims.ToList())
             {
-                //TODO: Display a list of names.
+                AuthenticationServiceUserProfile objAuth0Users = new AuthenticationServiceUserProfile();
+                {
+                    
+                }
             }
             string userSessionEmail = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
             return View();
