@@ -1,83 +1,58 @@
-@model IEnumerable<Pitcher.Models.Registration>
 
+@model Pitcher.Models.Registration
 @{
     ViewData["Title"] = "Registrations";
-}
-
-<h1>Registrations</h1>
+}   
+<h1>Jobs</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-
- @*COPY AND PASTE THIS TAG HELPER METHOD TEXTBOX CUSTOMIZATION INTO OTHER VIEWS TO ENABLE SEARCHING.*@
-<form asp-action="Index" method="get">
-    <div class="form-actions no-color">
-        <p>
-            Find by name: <input type="text" name="SearchString" value="@ViewData["currentFilter"]" />
-            <input type="submit" value="Search" class="btn btn-primary" /> |
-            <a asp-action="Index">Back to Full List</a>
-        </p>
-    </div>
-</form>
-
-<table class="table table-hover">
+<table id="registrationTable" class="table table-hover">
     <thead>
         <tr>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["RegDateSortParm"]">@Html.DisplayNameFor(model => model.RegistrationDate)</a>
+                @Html.DisplayNameFor(model => model.RegistrationDate)
             </th>
             <th>
-                @* COPY AND PASTE THIS METHOD CUSTOMIZATION INTO OTHER VIEWS BOUND TO COMPOSITE TABLES. Enables sorting. *@
-                 <a asp-action="Index" asp-route-sortOrder="@ViewData["FullNameSortParam"]">@Html.DisplayNameFor(model => model.User)</a>
+                @Html.DisplayNameFor(model => model.User)
             </th>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["JobTitleSortParam"]">@Html.DisplayNameFor(model => model.Job)</a>
+                @Html.DisplayNameFor(model => model.Job)
             </th>
-            <th></th>
+            <th>
+            </th>
         </tr>
     </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.RegistrationDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.UserFullname)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Job.JobTitle)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ID" button type="button" class="btn btn-primary btn-block">Edit</a> 
-                <a asp-action="Details" asp-route-id="@item.ID" button type="button" class="btn btn-info btn-block">Details</a> 
-                <a asp-action="Delete" asp-route-id="@item.ID" button type="button" class="btn btn-primary btn-block">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
+    <tbody></tbody>
 </table>
-
-@* @{
-    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
-    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+@section scripts{ 
+    <script src="~/js/jquery.dataTables.min.js"></script>
+    <script>
+        var oTable = $('#registrationTable').DataTable({
+                "ajax": {
+                type: 'get',
+                'dataType': "json",
+                "url": "@Url.Action("GetAllRegistrations")",
+                "dataSrc": function (result) {
+                    return result;
+                    }
+                },
+            "columns": [
+                { "data": "RegistrationDate"},                
+                { "data": "User"},
+                { "data": "Job"},
+                {
+                    "data": null,
+                    "render": function (value) {
+                        return '<a href="/Registration/Details/' + value.ID + '"button type="button" class="btn btn-primary btn-block">Details</a> <br> '
+                            
+                            + '<a href="/Registration/Edit/' + value.ID + '"button type="button" class="btn btn-info btn-block">Edit </a> <br> ' 
+                            
+                            + '<a href="/Registration/Delete/' + value.ID + '"button type="button" class="btn btn-primary btn-block">Delete</a>';
+                    }
+                }
+                ]
+        });
+    </script>
 }
-
-<a asp-action="Index"
-   asp-route-sortOrder="@ViewData["CurrentSort"]"
-   asp-route-pageNumber="@(Model.PageIndex - 1)"
-   asp-route-currentFilter="@ViewData["CurrentFilter"]"
-   class="btn btn-secondary @prevDisabled"
-   button type="button">
-    Previous
-</a>
-<a asp-action="Index"
-   asp-route-sortOrder="@ViewData["CurrentSort"]"
-   asp-route-pageNumber="@(Model.PageIndex + 1)"
-   asp-route-currentFilter="@ViewData["CurrentFilter"]"
-   class="btn btn-secondary @nextDisabled"
-   button type="button">
-   
-    Next
-</a> *@
