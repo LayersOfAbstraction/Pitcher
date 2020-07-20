@@ -71,11 +71,14 @@ namespace Pitcher.Controllers
 
     
         [Authorize(Roles = "admin")]
-        public IActionResult Index()
+        public async Task <IActionResult> Index()
         {
             //auth0 management API.
             var apiClient = new ManagementApiClient(Pitcher.Models.ConstantStrings.strToken, "dev-dgdfgfdgf324.au.auth0.com");
-            return View();
+            //var allUsers = await apiClient.Users.GetAllAsync();
+            
+            //allUsers.Dispose();
+            return View();            
         }
 
         public IActionResult GetAllUsers()
