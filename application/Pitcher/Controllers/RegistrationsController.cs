@@ -7,6 +7,10 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Pitcher.Data;
 using Pitcher.Models;
+using DataTables;
+using System.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
+
 
 namespace Pitcher.Controllers
 {
@@ -14,60 +18,37 @@ namespace Pitcher.Controllers
     {
         private readonly TeamContext _context;
 
-        public RegistrationsController(TeamContext context)
+        private readonly IConfiguration _config;
+
+        //Expose connection string in appsettings.json for DataTables Editor libraries.
+        public RegistrationsController(TeamContext context, IConfiguration config)
         {
             _context = context;
+            _config = config;
+        }      
+
+        
+        public IActionResult Index()
+        {   
+                 
+            string connectionString = _config.GetConnectionString("DefaultConnection");
+            
+            using (var db = new Database(String sqlserver, connectionString))
+            {
+                var response = new Editor(, "registrations")
+                .Field(new Field("users.main_site"))
+                .Field(new Field("users.backup_site"))
+                .Field(new Field("mainSite.name"))
+                .Field(new Field("backupSite.name"))
+                .LeftJoin( "sites as mainSite",   "mainSite.id",   "=", "users.main_site" )
+                .LeftJoin( "sites as backupSite", "backupSite.id", "=", "users.backup_site" );
+                return View();
+            }       
         }
 
-        // GET: Registrations
-        // COPY AND PASTE THIS METHOD CUSTOMIZATION INTO OTHER CONTROLLERS BOUND TO COMPOSITE TABLES. Enables sorting.
-        public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? pageNumber)
+        public IActionResult GetAllRegistrations()
         {
-            ViewData["CurrentSort"] = sortOrder;
-            ViewData["FullNameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "fullName_desc" : "";           
-            ViewData["JobTitleSortParam"] = sortOrder == "jobTitle" ? "jobTitle_desc" : "jobTitle";
-            ViewData["RegDateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
-            ViewData["CurrentFilter"] = searchString;
-            IQueryable <Registration> registrations = _context.Registrations.Include(r => r.Job).Include(r => r.User);
-
-            if (searchString != null)
-            {
-                pageNumber = 1;
-            }
-            else
-            {
-                searchString = currentFilter;
-            }
-
-            if (!String.IsNullOrEmpty(searchString))
-            {
-                registrations = registrations.Where(r => r.User.ToString().Contains(searchString)
-                                    || r.Job.ToString().Contains(searchString));
-            }
-            switch (sortOrder)
-            {
-                case "fullName_desc":
-                    registrations = registrations.OrderByDescending(r => r.User);
-                    break;
-                case "jobTitle_desc":
-                    registrations = registrations.OrderByDescending(r => r.Job);
-                    break;
-                case "Date":
-                registrations = registrations.OrderBy(r => r.RegistrationDate);
-                    break;
-                case "date_desc":
-                    registrations = registrations.OrderByDescending(r => r.RegistrationDate);
-                    break;
-                case "jobTitle":
-                    registrations = registrations.OrderBy(r => r.User);
-                    break;
-                //By default FullName is in ascending order when entity is loaded. 
-                default:
-                    registrations = registrations.OrderBy(r => r.Job);
-                    break;
-            }
-            int pageSize = 20;
-            return View(await  PaginatedList<Registration>.CreateAsync(registrations.AsNoTracking(), pageNumber ?? 1, pageSize));
+            return Json(_context.Registrations.ToList());
         }
 
         // GET: Registrations/Details/5
