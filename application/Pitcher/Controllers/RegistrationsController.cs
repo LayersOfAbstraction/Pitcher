@@ -33,9 +33,9 @@ namespace Pitcher.Controllers
                  
             string connectionString = _config.GetConnectionString("DefaultConnection");
             
-            using (var db = new Database(String sqlserver, connectionString))
+            using (var db = new Database("sqlserver", connectionString))
             {
-                var response = new Editor(, "registrations")
+                var response = new Editor("", "registrations")
                 .Field(new Field("users.main_site"))
                 .Field(new Field("users.backup_site"))
                 .Field(new Field("mainSite.name"))
