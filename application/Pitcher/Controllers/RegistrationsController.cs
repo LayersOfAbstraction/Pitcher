@@ -35,7 +35,7 @@ namespace Pitcher.Controllers
             
             using (var db = new Database("sqlserver", connectionString))
             {
-                var response = new Editor("", "registrations")
+                var response = new Editor(db, "registrations")
                 .Field(new Field("users.main_site"))
                 .Field(new Field("users.backup_site"))
                 .Field(new Field("mainSite.name"))
