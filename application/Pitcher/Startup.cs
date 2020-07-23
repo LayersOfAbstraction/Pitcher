@@ -14,6 +14,10 @@ using Pitcher.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json.Serialization;
+using Auth0.ManagementApi;
+using System.Data.SqlClient;
+using System.Data.Common;
 
 namespace Pitcher
 {
@@ -59,8 +63,9 @@ namespace Pitcher
                 // Configure the scope
                 options.Scope.Clear();
                 options.Scope.Add("openid");
-                 options.Scope.Add("profile");
+                options.Scope.Add("profile");
                 options.Scope.Add("email");
+                options.Scope.Add("openid email profile");
                 // Set the correct name claim type
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
@@ -68,7 +73,7 @@ namespace Pitcher
                     RoleClaimType = "https://schemas.Aussie_Tenant.com"
                 }; 
 
-                // Set the callback path, so Auth0 will call back to http://localhost:3000/callback
+                // Set the callback path, so Auth0 will call back to http://localhost:5001/callback
                 // Also ensure that you have added the URL as an Allowed Callback URL in your Auth0 dashboard
                 options.CallbackPath = new PathString("/callback");
 
@@ -104,10 +109,19 @@ namespace Pitcher
                     }
                 };
             });                       
-
+                
+                DbProviderFactories.RegisterFactory("System.Data.SqlClient", SqlClientFactory.Instance);
                 services.AddDbContext<TeamContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-                services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);           
+                
+                // Add the whole configuration object here.
+                services.AddSingleton<IConfiguration>(Configuration);
+                
+                services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+                services.AddMvc().AddJsonOptions(options =>
+                {
+                    options.SerializerSettings.ContractResolver = new DefaultContractResolver();
+                });   
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
