@@ -12,7 +12,6 @@ using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Auth0.ManagementApi;
 
-
 namespace Pitcher.Controllers
 {
     
@@ -71,15 +70,17 @@ namespace Pitcher.Controllers
 
     
         [Authorize(Roles = "admin")]
-        public async Task <IActionResult> Index()
+        public /*async Task <*/IActionResult/*>*/ Index()
         {
             //auth0 management API.
             var apiClient = new ManagementApiClient(Pitcher.Models.ConstantStrings.strToken, "dev-dgdfgfdgf324.au.auth0.com");
-            //var allUsers = await apiClient.Users.GetAllAsync();
-            
-            //allUsers.Dispose();
+            // var allUsers = await apiClient.Users.GetAllAsync();
+
+            // allUsers.Dispose();
             return View();            
         }
+
+
 
         public IActionResult GetAllUsers()
         {
