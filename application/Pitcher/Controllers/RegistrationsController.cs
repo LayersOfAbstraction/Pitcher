@@ -30,27 +30,33 @@ namespace Pitcher.Controllers
         
         public IActionResult Index()
         {   
-                 
-            string connectionString = _config.GetConnectionString("DefaultConnection");
+            return View();                 
+        }
+        
+        [HttpPost]
+        [HttpGet]
+        public ActionResult LeftJoinJobsAndUsersOntoRegistrations()
+        {
+            var formData = HttpContext.Request.Form;
+
+            string connectionString = _config.GetConnectionString("DefaultConnection");            
             
             using (var db = new Database("sqlserver", connectionString))
             {
-                var response = new Editor(db, "registrations")
-                .Field(new Field("users.main_site"))
-                .Field(new Field("users.backup_site"))
-                .Field(new Field("mainSite.name"))
-                .Field(new Field("backupSite.name"))
-                .LeftJoin( "sites as mainSite",   "mainSite.id",   "=", "users.main_site" )
-                .LeftJoin( "sites as backupSite", "backupSite.id", "=", "users.backup_site" );
-                return View();
-            }       
+                var response = new Editor(db, "Registration")
+                    .Model<Registration>("Registration")
+                    .Model<Registration>("User")
+                    .Model<Registration>("Job")
+                    .Field(new Field("Registration.RegistrationDate")
+                        .Options("User", "ID", "UserFullname")
+                        .Validator(Validation.DbValues(new ValidationOpts {Empty = false}))
+                    )
+                    .LeftJoin( "User", "Registration.UserID", "=", "User.UserFullname")
+                    .Process(formData)
+                    .Data();
+                return Json(response, JsonRequestBehavior.AllowGet);
+            }
         }
-
-        public IActionResult GetAllRegistrations()
-        {
-            return Json(_context.Registrations.ToList());
-        }
-
         // GET: Registrations/Details/5
         // COPY AND PASTE THIS METHOD CUSTOMIZATION INTO OTHER CONTROLLERS.
         public async Task<IActionResult> Details(int? id)
