@@ -12,6 +12,7 @@ using System.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 
 
+
 namespace Pitcher.Controllers
 {
     public class RegistrationsController : Controller
@@ -33,12 +34,11 @@ namespace Pitcher.Controllers
             return View();                 
         }
         
-        [HttpPost]
-        [HttpGet]
-        public ActionResult LeftJoinJobsAndUsersOntoRegistrations()
+        [HttpPost()]
+        [HttpGet()]
+        public IActionResult Table()
         {
             var formData = HttpContext.Request.Form;
-
             string connectionString = _config.GetConnectionString("DefaultConnection");            
             
             using (var db = new Database("sqlserver", connectionString))
@@ -49,12 +49,13 @@ namespace Pitcher.Controllers
                     .Model<Registration>("Job")
                     .Field(new Field("Registration.RegistrationDate")
                         .Options("User", "ID", "UserFullname")
-                        .Validator(Validation.DbValues(new ValidationOpts {Empty = false}))
+                        .Validator(Validation.DbValues(new ValidationOpts {Empty = false}
+                        ))
                     )
                     .LeftJoin( "User", "Registration.UserID", "=", "User.UserFullname")
                     .Process(formData)
                     .Data();
-                return Json(response, JsonRequestBehavior.AllowGet);
+                return Json(response);
             }
         }
         // GET: Registrations/Details/5
