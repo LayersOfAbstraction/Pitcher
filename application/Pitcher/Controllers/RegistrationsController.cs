@@ -36,7 +36,7 @@ namespace Pitcher.Controllers
         
         [HttpPost()]
         [HttpGet()]
-        public IActionResult Table()
+        public ActionResult LeftJoinJobsAndUsersOntoRegistrations()
         {
             var formData = HttpContext.Request.Form;
             string connectionString = _config.GetConnectionString("DefaultConnection");            
@@ -51,6 +51,8 @@ namespace Pitcher.Controllers
                         .Options("User", "ID", "UserFullname")
                         .Validator(Validation.DbValues(new ValidationOpts {Empty = false}
                         ))
+                        .GetFormatter(Format.DateSqlToFormat(Format.DATE_ISO_8601))
+                        .SetFormatter(Format.DateFormatToSql(Format.DATE_ISO_8601))
                     )
                     .LeftJoin( "User", "Registration.UserID", "=", "User.UserFullname")
                     .Process(formData)
