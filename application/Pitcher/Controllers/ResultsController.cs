@@ -20,48 +20,9 @@ namespace Pitcher.Controllers
         }
 
         // GET: Results
-        public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? pageNumber)
+        public IActionResult Index()
         {
-            ViewData["CurrentSort"] = sortOrder;
-            ViewData["JobTitleSortParam"] = sortOrder == "jobTitle" ? "jobTitle_desc" : "jobTitle";
-            ViewData["ProblemTitleSortParam"] = sortOrder == "problemTitle" ? "jobTitle_desc" : "problemTitle";
-            ViewData["CurrentFilter"] = searchString;
-            IQueryable <Result> results = _context.Results.Include(r => r.Job).Include(r => r.Problem);
-            
-            if (searchString != null)
-            {
-                pageNumber = 1;
-            }
-            else
-            {
-                searchString = currentFilter;
-            }
-
-            if (!String.IsNullOrEmpty(searchString))
-            {
-                results = results.Where(r => r.Job.ToString().Contains(searchString)
-                                    || r.Problem.ToString().Contains(searchString));
-            }
-            
-           switch (sortOrder)
-            {
-                case "problemTitle":
-                    results = results.OrderBy(r => r.Problem);
-                    break;
-                case "problemTitle_desc":
-                    results = results.OrderByDescending(r => r.Problem);
-                    break;
-                case "jobTitle_desc":
-                    results = results.OrderByDescending(r => r.Job);
-                    break;
-                //By default FullName is in ascending order when entity is loaded. 
-                default:
-                    results = results.OrderBy(r => r.Job);
-                    break;   
-                    
-            }
-                int pageSize = 20;
-                return View(await  PaginatedList<Result>.CreateAsync(results.AsNoTracking(), pageNumber ?? 1, pageSize));   
+            return View();
         }
 
         // GET: Results/Details/5
