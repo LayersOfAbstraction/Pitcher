@@ -10,42 +10,30 @@
 @section scripts{ 
     <script src="~/js/jquery.dataTables.min.js"></script>
     <script>    
-    $(document).ready(function() {
-    var editor = new $.fn.dataTable.Editor( {
-        ajax: "/registrations/table",      
-        table: "#registrationTable",   
-        fields: [ {
-                label: "Registration Date:",
-                name: "Registration.RegistrationDate"
-            }, {
-                label: "User:",
-                name: "User.UserFullname"
-            }, {
-                label: "Job:",
-                name: "Job.JobTitle",
-                type: "select"
-            }
-        ]
-    } );
-
-    $('#registrationTable').DataTable({
-        dom: "Bfrtip",
-        ajax: {
-            url: "registrations/table",
-            type: 'POST'
-        },
-        columns: [
-            {data: "Registration.RegistrationDate"},
-            {data: "User.UserFullname"},
-            {data: "Job.JobTitle"}
-        ],
-        select: true,
-        buttons: [
-            { extend: "/Registrations/Details/", editor: editor },
-            { extend: "/Registrations/Edit",   editor: editor },
-            { extend: "/Registrations/Delete", editor: editor }
-        ]
-    } );
-} );
+        var oTable = $('#jobTable').DataTable({
+                "ajax": {
+                type: 'get',
+                'dataType': "json",
+                "url": "@Url.Action("LeftJoinJobsAndUsersOntoRegistrations")",
+                "dataSrc": function (result) {
+                    return result;
+                    }
+                },
+            "columns": [
+                { "data": "RegistrationDate"},
+                { "data": "User"},
+                { "data": "Job"},
+                {
+                    "data": null,
+                    "render": function (value) {
+                        return '<a href="/Registrations/Details/' + value.ID + '"button type="button" class="btn btn-primary btn-block">Details</a> <br> '
+                            
+                            + '<a href="/Registrations/Edit/' + value.ID + '"button type="button" class="btn btn-info btn-block">Edit </a> <br> ' 
+                            
+                            + '<a href="/Registrations/Delete/' + value.ID + '"button type="button" class="btn btn-primary btn-block">Delete</a>';
+                    }
+                }
+                ]
+        });
     </script>
 }
