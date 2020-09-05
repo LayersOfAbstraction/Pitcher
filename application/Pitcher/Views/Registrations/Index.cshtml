@@ -7,18 +7,35 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+<table id="registrationTable" class="table table-hover">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.RegistrationDate)</a>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.User)</a>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Job)</a>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
 @section scripts{ 
     <script src="~/js/jquery.dataTables.min.js"></script>
     <script>    
-        var oTable = $('#jobTable').DataTable({
-                "ajax": {
-                type: 'get',
+        var oTable = $('#registrationTable').DataTable({
+            "ajax": {
+                type: "get",
                 'dataType': "json",
                 "url": "@Url.Action("LeftJoinJobsAndUsersOntoRegistrations")",
                 "dataSrc": function (result) {
                     return result;
                     }
-                },
+            },
             "columns": [
                 { "data": "RegistrationDate"},
                 { "data": "User"},
