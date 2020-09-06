@@ -29,8 +29,9 @@
     <script>    
         var oTable = $('#registrationTable').DataTable({
             "ajax": {
-                type: "get",
-                'dataType': "json",
+                type: "POST",
+               // 'dataType': "json",
+                
                 "url": "@Url.Action("LeftJoinJobsAndUsersOntoRegistrations")",
                 "dataSrc": function (result) {
                     return result;
@@ -38,8 +39,8 @@
             },
             "columns": [
                 { "data": "RegistrationDate"},
-                { "data": "User"},
-                { "data": "Job"},
+                { "data": "tblUser.UserFullname"},
+                { "data": "tblJob.JobTitle"},
                 {
                     "data": null,
                     "render": function (value) {
