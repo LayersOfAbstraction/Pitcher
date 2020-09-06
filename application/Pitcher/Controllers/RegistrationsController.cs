@@ -34,28 +34,29 @@ namespace Pitcher.Controllers
             return View();                 
         }
         
+        //[Produces("application/json")]
         [HttpPost()]
         [HttpGet()]
         public ActionResult LeftJoinJobsAndUsersOntoRegistrations()
         {
-            var formData = HttpContext.Request.Form;
+            //var formData = HttpContext.Request.Form;
             string connectionString = _config.GetConnectionString("DefaultConnection");            
             
             using (var db = new Database("sqlserver", connectionString))
             {
-                var response = new Editor(db, "Registration")
-                    .Model<Registration>("Registration")
-                    .Model<Registration>("User")
-                    .Model<Registration>("Job")
-                    .Field(new Field("Registration.RegistrationDate")
-                        .Options("User", "ID", "UserFullname")
-                        .Validator(Validation.DbValues(new ValidationOpts {Empty = false}
-                        ))
-                        .GetFormatter(Format.DateSqlToFormat(Format.DATE_ISO_8601))
-                        .SetFormatter(Format.DateFormatToSql(Format.DATE_ISO_8601))
-                    )
-                    .LeftJoin( "User", "Registration.UserID", "=", "User.UserFullname")
-                    .Process(formData)
+                var response = new Editor(db, "tblRegistration")
+                    .Model<Registration2>("tblRegistration")
+                    .Model<User2>("tblUser")
+                    // .Model<Job>("tblJob")
+                    // .Field(new Field("tblRegistration.RegistrationDate")
+                    //     .Options("tblUser", "ID", "UserFullname")
+                    //     .Validator(Validation.DbValues(new ValidationOpts {Empty = false}
+                    //     ))
+                    //     .GetFormatter(Format.DateSqlToFormat(Format.DATE_ISO_8601))
+                    //     .SetFormatter(Format.DateFormatToSql(Format.DATE_ISO_8601))
+                    // )
+                    .LeftJoin( "tblUser", "tblRegistration.UserID", "=", "tblUser.ID")
+                    .Process(HttpContext.Request)
                     .Data();
                 return Json(response);
             }
