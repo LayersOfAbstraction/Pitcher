@@ -38,9 +38,18 @@
                     }
             },
             "columns": [
-                { "data": "RegistrationDate"},
-                { "data": "tblUser.UserFullname"},
+                { "data": "tblRegistration.RegistrationDate"},
                 { "data": "tblJob.JobTitle"},
+                {
+                    "data": "UserFullname",
+                    "render": function (data, type, row, meta) {
+                        if (row) {
+                            return "tblUser.UserFirstName";
+                        } else {
+                            return "tblUser.UserLastName";
+                        }
+                    }
+                },
                 {
                     "data": null,
                     "render": function (value) {
