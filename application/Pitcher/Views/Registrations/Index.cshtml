@@ -34,16 +34,17 @@
                 
                 "url": "@Url.Action("LeftJoinJobsAndUsersOntoRegistrations")",
                 "dataSrc": function (result) {
-                    return result;
+                    return result.data;
                     }
             },
             "columns": [
-                { "data": "tblRegistration.RegistrationDate"},
+                { "data": "tblRegistration.RegistrationDate" , "name": "tblRegistration.RegistrationDate" , "autoWidth": true},
                 { "data": "tblJob.JobTitle"},
                 {
                     "data": "UserFullname",
+                    @* , type, row, meta *@
                     "render": function (data, type, row, meta) {
-                        if (row) {
+                        if (data) {
                             return "tblUser.UserFirstName";
                         } else {
                             return "tblUser.UserLastName";
