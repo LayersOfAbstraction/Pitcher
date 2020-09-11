@@ -39,21 +39,28 @@ namespace Pitcher.Controllers
         [HttpGet()]
         public ActionResult LeftJoinJobsAndUsersOntoRegistrations()
         {
-            //var formData = HttpContext.Request.Form;
+            //DECLARE database connection.
             string connectionString = _config.GetConnectionString("DefaultConnection");            
             
+            //CREATE datatabe instance.
             using (var db = new Database("sqlserver", connectionString))
             {
+                //CREATE Editor instance with starting table.
                 var response = new Editor(db, "tblRegistration")
+                    //GET model of tblRegistration.
                     .Model<Registration2>("tblRegistration")
+                    //GET model of tblJob.
                     .Model<Job2>("tblJob")
+                    //GET model of tblUser.
                     .Model<User2>("tblUser")
+                    //PRESENT selectable value list of JobTitles .
                     .Field(new Field("tblRegistration.JobID")
                         .Options("tblJob", "ID", "JobTitle")
                         .Validator(Validation.DbValues(new ValidationOpts {Empty = false}))
                         // .GetFormatter(Format.DateSqlToFormat(Format.DATE_ISO_8601))
                         // .SetFormatter(Format.DateFormatToSql(Format.DATE_ISO_8601))
                     )
+                    //JOIN from tblRegistration column JobID linked from tblJob column ID.   
                     .LeftJoin( "tblJob", "tblJob.ID", "=", "tblRegistration.JobID")
                     .Process(HttpContext.Request)
                     .Data();
