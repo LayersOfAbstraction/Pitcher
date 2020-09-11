@@ -54,10 +54,7 @@ namespace Pitcher.Controllers
                     //GET model of tblUser.
                     .Field(new Field("tblUser.UserFirstName"))
                     .Field(new Field("tblUser.UserLastName"))
-                    // //PRESENT selectable value list of JobTitles .
-                     .Field(new Field("tblRegistration.JobID")
-                         .Options("tblJob", "ID", "JobTitle")                    
-                     )
+
                     //JOIN from tblRegistration column JobID linked from tblJob column ID.   
                     .LeftJoin( "tblJob ", " tblJob.ID ", "=", " tblRegistration.JobID")
                     .LeftJoin( "tblUser ", " tblUser.ID ", "=", " tblRegistration.UserID")
