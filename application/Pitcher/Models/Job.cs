@@ -74,14 +74,10 @@ namespace Pitcher.Models
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         [Display(Name = "Deadline Date")]
         [Column("JobDeadlineDate")]
-        public DateTime JobDeadline {get;set;}
+        public DateTime JobDeadlineDate {get;set;}
 
         [Display(Name = "Job Is Complete?")]
         [Column("JobIsComplete")]
         public bool JobIsComplete{get;set;}
-
-        public ICollection<Registration> Registrations {get;set;}
-
-        public ICollection<Result> Results {get;set;}
     }
 }
