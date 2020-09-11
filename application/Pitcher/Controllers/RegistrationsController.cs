@@ -46,13 +46,15 @@ namespace Pitcher.Controllers
             {
                 var response = new Editor(db, "tblRegistration")
                     .Model<Registration2>("tblRegistration")
-                    .Model<User2>("tblUser")
                     .Model<Job2>("tblJob")
-                    .Field(new Field("tblRegistration.RegistrationDate")
-                        .Options("tblUser", "ID", "UserFullname")
+                    .Model<User2>("tblUser")
+                    .Field(new Field("tblRegistration.JobID")
+                        .Options("tblJob", "ID", "JobTitle")
                         .Validator(Validation.DbValues(new ValidationOpts {Empty = false}))
+                        // .GetFormatter(Format.DateSqlToFormat(Format.DATE_ISO_8601))
+                        // .SetFormatter(Format.DateFormatToSql(Format.DATE_ISO_8601))
                     )
-                    .LeftJoin( "tblUser", "tblRegistration.UserID", "=", "tblUser.ID")
+                    .LeftJoin( "tblJob", "tblJob.ID", "=", "tblRegistration.JobID")
                     .Process(HttpContext.Request)
                     .Data();
                 return Json(response);
