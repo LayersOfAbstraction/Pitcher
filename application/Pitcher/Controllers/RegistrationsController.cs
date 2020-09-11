@@ -52,16 +52,15 @@ namespace Pitcher.Controllers
                     //GET model of tblJob.
                     .Field(new Field("tblJob.JobTitle"))
                     //GET model of tblUser.
-                    // .Field(new Field("tblUser.JobTitle"))
+                    .Field(new Field("tblUser.UserFirstName"))
+                    .Field(new Field("tblUser.UserLastName"))
                     // //PRESENT selectable value list of JobTitles .
                      .Field(new Field("tblRegistration.JobID")
-                         .Options("tblJob", "ID", "JobTitle")
-                    //     .Validator(Validation.DbValues(new ValidationOpts {Empty = false}))
-                    //     // .GetFormatter(Format.DateSqlToFormat(Format.DATE_ISO_8601))
-                    //     // .SetFormatter(Format.DateFormatToSql(Format.DATE_ISO_8601))
+                         .Options("tblJob", "ID", "JobTitle")                    
                      )
                     //JOIN from tblRegistration column JobID linked from tblJob column ID.   
                     .LeftJoin( "tblJob ", " tblJob.ID ", "=", " tblRegistration.JobID")
+                    .LeftJoin( "tblUser ", " tblUser.ID ", "=", " tblRegistration.UserID")
                     .Process(HttpContext.Request)
                     .Data();
                 return Json(response);
