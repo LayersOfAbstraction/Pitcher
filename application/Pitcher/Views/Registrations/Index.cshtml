@@ -30,7 +30,6 @@
         var oTable = $('#registrationTable').DataTable({
             "ajax": {
                 type: "POST",
-               // 'dataType': "json",
                 
                 "url": "@Url.Action("LeftJoinJobsAndUsersOntoRegistrations")",
                 "dataSrc": function (result) {
@@ -38,19 +37,15 @@
                     }
             },
             "columns": [
-                { "data": "tblRegistration.RegistrationDate" , "name": "tblRegistration.RegistrationDate" , "autoWidth": true},
-                { "data": "tblJob.JobTitle"},
+                { "data": "tblRegistration.RegistrationDate"},                
                 {
                     "data": "UserFullname",
-                    @* , type, row, meta *@
-                    "render": function (data, type, row, meta) {
-                        if (data) {
-                            return "tblUser.UserFirstName";
-                        } else {
-                            return "tblUser.UserLastName";
-                        }
+                    "render": function (data, type, row, meta) 
+                    {
+                        return `${row.tblUser.UserFirstName} ${row.tblUser.UserLastName}`
                     }
                 },
+                { "data": "tblJob.JobTitle"},
                 {
                     "data": null,
                     "render": function (value) {
