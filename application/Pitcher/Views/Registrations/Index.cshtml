@@ -7,12 +7,9 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table id="registrationTable" class="table table-hover">
+<table id="registrationTable" >
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.ID)
-            </th>
             <th>
                 @Html.DisplayNameFor(model => model.RegistrationDate)
             </th>
@@ -43,10 +40,6 @@
                     }
             },
             "columns": [
-                {
-                    "data": "DT_RowId",
-                    "render": renderDT_RowId
-                },
                 { "data": "tblRegistration.RegistrationDate"},                
                 {
                     "data": "UserFullname",
@@ -63,12 +56,11 @@
                             
                             + '<a href="/Registrations/Edit/' + renderDT_RowId(value.DT_RowId) + '"button type="button" class="btn btn-info btn-block">Edit </a> <br> ' 
                             
+                            
                             + '<a href="/Registrations/Delete/' + renderDT_RowId(value.DT_RowId) + '"button type="button" class="btn btn-primary btn-block">Delete</a>';
                     }
                 }
                 ]
         });
-
-
     </script>
 }
