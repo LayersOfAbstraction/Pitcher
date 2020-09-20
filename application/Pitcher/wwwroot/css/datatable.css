@@ -47,14 +47,16 @@
     table.dataTable thead .sorting_desc_disabled {
       background-image: url("../images/sort_desc_disabled.png"); }
     table.dataTable tbody tr {
-      /* tr background */
+      /* tr background*/
       background-color: white;
       /* Text background */
-      color: black; }
+      color: black;
+     }
       table.dataTable tbody tr.selected {
         background-color: #b0bed9; }
     table.dataTable tbody th,
     table.dataTable tbody td {
+      border-bottom: 1px solid #111111; 
       padding: 8px 10px; }
     table.dataTable.row-border tbody th, table.dataTable.row-border tbody td, table.dataTable.display tbody th, table.dataTable.display tbody td {
       border-top: 1px solid #dddddd; }
