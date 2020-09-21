@@ -34,9 +34,6 @@ namespace Pitcher.Controllers
             return View();                 
         }
         
-        //[Produces("application/json")]
-        [HttpPost()]
-        [HttpGet()]
         public ActionResult LeftJoinJobsAndUsersOntoRegistrations()
         {
             //DECLARE database connection.
@@ -47,15 +44,13 @@ namespace Pitcher.Controllers
             {
                 //CREATE Editor instance with starting table.
                 var response = new Editor(db, "tblRegistration")
-                    //GET model of tblRegistration.
                     .Field(new Field("tblRegistration.RegistrationDate"))
-                    //GET model of tblJob.
                     .Field(new Field("tblJob.JobTitle"))
-                    //GET model of tblUser.
                     .Field(new Field("tblUser.UserFirstName"))
                     .Field(new Field("tblUser.UserLastName"))
 
-                    //JOIN from tblRegistration column JobID linked from tblJob column ID.   
+                    //JOIN from tblRegistration column JobID linked from tblJob column ID
+                    //and UserID linked from tblUser column ID.  
                     .LeftJoin( "tblJob ", " tblJob.ID ", "=", " tblRegistration.JobID")
                     .LeftJoin( "tblUser ", " tblUser.ID ", "=", " tblRegistration.UserID")
                     .Process(HttpContext.Request)
