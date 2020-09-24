@@ -117,6 +117,8 @@ namespace Pitcher
                 // Add the whole configuration object here.
                 services.AddSingleton<IConfiguration>(Configuration);
                 
+                // Add the Auth0 HttpClientManagementConnection.
+                services.AddSingleton<IManagementConnection, HttpClientManagementConnection>();                
                 services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
                 services.AddMvc().AddJsonOptions(options =>
                 {
