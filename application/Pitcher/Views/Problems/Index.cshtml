@@ -56,7 +56,21 @@
                 { "data": "ProblemDescription"},
                 { "data": "ProblemStartDate"},
                 { "data": "ProblemFileAttachments"},
-                { "data": "ProblemSeverity"},
+                { "data": "ProblemSeverity",
+                    "render": function (data) {
+                        if (data == 1) {
+                            return "Very Low";
+                        } else if (data == 2) {
+                            return "Low";                            
+                        } else if (data == 3) {
+                            return "Medium";                            
+                        } else if (data == 4) {
+                            return "High";                            
+                        } else if (data == 5) {
+                            return "Very High";                            
+                        }                        
+                    }
+                },
                 {
                     "data": "ProblemComplete",
                     "render": function (data) {
