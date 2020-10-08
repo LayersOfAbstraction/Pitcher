@@ -44,6 +44,7 @@ namespace Pitcher.Controllers
             {
                 //CREATE Editor instance with starting table.
                 var response = new Editor(db, "tblRegistration")
+                    .Field(new Field("tblRegistration.ID"))
                     .Field(new Field("tblRegistration.RegistrationDate"))
                     .Field(new Field("tblJob.JobTitle"))
                     .Field(new Field("tblUser.UserFirstName"))
