@@ -70,19 +70,19 @@ namespace Pitcher.Controllers
 
     
         [Authorize(Roles = "admin")]
+        [HttpGet]
         public async Task <IActionResult> Index()
         {
+            // var managementConnection = services.Get<IManagementConnection>();
             //auth0 management API.
-            var apiClient = new ManagementApiClient(Pitcher.Models.ConstantStrings.strToken, "dev-dgdfgfdgf324.au.auth0.com");
+            var apiClient = new ManagementApiClient(Pitcher.Models.ConstantStrings.strToken, new Uri ("https://dev-dgdfgfdgf324.au.auth0.com/api/v2"));
             var allUsers = await apiClient.Users.GetAllAsync(new Auth0.ManagementApi.Models.GetUsersRequest(), new Auth0.ManagementApi.Paging.PaginationInfo());
-
-             //allUsers.Dispose();
+            //var users = await apiClient.Users.GetUsersByEmailAsync("jnash486+test1@gmail.com");
+            //allUsers.Dispose();
 
              await Task.Delay(100);
             return View();            
         }
-
-
 
         public IActionResult GetAllUsers()
         {
