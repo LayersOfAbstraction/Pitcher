@@ -38,9 +38,16 @@
             </div>
             <div class="form-group">
                 <label asp-for="ProblemSeverity" class="control-label"></label>
-                <input asp-for="ProblemSeverity" class="form-control" />
-                <span asp-validation-for="ProblemSeverity" class="text-danger"></span>
+                <select asp-for="ProblemSeverity" class="form-control">
+                    @* <option value="">Please choose severity level</option> *@
+                    <option value="1">Very Low</option>
+                    <option value="2">Low</option>
+                    <option value="3">Medium</option>
+                    <option value="4">High</option>
+                    <option value="5">Very High</option>
+                </select>
             </div>
+            
             <div class="form-group form-check">
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="ProblemComplete" /> @Html.DisplayNameFor(model => model.ProblemComplete)
