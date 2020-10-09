@@ -71,21 +71,32 @@ namespace Pitcher.Controllers
     
         [Authorize(Roles = "admin")]
         [HttpGet]
-        public async Task <IActionResult> Index()
+        public IActionResult Index()
         {
             // var managementConnection = services.Get<IManagementConnection>();
             //auth0 management API.
-            var apiClient = new ManagementApiClient(Pitcher.Models.ConstantStrings.strToken, new Uri ("https://dev-dgdfgfdgf324.au.auth0.com/api/v2/"));
-            var allUsers = await apiClient.Users.GetAllAsync(new Auth0.ManagementApi.Models.GetUsersRequest(), new Auth0.ManagementApi.Paging.PaginationInfo());
+           
             //allUsers.Dispose();
             
-            await Task.Delay(100);
+            //await Task.Delay(100);
             return View();            
         }
 
         public IActionResult GetAllUsers()
         {
             return Json(_context.Users.ToList());
+        }
+
+        public async Task <IActionResult> GetAllAuth0Users()
+        {
+            var apiClient = new ManagementApiClient(Pitcher.Models.ConstantStrings.strToken, new Uri ("https://dev-dgdfgfdgf324.au.auth0.com/api/v2/"));
+            var allUsers = await apiClient.Users.GetAllAsync(new Auth0.ManagementApi.Models.GetUsersRequest(), new Auth0.ManagementApi.Paging.PaginationInfo());
+            return Json(allUsers.Select(u => new User
+            {
+                UserFirstName = u.FirstName,
+                UserLastName = u.LastName,
+                UserContactEmail = u.Email
+            }));
         }
 
         // GET: Users/Details/5
