@@ -73,12 +73,6 @@ namespace Pitcher.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            // var managementConnection = services.Get<IManagementConnection>();
-            //auth0 management API.
-           
-            //allUsers.Dispose();
-            
-            //await Task.Delay(100);
             return View();            
         }
 
@@ -91,12 +85,14 @@ namespace Pitcher.Controllers
         {
             var apiClient = new ManagementApiClient(Pitcher.Models.ConstantStrings.strToken, new Uri ("https://dev-dgdfgfdgf324.au.auth0.com/api/v2/"));
             var allUsers = await apiClient.Users.GetAllAsync(new Auth0.ManagementApi.Models.GetUsersRequest(), new Auth0.ManagementApi.Paging.PaginationInfo());
-            return Json(allUsers.Select(u => new User
-            {
-                UserFirstName = u.FirstName,
-                UserLastName = u.LastName,
+            var renderedUsers = allUsers.Select(u => new User
+            {                
+                UserFirstName = u.FullName.Contains(' ') ? u.FullName.Split(' ')[0] : "no space",
+                UserLastName = u.FullName.Contains(' ') ? u.FullName.Split(' ')[1] : "no space",
                 UserContactEmail = u.Email
-            }));
+            }).ToList();
+
+            return Json(renderedUsers);
         }
 
         // GET: Users/Details/5
