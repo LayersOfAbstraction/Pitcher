@@ -4,15 +4,26 @@
     ViewData["Title"] = "Users";
 }
 
-<h1>Users</h1>
+<h1>Auth0 Users</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-
-<table id ="auth0UsersTable">
-    
+<table id ="auth0UsersTable" style="width: 200px;">
+        <thead>
+        <tr>
+            <th>
+               First name
+            </th>
+            <th>
+                Last name
+            </th>        
+        </tr>        
+        </thead>
+        <tbody></tbody>
 </table>
+
+<h1>Users existing in application</h1>
 
 <table id="userTable">
     <thead>
@@ -53,6 +64,22 @@
 @section scripts{ 
     <script src="~/js/jquery.dataTables.min.js"></script>
     <script>
+        var oTable = $('#auth0UsersTable').DataTable({
+                "ajax": {
+                type: 'get',
+                'dataType': "json",
+                "url": "@Url.Action("GetAllAuth0Users")",
+                "dataSrc": function (result) {
+                    return result;
+                    }
+                },
+                "columns": [                
+                { "data": "UserFirstName"},
+                { "data": "UserLastName"}
+                ]
+        });
+
+
         var oTable = $('#userTable').DataTable({
                 "ajax": {
                 type: 'get',
