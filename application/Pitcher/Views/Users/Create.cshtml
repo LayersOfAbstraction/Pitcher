@@ -4,29 +4,27 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Auth0 Users</h1>
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <label>Please choose a current Auth0 user to submit to database:
-            <select name="pets" multiple size="4">
-                <optgroup label="4-legged pets">
-                <option value="dog">Dog</option>
-                <option value="cat">Cat</option>
-                </optgroup>
-            </select>
-            </label>
-        </form>
-    </div>
-</div>
-<h1>Create</h1>
+<h1>Auth0 Users</h1>     
 
-<h4>User</h4>
+<h1></h1>
+<table id ="auth0UsersTable" style="width: 200px;">
+        <thead>
+        <tr>
+            <th>
+               First name
+            </th>
+            <th>
+                Last name
+            </th>        
+        </tr>        
+        </thead>
+        <tbody></tbody>
+</table>
+<h4>Create New User</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>            
+        <form asp-action="GetAllAuth0Users">
             <div class="form-group">
                 <label asp-for="UserFirstName" class="control-label"></label>
                 <input asp-for="UserFirstName" class="form-control" />
@@ -42,6 +40,10 @@
                 <input asp-for="UserContactEmail" class="form-control" />
                 <span asp-validation-for="UserContactEmail" class="text-danger"></span>
             </div>
+        </form>
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>            
+
             <div class="form-group">
                 <label asp-for="UserPhoneNumber" class="control-label"></label>
                 <input asp-for="UserPhoneNumber" class="form-control" />
@@ -85,4 +87,33 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+            var oTable = $('#auth0UsersTable').DataTable({
+                    "ajax": {
+                    type: 'get',
+                    'dataType': "json",
+                    select: true,
+                    select: {
+                        style: 'single'
+                    },                    
+                    "url": "@Url.Action("GetAllAuth0Users")",
+                    "dataSrc": function (result) {
+                        return result;
+                        }
+                    },            
+                    "columns": [                
+                    { "data": "UserFirstName"},
+                    { "data": "UserLastName"}
+                    ]
+            });
+
+            $('#auth0UsersTable').on( 'click', 'tbody tr', function () {
+            if ( oTable.row( this, { selected: true } ).any() ) {
+                oTable.row( this ).deselect();
+            }
+            else  {
+                oTable.row( this ).select();
+            }
+        } );
+    </script>
 }
