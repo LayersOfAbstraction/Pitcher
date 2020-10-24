@@ -91,11 +91,7 @@
             var oTable = $('#auth0UsersTable').DataTable({
                     "ajax": {
                     type: 'get',
-                    'dataType': "json",
-                    select: true,
-                    select: {
-                        style: 'single'
-                    },                    
+                    'dataType': "json",                  
                     "url": "@Url.Action("GetAllAuth0Users")",
                     "dataSrc": function (result) {
                         return result;
@@ -108,12 +104,17 @@
             });
 
             $('#auth0UsersTable').on( 'click', 'tbody tr', function () {
-            if ( oTable.row( this, { selected: true } ).any() ) {
-                oTable.row( this ).deselect();
-            }
-            else  {
-                oTable.row( this ).select();
-            }
+                //IF table row you click on is already selected. 
+                if ( $(this).hasClass('selected') ) {
+                    //deselect the row you already selected.
+                    $(this).removeClass('selected');
+                }
+                else {
+                    //Search all visible rows and deselect them.  
+                    oTable.$('tr.selected').removeClass('selected');
+                    //Select new row you clicked.
+                    $(this).addClass('selected');
+                }
         } );
     </script>
 }
