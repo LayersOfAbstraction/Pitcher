@@ -53,7 +53,9 @@
             "columns": [
                 { "data": "ID"},
                 { "data": "ProblemTitle"},
-                { "data": "ProblemDescription"},
+                { "data": "ProblemDescription",
+                  render: $.fn.dataTable.render.text()
+                },
                 { "data": "ProblemStartDate"},
                 { "data": "ProblemFileAttachments"},
                 { "data": "ProblemSeverity",
