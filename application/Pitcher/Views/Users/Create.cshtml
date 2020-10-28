@@ -129,21 +129,20 @@
                 
                 table.addEventListener('click', onTableClick);  
 
-            function onTableClick (e) 
-            {
-                var tr = e.target.parentElement;        
-                var data = [];
-                
-                for (var td of tr.children) 
+                function onTableClick (e) 
                 {
-                    data.push(td.innerHTML);
+                    var tr = e.target.parentElement;        
+                    var data = [];
+                    
+                    for (var td of tr.children) 
+                    {
+                        data.push(td.innerHTML);
+                    }
+                
+                    firstName.value = data[0];
+                    lastName.value = data[1];
+                    email.value = data[2];
                 }
-            
-                firstName.value = data[0];
-                lastName.value = data[1];
-                email.value = data[2];
-                table.row('.selected').remove().draw( false );
-            }
             }
                 
            
