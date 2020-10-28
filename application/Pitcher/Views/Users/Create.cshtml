@@ -121,31 +121,32 @@
                 oTable.$('tr.selected').removeClass('selected');
                 //Select new row you clicked.
                 $(this).addClass('selected');
-            }
-                
-                oTable = document.querySelector('#auth0UsersTable');
+
+                var table = document.querySelector('#auth0UsersTable');
                 var firstName = document.querySelector('#UFirstNameInput');
-            
                 var lastName = document.querySelector('#ULastNameInput');
                 var email = document.querySelector('#UEmailInput');        
-                var datatable = $('#auth0UsersTable').DataTable();
-                oTable.addEventListener('click', onTableClick);  
-
-                function onTableClick (e) 
-                {
-                    var tr = e.target.parentElement;        
-                    var data = [];
-                    
-                    for (var td of tr.children) 
-                    {
-                        data.push(td.innerHTML);
-                    }
                 
-                    firstName.value = data[0];
-                    lastName.value = data[1];
-                    email.value = data[2];
-                    oTable.row.add(data).draw(false);    
+                table.addEventListener('click', onTableClick);  
+
+            function onTableClick (e) 
+            {
+                var tr = e.target.parentElement;        
+                var data = [];
+                
+                for (var td of tr.children) 
+                {
+                    data.push(td.innerHTML);
                 }
+            
+                firstName.value = data[0];
+                lastName.value = data[1];
+                email.value = data[2];
+                table.row('.selected').remove().draw( false );
+            }
+            }
+                
+           
         });
     </script>
 }
