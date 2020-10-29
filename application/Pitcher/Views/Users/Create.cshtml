@@ -4,9 +4,7 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Auth0 Users</h1>     
-
-<h1></h1>
+<h1>Auth0 Users</h1>
 <table id ="auth0UsersTable" style="width: 200px;">
         <thead>
         <tr>
@@ -36,17 +34,17 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>            
             <div class="form-group">
                 <label asp-for="UserFirstName" class="control-label"></label>
-                <input id="UFirstNameInput" asp-for="UserFirstName" class="form-control" type="text"/>
+                <input id="UFirstNameInput" asp-for="UserFirstName" class="form-control"/>
                 <span asp-validation-for="UserFirstName" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="UserLastName" class="control-label"></label>
-                <input id="ULastNameInput" asp-for="UserLastName" class="form-control" type="text"/>
+                <input id="ULastNameInput" asp-for="UserLastName" class="form-control"/>
                 <span asp-validation-for="UserLastName" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="UserContactEmail" class="control-label"></label>
-                <input id="UEmailInput" asp-for="UserContactEmail" class="form-control" type="text"/>
+                <input id="UEmailInput" asp-for="UserContactEmail" class="form-control"/>
                 <span asp-validation-for="UserContactEmail" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -121,16 +119,17 @@
                 oTable.$('tr.selected').removeClass('selected');
                 //Select new row you clicked.
                 $(this).addClass('selected');
-            }
-                
-                oTable = document.querySelector('#auth0UsersTable');
+
+                //Get ID of table and some property.
+                var table = document.querySelector('#auth0UsersTable');
                 var firstName = document.querySelector('#UFirstNameInput');
-            
                 var lastName = document.querySelector('#ULastNameInput');
                 var email = document.querySelector('#UEmailInput');        
-                var datatable = $('#auth0UsersTable').DataTable();
-                oTable.addEventListener('click', onTableClick);  
+                
+                //Add listener for table click event.
+                table.addEventListener('click', onTableClick);  
 
+                //Get click of Table.
                 function onTableClick (e) 
                 {
                     var tr = e.target.parentElement;        
@@ -144,8 +143,8 @@
                     firstName.value = data[0];
                     lastName.value = data[1];
                     email.value = data[2];
-                    oTable.row.add(data).draw(false);    
                 }
+            }        
         });
     </script>
 }
