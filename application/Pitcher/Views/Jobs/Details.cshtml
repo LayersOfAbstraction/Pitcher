@@ -1,5 +1,4 @@
 @model Pitcher.Models.Job
-@using Pitcher.Models
 @{ 
     var problem = new Problem();
 }
@@ -7,32 +6,46 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
-<table id="CurrentJobTable" class="table">
-    <thead>
-        <tr>
-            <th>@Html.DisplayNameFor(model => model.ID)</th>
-            <th>@Html.DisplayNameFor(model => model.JobTitle)</th>
-            <th>@Html.DisplayNameFor(model => model.JobDescription)</th>
-            <th>@Html.DisplayNameFor(model => model.JobStartDate)</th>
-            <th>@Html.DisplayNameFor(model => model.JobDeadline)</th>
-            <th>@Html.DisplayNameFor(model => model.JobIsComplete)</th>
-            <th>
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>@Html.DisplayTextFor(model => model.ID)</td>
-            <td>@Html.DisplayTextFor(model => model.JobTitle)</td>
-            <td>@Html.DisplayTextFor(model => model.JobDescription)</td>
-            <td>@Html.DisplayTextFor(model => model.JobStartDate)</td>
-            <td>@Html.DisplayTextFor(model => model.JobDeadline)</td>
-            <td>@Html.DisplayTextFor(model => model.JobIsComplete)</td>
-        </tr>
-    </tbody>
-</table>
+<div>
+    <h4>Job</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.JobTitle)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.JobTitle)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.JobDescription)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.JobDescription)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.JobStartDate)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.JobStartDate)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.JobDeadline)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.JobDeadline)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.JobIsComplete)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.JobIsComplete)
+        </dd>
+    </dl>
+</div>
+
 <table id="ProblemsTable" class="table">
+    <br/>
+    <h4>Problem</h4>
     <thead>
         <tr>
             <th>
