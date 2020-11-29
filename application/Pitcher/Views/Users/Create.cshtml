@@ -89,7 +89,7 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script>
-            var oTable = $('#auth0UsersTable').DataTable({
+            var Auth0Table = $('#auth0UsersTable').DataTable({
                     "ajax": {
                     type: 'get',
                     'dataType': "json",                  
@@ -114,7 +114,7 @@
             }
             else {
                 //Search all visible rows and deselect them.  
-                oTable.$('tr.selected').removeClass('selected');
+                Auth0Table.$('tr.selected').removeClass('selected');
                 //Select new row you clicked.
                 $(this).addClass('selected');
 
@@ -144,5 +144,7 @@
                 }
             }        
         });
+
+
     </script>
 }
