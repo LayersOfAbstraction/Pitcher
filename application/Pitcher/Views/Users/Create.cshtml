@@ -5,6 +5,7 @@
 }
 
 <h1>Auth0 Users</h1>
+<p>Please select Auth0 user from table to enter into database</p>
 <table id ="auth0UsersTable" style="width: 200px;">
         <thead>
         <tr>
@@ -27,24 +28,21 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="GetAllAuth0Users">
-
-        </form>
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>            
             <div class="form-group">
                 <label asp-for="UserFirstName" class="control-label"></label>
-                <input id="UFirstNameInput" asp-for="UserFirstName" class="form-control"/>
+                <input id="UFirstNameInput" readonly="true" asp-for="UserFirstName" class="form-control"/>
                 <span asp-validation-for="UserFirstName" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="UserLastName" class="control-label"></label>
-                <input id="ULastNameInput" asp-for="UserLastName" class="form-control"/>
+                <input id="ULastNameInput" readonly="true" asp-for="UserLastName" class="form-control"/>
                 <span asp-validation-for="UserLastName" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="UserContactEmail" class="control-label"></label>
-                <input id="UEmailInput" asp-for="UserContactEmail" class="form-control"/>
+                <input id="UEmailInput" readonly="true" asp-for="UserContactEmail" class="form-control"/>
                 <span asp-validation-for="UserContactEmail" class="text-danger"></span>
             </div>
             <div class="form-group">
