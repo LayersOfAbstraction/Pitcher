@@ -1,5 +1,7 @@
 @model Pitcher.Models.Job
-
+@{ 
+    var user = new User();
+}
 @{
     ViewData["Title"] = "Create";
 }
@@ -48,6 +50,83 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
+<div>
+<table id="registeredUsersTable" class="table">
+<thead>
+        <tr>
+            <th>
+               @Html.DisplayNameFor(model => user.UserFirstName)
+            </th>        
+            <th>
+               @Html.DisplayNameFor(model => user.UserLastName)
+            </th>
+            <th>
+               @Html.DisplayNameFor(model => user.UserContactEmail)
+            </th>
+            <th>                
+            </th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+</div>
+
+<div>
+<table id="unassignedUsersTable" class="table">
+<thead>
+        <tr>
+            <th>
+               @Html.DisplayNameFor(model => user.UserFirstName)
+            </th>        
+            <th>
+               @Html.DisplayNameFor(model => user.UserLastName)
+            </th>
+            <th>
+               @Html.DisplayNameFor(model => user.UserContactEmail)
+            <th>                
+            </th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+</div>
+
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        
+        var registeredUsersTable = $('#registeredUsersTable').DataTable({
+                "ajax": {
+                'type': 'get',
+                //PROBLEM:Cannot get the related UserID of the Job.
+                'data': { ID: id},
+                'dataType': "json",                  
+                "url": "@Url.Action("GetAllUsersByJobId")",
+                "dataSrc": function (result) {
+                    return result;
+                    }
+                },            
+                "columns": [                
+                { "data": "UserFirstName"},
+                { "data": "UserLastName"},
+                { "data": "UserContactEmail"}
+                ]
+        });
+
+        var unassignedUsersTable = $('#unassignedUsersTable').DataTable({
+                    "ajax": {
+                    type: 'get',
+                    'dataType': "json",                  
+                    "url": "@Url.Action("GetAllUsers")",
+                    "dataSrc": function (result) {
+                        return result;
+                        }
+                    },            
+                    "columns": [                
+                    { "data": "UserFirstName"},
+                    { "data": "UserLastName"},
+                    { "data": "UserContactEmail"}
+                    ]
+            });
+    </script>
 }

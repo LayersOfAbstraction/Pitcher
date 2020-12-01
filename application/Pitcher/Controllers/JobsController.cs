@@ -31,7 +31,7 @@ namespace Pitcher.Controllers
         {
             return Json(_context.Jobs.ToList());
         }
-        //Hello Word
+        
         public IActionResult GetAllProblemByJobId(int? ID)
         {
             if (ID == null)
@@ -41,6 +41,17 @@ namespace Pitcher.Controllers
             
             var problemlist = _context.Results.Where(r => r.JobID == ID).Select(r => r.Problem).ToList();
             return Json(problemlist);
+        }
+
+        public IActionResult GetAllUsersByJobId(int? ID)
+        {
+            if (ID == null)
+            {
+                return NotFound();
+            } 
+            
+            var userlist = _context.Registrations.Where(r => r.JobID == ID).Select(r => r.User).ToList();
+            return Json(userlist);
         }
 
         // GET: Jobs/Details/5
