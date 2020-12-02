@@ -93,9 +93,9 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script>
-        
-        var registeredUsersTable = $('#registeredUsersTable').DataTable({
+    <script>        
+        var id=@Model.ID 
+        $('#registeredUsersTable').DataTable({
                 "ajax": {
                 'type': 'get',
                 //PROBLEM:Cannot get the related UserID of the Job.
