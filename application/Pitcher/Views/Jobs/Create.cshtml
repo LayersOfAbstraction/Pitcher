@@ -51,7 +51,7 @@
 </div>
 
 <div>
-<table id="registeredUsersTable" class="table">
+<table id="registeredUsersTable" class="table" style="display: none">
 <thead>
         <tr>
             <th>
@@ -72,7 +72,7 @@
 </div>
 
 <div>
-<table id="unassignedUsersTable" class="table">
+<table id="unassignedUsersTable" class="table" style="display: none">
 <thead>
         <tr>
             <th>
@@ -93,25 +93,28 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script>        
-        var id=@Model.ID 
-        $('#registeredUsersTable').DataTable({
-                "ajax": {
-                'type': 'get',
-                //PROBLEM:Cannot get the related UserID of the Job.
-                'data': { ID: id},
-                'dataType': "json",                  
-                "url": "@Url.Action("GetAllUsersByJobId")",
-                "dataSrc": function (result) {
-                    return result;
-                    }
-                },            
-                "columns": [                
-                { "data": "UserFirstName"},
-                { "data": "UserLastName"},
-                { "data": "UserContactEmail"}
-                ]
+    <script>
+    function buttonClick(){
+    document.getElementById('myTable').style.display = 'block';
+        var assignedUsersTable = $('#registeredUsersTable').DataTable({
+            "ajax": {
+            'type': 'get',
+            //PROBLEM:Cannot get the related UserID of the Job.
+            'data': { ID: id},
+            'dataType': "json",                  
+            "url": "@Url.Action("GetAllUsersByJobId")",
+            "dataSrc": function (result) {
+                return result;
+                }
+            },            
+            "columns": [                
+            { "data": "UserFirstName"},
+            { "data": "UserLastName"},
+            { "data": "UserContactEmail"}
+            ]
         });
+    }        
+        
 
         var unassignedUsersTable = $('#unassignedUsersTable').DataTable({
                     "ajax": {
