@@ -12,7 +12,8 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        @* asp-action="Create" *@
+        <form >
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="JobTitle" class="control-label"></label>
@@ -40,7 +41,8 @@
                 </label>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" 
+                value="Create" class="btn btn-primary" onclick='buttonClick()'/>
             </div>
         </form>
     </div>
@@ -50,7 +52,7 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
-<table id="registeredUsersTable" class="table" style="display: none">
+@* <table id="registeredUsersTable" class="table" style="display: none">
 <thead>
         <tr>
             <th>
@@ -67,9 +69,10 @@
         </tr>
     </thead>
     <tbody></tbody>
-</table>
+</table> *@
 
-<table id="unassignedUsersTable">
+@* Hide table before submission of record to DB *@
+<table id="unassignedUsersTable" style='display:none;'>
 <thead>
         <tr>
             <th>
@@ -80,6 +83,7 @@
             </th>
             <th>
                @Html.DisplayNameFor(model => user.UserContactEmail)
+            </th>
             <th>                
             </th>
         </tr>
@@ -88,7 +92,7 @@
 </table>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/jquery.dataTables.min.js"></script>
     <script>
     @* function buttonClick(){
     document.getElementById('registeredUsersTable').style.display = 'block';
@@ -109,28 +113,26 @@
             { "data": "UserContactEmail"}
             ]
         });
-    }         *@
-        
-        
-    var unassignedUsersTable = $('#unassignedUsersTable').DataTable({
+    }         *@        
+
+    //Reveal table if button click successful.  
+    function buttonClick(){  
+        $("#unassignedUsersTable").toggle();
+        @* document.getElementById('unassignedUsersTable').style.display = 'block';  *@
+        var unassignedUsersTable = $('#unassignedUsersTable').DataTable({
                 "ajax": {
                 type: 'get',
-                'dataType': "json",                  
+                'dataType': "json",
+                //Get users from UsersController.                  
                 "url": "@Url.Action("GetAllUsers")",
                 "dataSrc": function (result) {
                     return result;
                     }
                 },            
-                "columns": [                
+            "columns": [                
                 { "data": "UserFirstName"},
                 { "data": "UserLastName"},
                 { "data": "UserContactEmail"},
-                { "data": "UserPhoneNumber"},
-                { "data": "UserAddress"},
-                { "data": "UserPostCode"},
-                { "data": "UserCountry"},
-                { "data": "UserMobileNumber"},
-                { "data": "UserState"},
                 {
                     "data": null,
                     "render": function (value) {
@@ -142,7 +144,8 @@
                     }
                 }
                 ]
-    });
+        })
+    };
         
     </script>
 }
