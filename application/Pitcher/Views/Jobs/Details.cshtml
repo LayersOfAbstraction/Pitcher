@@ -43,7 +43,7 @@
     </dl>
 </div>
 
-<table id="ProblemsTable" class="table">
+<table id="ProblemsTable" >
     <br/>
     <h4>Problem</h4>
     <thead>
@@ -99,7 +99,16 @@
                 { "data": "ProblemStartDate"},
                 { "data": "ProblemFileAttachments"},
                 { "data": "ProblemSeverity" },
-                { "data": "ProblemComplete" },
+                {
+                    "data": "ProblemComplete",
+                    "render": function (data) {
+                        if (data) {
+                            return "Is Complete";
+                        } else {
+                            return "Not Complete";
+                        }
+                    }
+                },
                 {
                     "data": null,
                     "render": function (value) {
