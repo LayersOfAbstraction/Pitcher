@@ -51,6 +51,7 @@
 @section scripts{ 
     <script src="~/js/jquery.dataTables.min.js"></script>
     <script>
+        $.fn.dataTable.ext.errMode = 'throw';
         var oTable = $('#userTable').DataTable({
                 "ajax": {
                 type: 'get',

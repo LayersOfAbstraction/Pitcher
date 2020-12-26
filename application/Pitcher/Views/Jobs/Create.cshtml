@@ -11,9 +11,8 @@
 <h4>Job</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
-        @* asp-action="Create" *@
-        <form >
+    <div class="col-md-4">        
+        <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="JobTitle" class="control-label"></label>
@@ -92,8 +91,9 @@
 </table>
 
 @section Scripts {
-    <script src="~/js/jquery.dataTables.min.js"></script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script>
+    $.fn.dataTable.ext.errMode = 'throw';
     @* function buttonClick(){
     document.getElementById('registeredUsersTable').style.display = 'block';
         var id=@Model.ID  = $('#registeredUsersTable').DataTable({
@@ -116,15 +116,15 @@
     }         *@        
 
     //Reveal table if button click successful.  
-    function buttonClick(){  
-        $("#unassignedUsersTable").toggle();
-        @* document.getElementById('unassignedUsersTable').style.display = 'block';  *@
-        var unassignedUsersTable = $('#unassignedUsersTable').DataTable({
+    @* function buttonClick(){  
+        document.getElementById('unassignedUsersTable').style.display = 'block'; 
+        var id=@Model.ID
+        $('#unassignedUsersTable').DataTable({
                 "ajax": {
                 type: 'get',
                 'dataType': "json",
                 //Get users from UsersController.                  
-                "url": "@Url.Action("GetAllUsers")",
+                "url": "@Url.Action("GetUnassignedUsersJobId")",
                 "dataSrc": function (result) {
                     return result;
                     }
@@ -145,7 +145,7 @@
                 }
                 ]
         })
-    };
+    }; *@
         
     </script>
 }

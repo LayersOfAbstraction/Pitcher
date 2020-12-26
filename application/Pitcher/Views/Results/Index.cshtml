@@ -1,52 +1,56 @@
-@model IEnumerable<Pitcher.Models.Result>
-
+@model Pitcher.Models.Result
 @{
     ViewData["Title"] = "Results";
-}
-
-<h1>Index</h1>
+}   
+<h1>Results</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-
- @*COPY AND PASTE THIS TAG HELPER METHOD TEXTBOX CUSTOMIZATION INTO OTHER VIEWS TO ENABLE SEARCHING.*@
-<form asp-action="Index" method="get">
-    <div class="form-actions no-color">
-        <p>
-            Find by name: <input type="text" name="SearchString" value="@ViewData["currentFilter"]" />
-            <input type="submit" value="Search" class="btn btn-primary" /> |
-            <a asp-action="Index">Back to Full List</a>
-        </p>
-    </div>
-</form>
-
-<table class="table table-hover">
+<table id="resultsTable" >
     <thead>
         <tr>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["JobTitleSortParam"]">@Html.DisplayNameFor(model => model.Job)</a>
+                @Html.DisplayNameFor(model => model.Job)
             </th>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["ProblemTitleSortParam"]">@Html.DisplayNameFor(model => model.Problem)</a>
+                @Html.DisplayNameFor(model => model.Problem)
             </th>
             <th></th>
         </tr>
     </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Job.JobTitle)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProblemID)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ID" button type="button" class="btn btn-primary btn-block">Edit</a> 
-                <a asp-action="Details" asp-route-id="@item.ID" button type="button" class="btn btn-info btn-block">Details</a> 
-                <a asp-action="Delete" asp-route-id="@item.ID" button type="button" class="btn btn-primary btn-block">Delete</a>
-            </td>
-        </tr>}
-    </tbody>
+    <tbody></tbody>
 </table>
+@section scripts{ 
+    <script>
+        $.fn.dataTable.ext.errMode = 'throw';    
+        function renderDT_RowId (data) 
+        {                    
+          return data.replace( 'row_', '' );
+        };
+        var oTable = $('#resultsTable').DataTable({
+            "ajax": {
+                type: "POST",
+                "url": "@Url.Action("LeftJoinJobsAndProblemsOntoResults")",
+                "dataSrc": function (result) {
+                    return result.data;
+                    }
+            },
+            "columns": [
+                { "data": "tblJob.JobTitle"},
+                { "data": "tblProblem.ID"},     
+                {
+                    "data": null,
+                    "render": function (value) {
+                        return '<a href="/Results/Details/' + renderDT_RowId(value.DT_RowId) + '"button type="button" class="btn btn-primary btn-block">Details</a> <br> '
+                            
+                            + '<a href="/Results/Edit/' + renderDT_RowId(value.DT_RowId) + '"button type="button" class="btn btn-info btn-block">Edit </a> <br> ' 
+                            
+                            
+                            + '<a href="/Results/Delete/' + renderDT_RowId(value.DT_RowId) + '"button type="button" class="btn btn-primary btn-block">Delete</a>';
+                    }
+                }
+                ]
+        });
+    </script>
+}
