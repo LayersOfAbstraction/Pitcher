@@ -52,14 +52,14 @@
                     }
                 },
             "columns": [
-                { "data": "ID"},
-                { "data": "ProblemTitle"},
-                { "data": "ProblemDescription",
+                { "data": "id"},
+                { "data": "problemTitle"},
+                { "data": "problemDescription",
                   render: $.fn.dataTable.render.text()
                 },
-                { "data": "ProblemStartDate"},
-                { "data": "ProblemFileAttachments"},
-                { "data": "ProblemSeverity",
+                { "data": "problemStartDate"},
+                { "data": "problemFileAttachments"},
+                { "data": "problemSeverity",
                     "render": function (data) {
                         if (data == 1) {
                             return "Very Low";
@@ -75,7 +75,7 @@
                     }
                 },
                 {
-                    "data": "ProblemComplete",
+                    "data": "problemComplete",
                     "render": function (data) {
                         if (data) {
                             return "Is Complete";

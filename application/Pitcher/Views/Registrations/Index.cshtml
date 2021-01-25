@@ -34,30 +34,27 @@
         var oTable = $('#registrationTable').DataTable({
             "ajax": {
                 type: "POST",
-                "url": "@Url.Action("LeftJoinJobsAndUsersOntoRegistrations")",
-                "dataSrc": function (result) {
-                    return result.data;
-                    }
+                "url": "@Url.Action("LeftJoinJobsAndUsersOntoRegistrations")"
             },
             "columns": [
-                { "data": "tblRegistration.RegistrationDate"},                
+                { "data": "tblRegistration.registrationDate"},                
                 {
-                    "data": "UserFullname",
+                    "data": "userFullname",
                     "render": function (data, type, row, meta) 
                     {
-                        return `${row.tblUser.UserFirstName} ${row.tblUser.UserLastName}`
+                        return `${row.tblUser.userFirstName} ${row.tblUser.userLastName}`
                     }
                 },
-                { "data": "tblJob.JobTitle"},
+                { "data": "tblJob.jobTitle"},
                 {
                     "data": null,
                     "render": function (value) {
-                        return '<a href="/Registrations/Details/' + renderDT_RowId(value.DT_RowId) + '"button type="button" class="btn btn-primary btn-block">Details</a> <br> '
+                        return '<a href="/Registrations/Details/' + renderDT_RowId(value.dT_RowId) + '"button type="button" class="btn btn-primary btn-block">Details</a> <br> '
                             
-                            + '<a href="/Registrations/Edit/' + renderDT_RowId(value.DT_RowId) + '"button type="button" class="btn btn-info btn-block">Edit </a> <br> ' 
+                            + '<a href="/Registrations/Edit/' + renderDT_RowId(value.dT_RowId) + '"button type="button" class="btn btn-info btn-block">Edit </a> <br> ' 
                             
                             
-                            + '<a href="/Registrations/Delete/' + renderDT_RowId(value.DT_RowId) + '"button type="button" class="btn btn-primary btn-block">Delete</a>';
+                            + '<a href="/Registrations/Delete/' + renderDT_RowId(value.dT_RowId) + '"button type="button" class="btn btn-primary btn-block">Delete</a>';
                     }
                 }
                 ]

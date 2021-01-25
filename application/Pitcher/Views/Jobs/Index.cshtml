@@ -70,13 +70,13 @@
                     }
                 },
             "columns": [
-                { "data": "ID"},
-                { "data": "JobTitle"},
-                { "data": "JobDescription"},
-                { "data": "JobStartDate"},
-                { "data": "JobDeadline"},
+                { "data": "id"},
+                { "data": "jobTitle"},
+                { "data": "jobDescription"},
+                { "data": "jobStartDate"},
+                { "data": "jobDeadline"},
                 {
-                    "data": "JobIsComplete",
+                    "data": "jobIsComplete",
                     "render": function (data) {
                         if (data) {
                             return "Is Complete";
@@ -115,7 +115,7 @@
                 ]
         }); *@
         
-        $('#registeredUsersTable').on( 'click', 'tbody tr', function DisplaySelectedRowItems() {            
+        @* $('#registeredUsersTable').on( 'click', 'tbody tr', function DisplaySelectedRowItems() {            
             //IF table row you click on is already selected. 
             if ( $(this).hasClass('selected') ) {
                 //deselect the row you already selected.
@@ -145,6 +145,6 @@
                     }
                 }
             }        
-        });
+        }); *@
     </script>
 }
