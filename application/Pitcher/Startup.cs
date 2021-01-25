@@ -6,42 +6,40 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Pitcher.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Serialization;
 using Auth0.ManagementApi;
 using System.Data.SqlClient;
 using System.Data.Common;
+using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Data.SqlClient;
 
 namespace Pitcher
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment hostingEnvironment)
         {
             Configuration = configuration;
+            HostingEnvironment = hostingEnvironment;
         }
 
         public IConfiguration Configuration { get; set; }
-
+        public IWebHostEnvironment HostingEnvironment { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-        {
-            services.Configure<CookiePolicyOptions>(options =>
-            {
-                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-                options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.None;
-            });
-
-             // Add authentication services
+        { 
+            // Add authentication services
             services.AddAuthentication(options => 
             {
                 options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -112,22 +110,24 @@ namespace Pitcher
                 
                 DbProviderFactories.RegisterFactory("System.Data.SqlClient", SqlClientFactory.Instance);
                 services.AddDbContext<TeamContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
                 
                 // Add the whole configuration object here.
                 services.AddSingleton<IConfiguration>(Configuration);
                 
                 // Add the Auth0 HttpClientManagementConnection.
-                services.AddSingleton<IManagementConnection, HttpClientManagementConnection>();                
-                services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-                services.AddMvc().AddJsonOptions(options =>
-                {
-                    options.SerializerSettings.ContractResolver = new DefaultContractResolver();
-                });   
+                services.AddSingleton<IManagementConnection, HttpClientManagementConnection>();
+                services.AddRazorPages();                
+                services.AddControllersWithViews();
+                services.AddMvc()
+                .AddNewtonsoftJson(options =>
+                    options.SerializerSettings.ContractResolver =
+                        new CamelCasePropertyNamesContractResolver());
+ 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -142,15 +142,19 @@ namespace Pitcher
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseRouting();
             app.UseCookiePolicy();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
-             app.UseAuthentication();
-
-            app.UseMvc(routes =>
+            app.UseEndpoints(endpoints => 
             {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapControllers();
+            });
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }
