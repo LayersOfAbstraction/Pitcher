@@ -88,63 +88,63 @@
                 {
                     "data": null,
                     "render": function (value) {
-                        return '<a href="/Jobs/Details/' + value.ID + '"button type="button" class="btn btn-primary btn-block">Details</a> <br> '
+                        return '<a href="/Jobs/Details/' + value.id + '"button type="button" class="btn btn-primary btn-block">Details</a> <br> '
                             
-                            + '<a href="/Jobs/Edit/' + value.ID + '"button type="button" class="btn btn-info btn-block">Edit </a> <br> ' 
+                            + '<a href="/Jobs/Edit/' + value.id + '"button type="button" class="btn btn-info btn-block">Edit </a> <br> ' 
                             
-                            + '<a href="/Jobs/Delete/' + value.ID + '"button type="button" class="btn btn-primary btn-block">Delete</a>';
+                            + '<a href="/Jobs/Delete/' + value.id + '"button type="button" class="btn btn-primary btn-block">Delete</a>';
                     }
                 }
                 ]
         });
         
         @* var id=@Model.ID $('#registeredUsersTable').DataTable({
-                "ajax": {
-                'type': 'get',
-                'data': { ID: id},
-                'dataType': "json",                  
-                "url": "@Url.Action("GetAllUsersByJobId")",
-                "dataSrc": function (result) {
-                    return result;
-                    }
-                },            
-                "columns": [                
-                { "data": "UserFirstName"},
-                { "data": "UserLastName"},
-                { "data": "UserContactEmail"}
-                ]
-        }); *@
-        
-        @* $('#registeredUsersTable').on( 'click', 'tbody tr', function DisplaySelectedRowItems() {            
-            //IF table row you click on is already selected. 
-            if ( $(this).hasClass('selected') ) {
-                //deselect the row you already selected.
-                $(this).removeClass('selected');
-            }
-            else {
-                //Search all visible rows and deselect them.  
-                Auth0Table.$('tr.selected').removeClass('selected');
-                //Select new row you clicked.
-                $(this).addClass('selected');
-
-                //Get ID of table and some property.
-                var table = document.querySelector('#registeredUsersTable');        
-                
-                //Add listener for table click event.
-                table.addEventListener('click', onTableClick);  
-
-                //Get click of Table.
-                function onTableClick (e) 
-                {
-                    var tr = e.target.parentElement;        
-                    var data = [];
-                    
-                    for (var td of tr.children) 
-                    {
-                        data.push(td.innerHTML);
-                    }
+            "ajax": {
+            'type': 'get',
+            'data': { ID: id},
+            'dataType': "json",                  
+            "url": "@Url.Action("GetAllUsersByJobId")",
+            "dataSrc": function (result) {
+                return result;
                 }
-            }        
-        }); *@
+            },            
+            "columns": [                
+            { "data": "UserFirstName"},
+            { "data": "UserLastName"},
+            { "data": "UserContactEmail"}
+            ]
+        });  *@
+        
+    $('#registeredUsersTable').on( 'click', 'tbody tr', function DisplaySelectedRowItems() {            
+    //IF table row you click on is already selected. 
+        if ( $(this).hasClass('selected') ) {
+            //deselect the row you already selected.
+            $(this).removeClass('selected');
+        }
+        else {
+            //Search all visible rows and deselect them.  
+            Auth0Table.$('tr.selected').removeClass('selected');
+            //Select new row you clicked.
+            $(this).addClass('selected');
+
+            //Get ID of table and some property.
+            var table = document.querySelector('#registeredUsersTable');        
+            
+            //Add listener for table click event.
+            table.addEventListener('click', onTableClick);  
+
+            //Get click of Table.
+            function onTableClick (e) 
+            {
+                var tr = e.target.parentElement;        
+                var data = [];
+                
+                for (var td of tr.children) 
+                {
+                    data.push(td.innerHTML);
+                }
+            }
+        }        
+    }); 
     </script>
 }
