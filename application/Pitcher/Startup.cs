@@ -118,8 +118,7 @@ namespace Pitcher
                 // Add the Auth0 HttpClientManagementConnection.
                 services.AddSingleton<IManagementConnection, HttpClientManagementConnection>();
                 services.AddRazorPages();                
-                services.AddControllersWithViews();
-                services.AddMvc()
+                services.AddControllersWithViews()
                 .AddNewtonsoftJson(options =>
                     options.SerializerSettings.ContractResolver =
                         new CamelCasePropertyNamesContractResolver());
