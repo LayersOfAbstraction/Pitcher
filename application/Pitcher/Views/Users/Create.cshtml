@@ -89,9 +89,10 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script>
+            $.fn.dataTable.ext.errMode = 'throw';
             var Auth0Table = $('#auth0UsersTable').DataTable({
                     "ajax": {
-                    type: 'get',
+                    'type': 'get',
                     'dataType': "json",                  
                     "url": "@Url.Action("GetAllAuth0Users")",
                     "dataSrc": function (result) {
@@ -99,9 +100,9 @@
                         }
                     },            
                     "columns": [                
-                    { "data": "UserFirstName"},
-                    { "data": "UserLastName"},
-                    { "data": "UserContactEmail"}
+                    { "data": "userFirstName"},
+                    { "data": "userLastName"},
+                    { "data": "userContactEmail"}
                     ]
             });
 

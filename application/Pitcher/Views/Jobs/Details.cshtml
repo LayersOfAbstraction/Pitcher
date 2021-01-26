@@ -92,16 +92,30 @@
                     }
                 },
             "columns": [
-                { "data": "ID"},
-                { "data": "ProblemTitle"},
-                { "data": "ProblemDescription",
+                { "data": "id"},
+                { "data": "problemTitle"},
+                { "data": "problemDescription",
                   render: $.fn.dataTable.render.text()
                 },
-                { "data": "ProblemStartDate"},
-                { "data": "ProblemFileAttachments"},
-                { "data": "ProblemSeverity" },
+                { "data": "problemStartDate"},
+                { "data": "problemFileAttachments"},
+                { "data": "problemSeverity",
+                    "render": function (data) {
+                        if (data == 1) {
+                            return "Very Low";
+                        } else if (data == 2) {
+                            return "Low";                            
+                        } else if (data == 3) {
+                            return "Medium";                            
+                        } else if (data == 4) {
+                            return "High";                            
+                        } else if (data == 5) {
+                            return "Very High";                            
+                        }                        
+                    }
+                },
                 {
-                    "data": "ProblemComplete",
+                    "data": "problemComplete",
                     "render": function (data) {
                         if (data) {
                             return "Is Complete";
@@ -113,11 +127,11 @@
                 {
                     "data": null,
                     "render": function (value) {
-                        return '<a href="/Problems/Details/' + value.ID + '"button type="button" class="btn btn-primary btn-block">Details</a> <br> '
+                        return '<a href="/Problems/Details/' + value.id + '"button type="button" class="btn btn-primary btn-block">Details</a> <br> '
                             
-                            + '<a href="/Problems/Edit/' + value.ID + '"button type="button" class="btn btn-info btn-block">Edit </a> <br> ' 
+                            + '<a href="/Problems/Edit/' + value.id + '"button type="button" class="btn btn-info btn-block">Edit </a> <br> ' 
                             
-                            + '<a href="/Problems/Delete/' + value.ID + '"button type="button" class="btn btn-primary btn-block">Delete</a>';
+                            + '<a href="/Problems/Delete/' + value.id + '"button type="button" class="btn btn-primary btn-block">Delete</a>';
                     }
                 }
                 ]
