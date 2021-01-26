@@ -108,9 +108,9 @@
                 }
             },            
             "columns": [                
-            { "data": "UserFirstName"},
-            { "data": "UserLastName"},
-            { "data": "UserContactEmail"}
+            { "data": "userFirstName"},
+            { "data": "userLastName"},
+            { "data": "userContactEmail"}
             ]
         });
     }         *@        
@@ -130,17 +130,17 @@
                     }
                 },            
             "columns": [                
-                { "data": "UserFirstName"},
-                { "data": "UserLastName"},
-                { "data": "UserContactEmail"},
+                { "data": "userFirstName"},
+                { "data": "userLastName"},
+                { "data": "userContactEmail"},
                 {
                     "data": null,
                     "render": function (value) {
-                        return '<a href="/Users/Details/' + value.ID + '"button type="button" class="btn btn-primary btn-block">Details</a> <br> '
+                        return '<a href="/Users/Details/' + value.id + '"button type="button" class="btn btn-primary btn-block">Details</a> <br> '
                             
-                            + '<a href="/Users/Edit/' + value.ID + '"button type="button" class="btn btn-info btn-block">Edit </a> <br> ' 
+                            + '<a href="/Users/Edit/' + value.id + '"button type="button" class="btn btn-info btn-block">Edit </a> <br> ' 
                             
-                            + '<a href="/Users/Delete/' + value.ID + '"button type="button" class="btn btn-primary btn-block">Delete</a>';
+                            + '<a href="/Users/Delete/' + value.id + '"button type="button" class="btn btn-primary btn-block">Delete</a>';
                     }
                 }
                 ]
