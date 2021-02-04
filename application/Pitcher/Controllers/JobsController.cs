@@ -48,9 +48,20 @@ namespace Pitcher.Controllers
             if (ID == null)
             {
                 return NotFound();
-            } 
-            
+            }                    
             var userlist = _context.Registrations.Where(r => r.JobID == ID).Select(r => r.User).ToList();
+            return Json(userlist);
+        }
+
+        public IActionResult GetUnassignedUsersJobId(int? ID)
+        {
+            if (ID == null)
+            {
+                return NotFound();
+            } 
+            //Get most recently created Job ID.
+            _context.Jobs.OrderByDescending(j => j.ID).FirstOrDefault();
+            var userlist = _context.Registrations.Where(r => r.JobID != ID).Select(r => r.User).ToList();
             return Json(userlist);
         }
 
@@ -69,7 +80,8 @@ namespace Pitcher.Controllers
         // GET: Jobs/Create
         public IActionResult Create()
         {
-            return View();
+            var job = new Job();
+            return View(job);
         }
 
         // POST: Jobs/Create
@@ -83,12 +95,12 @@ namespace Pitcher.Controllers
             try
             {
                 if (ModelState.IsValid)
-                {
+                {                    
                     _context.Add(job);
                     await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
+                    // return RedirectToAction(nameof(Index));
                 }
-                
+                    ViewData["Jobs"] = _context.Jobs.ToList();
             }
             catch(DbUpdateException /* ex */)
             {
