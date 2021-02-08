@@ -60,7 +60,7 @@ namespace Pitcher.Controllers
             //tblRegistration.UserID dos not match tblUserID
             //3.Display records
             _context.Jobs.OrderByDescending(j => j.ID).FirstOrDefault();
-            var userlist = _context.Registrations.Where(r => r.JobID != ID).Select(r => r.User).ToList();
+            var userlist = _context.Registrations.Where(r => r.JobID != ID).Select(r => r.User).ToList();            
             return Json(userlist);
         }
 
