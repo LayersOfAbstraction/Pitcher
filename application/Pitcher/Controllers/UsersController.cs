@@ -83,7 +83,7 @@ namespace Pitcher.Controllers
 
         public async Task <IActionResult> GetAllAuth0Users()
         {
-            var apiClient = new ManagementApiClient(Pitcher.Models.ConstantStrings.strToken, new Uri ("https://dev-dgdfgfdgf324.au.auth0.com/api/v2/"));
+            var apiClient = new ManagementApiClient(Pitcher.Models.ConstantStrings.strToken, new Uri ("https://dev-dgdfgfdgf324.au.auth0.com/oauth/token"));
             var allUsers = await apiClient.Users.GetAllAsync(new Auth0.ManagementApi.Models.GetUsersRequest(), new Auth0.ManagementApi.Paging.PaginationInfo());
             var renderedUsers = allUsers.Select(u => new User
             {                
