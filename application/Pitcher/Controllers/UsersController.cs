@@ -8,13 +8,12 @@ using Pitcher.Models;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Auth0.ManagementApi;
 
 namespace Pitcher.Controllers
 {
-    
+
     public class UsersController : Controller
     {        
         private readonly TeamContext _context;
@@ -84,6 +83,7 @@ namespace Pitcher.Controllers
         public async Task <IActionResult> GetAllAuth0Users()
         {
             var apiClient = new ManagementApiClient(Pitcher.Models.ConstantStrings.strToken, new Uri ("https://dev-dgdfgfdgf324.au.auth0.com/oauth/token"));
+            
             var allUsers = await apiClient.Users.GetAllAsync(new Auth0.ManagementApi.Models.GetUsersRequest(), new Auth0.ManagementApi.Paging.PaginationInfo());
             var renderedUsers = allUsers.Select(u => new User
             {                
