@@ -8,7 +8,6 @@ using Pitcher.Models;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Auth0.ManagementApi;
 using RestSharp;
@@ -16,7 +15,7 @@ using System.Net.Http;
 
 namespace Pitcher.Controllers
 {
-    
+
     public class UsersController : Controller
     {        
         private readonly TeamContext _context;
@@ -85,6 +84,7 @@ namespace Pitcher.Controllers
 
         public async Task <IActionResult> GetAllAuth0Users()
         {
+<<<<<<< HEAD
             //TESTING - working
             //
             // var apiClient = new ManagementApiClient(Pitcher.Models.ConstantStrings.strToken, new Uri ("https://dev-dgdfgfdgf324.au.auth0.com/api/v2/"));
@@ -100,6 +100,10 @@ namespace Pitcher.Controllers
             
             //PRODUCTION - Inoperable
             var apiClient = new ManagementApiClient(Pitcher.Models.ConstantStrings.strToken, new Uri ("https://dev-dgdfgfdgf324.au.auth0.com/oauth/token"));
+=======
+            var apiClient = new ManagementApiClient(Pitcher.Models.ConstantStrings.strToken, new Uri ("https://dev-dgdfgfdgf324.au.auth0.com/oauth/token"));
+            
+>>>>>>> 1d54762d7c7b615cdd948b6888a3b570d2b600f3
             var allUsers = await apiClient.Users.GetAllAsync(new Auth0.ManagementApi.Models.GetUsersRequest(), new Auth0.ManagementApi.Paging.PaginationInfo());
             var renderedUsers = allUsers.Select(u => new User
             {                
