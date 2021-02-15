@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Auth0.ManagementApi;
+using RestSharp;
+using System.Net.Http;
 
 namespace Pitcher.Controllers
 {
@@ -55,7 +57,7 @@ namespace Pitcher.Controllers
         
         [Authorize]        
         /// <summary>
-        /// Displays user profile.
+        /// /// Displays user profile.
         /// </summary>
         /// <returns>Info about user who logged in</returns>
         public IActionResult Profile()
@@ -83,16 +85,30 @@ namespace Pitcher.Controllers
 
         public async Task <IActionResult> GetAllAuth0Users()
         {
-            var apiClient = new ManagementApiClient(Pitcher.Models.ConstantStrings.strToken, new Uri ("https://dev-dgdfgfdgf324.au.auth0.com/api/v2/"));
+            //TESTING - working
+            //
+            // var apiClient = new ManagementApiClient(Pitcher.Models.ConstantStrings.strToken, new Uri ("https://dev-dgdfgfdgf324.au.auth0.com/api/v2/"));
+            // var allUsers = await apiClient.Users.GetAllAsync(new Auth0.ManagementApi.Models.GetUsersRequest(), new Auth0.ManagementApi.Paging.PaginationInfo());
+            // var renderedUsers = allUsers.Select(u => new User
+            // {                
+            //     UserFirstName = u.FullName.Contains(' ') ? u.FullName.Split(' ')[0] : "no space",
+            //     UserLastName = u.FullName.Contains(' ') ? u.FullName.Split(' ')[1] : "no space",
+            //     UserContactEmail = u.Email
+            // }).ToList();
+
+            // return Json(renderedUsers);
+            
+            //PRODUCTION - Inoperable
+            var apiClient = new ManagementApiClient(Pitcher.Models.ConstantStrings.strToken, new Uri ("https://dev-dgdfgfdgf324.au.auth0.com/oauth/token"));
             var allUsers = await apiClient.Users.GetAllAsync(new Auth0.ManagementApi.Models.GetUsersRequest(), new Auth0.ManagementApi.Paging.PaginationInfo());
             var renderedUsers = allUsers.Select(u => new User
             {                
                 UserFirstName = u.FullName.Contains(' ') ? u.FullName.Split(' ')[0] : "no space",
                 UserLastName = u.FullName.Contains(' ') ? u.FullName.Split(' ')[1] : "no space",
                 UserContactEmail = u.Email
-            }).ToList();
-
+            }).ToList();            
             return Json(renderedUsers);
+
         }
 
         // GET: Users/Details/5
@@ -175,8 +191,7 @@ namespace Pitcher.Controllers
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditPost(int? id)
-        {
-            
+        {            
             if (id == null)
             {
                 return NotFound();
