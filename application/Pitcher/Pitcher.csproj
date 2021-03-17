@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp5.0</TargetFramework>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+<UserSecretsId>a815071e-7eac-42a1-a70c-d20c9186077d</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Auth0.ManagementApi" Version="7.0.9" />
