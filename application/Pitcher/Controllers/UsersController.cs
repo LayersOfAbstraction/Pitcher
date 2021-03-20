@@ -10,8 +10,6 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Auth0.ManagementApi;
-using RestSharp;
-using System.Net.Http;
 
 namespace Pitcher.Controllers
 {
@@ -84,34 +82,29 @@ namespace Pitcher.Controllers
 
         public async Task <IActionResult> GetAllAuth0Users()
         {
-<<<<<<< HEAD
             //TESTING - working
             //
-            // var apiClient = new ManagementApiClient(Pitcher.Models.ConstantStrings.strToken, new Uri ("https://dev-dgdfgfdgf324.au.auth0.com/api/v2/"));
-            // var allUsers = await apiClient.Users.GetAllAsync(new Auth0.ManagementApi.Models.GetUsersRequest(), new Auth0.ManagementApi.Paging.PaginationInfo());
-            // var renderedUsers = allUsers.Select(u => new User
-            // {                
-            //     UserFirstName = u.FullName.Contains(' ') ? u.FullName.Split(' ')[0] : "no space",
-            //     UserLastName = u.FullName.Contains(' ') ? u.FullName.Split(' ')[1] : "no space",
-            //     UserContactEmail = u.Email
-            // }).ToList();
-
-            // return Json(renderedUsers);
-            
-            //PRODUCTION - Inoperable
-            var apiClient = new ManagementApiClient(Pitcher.Models.ConstantStrings.strToken, new Uri ("https://dev-dgdfgfdgf324.au.auth0.com/oauth/token"));
-=======
-            var apiClient = new ManagementApiClient(Pitcher.Models.ConstantStrings.strToken, new Uri ("https://dev-dgdfgfdgf324.au.auth0.com/oauth/token"));
-            
->>>>>>> 1d54762d7c7b615cdd948b6888a3b570d2b600f3
+            var apiClient = new ManagementApiClient(Pitcher.Models.ConstantStrings.strToken, new Uri ("https://dev-dgdfgfdgf324.au.auth0.com/api/v2/"));
             var allUsers = await apiClient.Users.GetAllAsync(new Auth0.ManagementApi.Models.GetUsersRequest(), new Auth0.ManagementApi.Paging.PaginationInfo());
             var renderedUsers = allUsers.Select(u => new User
             {                
                 UserFirstName = u.FullName.Contains(' ') ? u.FullName.Split(' ')[0] : "no space",
                 UserLastName = u.FullName.Contains(' ') ? u.FullName.Split(' ')[1] : "no space",
                 UserContactEmail = u.Email
-            }).ToList();            
+            }).ToList();
+
             return Json(renderedUsers);
+            
+            //PRODUCTION - Inoperable
+            // var apiClient = new ManagementApiClient(Pitcher.Models.ConstantStrings.strToken, new Uri ("https://dev-dgdfgfdgf324.au.auth0.com/oauth/token"));
+            // var allUsers = await apiClient.Users.GetAllAsync(new Auth0.ManagementApi.Models.GetUsersRequest(), new Auth0.ManagementApi.Paging.PaginationInfo());
+            // var renderedUsers = allUsers.Select(u => new User
+            // {                
+            //     UserFirstName = u.FullName.Contains(' ') ? u.FullName.Split(' ')[0] : "no space",
+            //     UserLastName = u.FullName.Contains(' ') ? u.FullName.Split(' ')[1] : "no space",
+            //     UserContactEmail = u.Email
+            // }).ToList();            
+            // return Json(renderedUsers);
 
         }
 
@@ -152,23 +145,12 @@ namespace Pitcher.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("UserLastName,UserFirstName,UserIsLeader,UserContactEmail,UserPhoneNumber,UserAddress,UserPostCode,UserCountry,UserMobileNumber,UserState,UserLogInName,UserPassword")] User user)
         {
-            try
-            {
                 if (ModelState.IsValid)
                 {
                     _context.Add(user);
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
                 }
-            }
-            catch(DbUpdateException /* ex */)
-            {
-                //Log the error (uncomment ex variable name and write a log.
-                ModelState.AddModelError("", "Unable to save changes. " +
-                    "Try again, and if the problem persists " +
-                    "see your system administrator.");
-            }
-
             return View(user);
         }
 
