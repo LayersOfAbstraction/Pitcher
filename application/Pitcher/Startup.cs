@@ -22,6 +22,7 @@ using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Data.SqlClient;
+using Pitcher.Models;
 
 namespace Pitcher
 {
@@ -50,7 +51,6 @@ namespace Pitcher
             .AddOpenIdConnect("Auth0", options => {
                 // Set the authority to your Auth0 domain
                 options.Authority = $"https://{Configuration["Auth0:Domain"]}";
-
                 // Configure the Auth0 Client ID and Client Secret
                 options.ClientId = Configuration["Auth0:ClientId"];
                 options.ClientSecret = Configuration["Auth0:ClientSecret"];
@@ -105,7 +105,7 @@ namespace Pitcher
 
                         return Task.CompletedTask;
                     }
-                };
+                };                
             });                       
                 
                 DbProviderFactories.RegisterFactory("System.Data.SqlClient", SqlClientFactory.Instance);
@@ -122,7 +122,7 @@ namespace Pitcher
                 .AddNewtonsoftJson(options =>
                     options.SerializerSettings.ContractResolver =
                         new CamelCasePropertyNamesContractResolver());
- 
+                services.AddSingleton(LoginAuthentication.Login(Configuration["Auth0:ClientId"], Configuration["Auth0:ClientSecret"], Configuration["Auth0:Domain"]));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
