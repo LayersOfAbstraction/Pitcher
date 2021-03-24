@@ -16,11 +16,13 @@ namespace Pitcher.Controllers
 
     public class UsersController : Controller
     {        
+        private readonly Auth0Token _Auth0Token;
         private readonly TeamContext _context;
 
-        public UsersController(TeamContext context)
+        public UsersController(TeamContext context, Auth0Token auth0Token)
         {
             _context = context;
+            _Auth0Token = auth0Token;
         }
 
         public async Task Login(string returnUrl = "/")
@@ -66,7 +68,6 @@ namespace Pitcher.Controllers
                 UserProfileImage = User.Claims.FirstOrDefault(c => c.Type == "picture")?.Value
             });
         }
-
     
         [Authorize(Roles = "admin")]
         [HttpGet]
@@ -84,7 +85,7 @@ namespace Pitcher.Controllers
         {
             //TESTING - working
             //
-            var apiClient = new ManagementApiClient(Pitcher.Models.ConstantStrings.strToken, new Uri ("https://dev-dgdfgfdgf324.au.auth0.com/api/v2/"));
+            var apiClient = new ManagementApiClient(_Auth0Token.strAuthToken, new Uri ("https://dev-dgdfgfdgf324.au.auth0.com/api/v2/"));
             var allUsers = await apiClient.Users.GetAllAsync(new Auth0.ManagementApi.Models.GetUsersRequest(), new Auth0.ManagementApi.Paging.PaginationInfo());
             var renderedUsers = allUsers.Select(u => new User
             {                
@@ -92,20 +93,7 @@ namespace Pitcher.Controllers
                 UserLastName = u.FullName.Contains(' ') ? u.FullName.Split(' ')[1] : "no space",
                 UserContactEmail = u.Email
             }).ToList();
-
             return Json(renderedUsers);
-            
-            //PRODUCTION - Inoperable
-            // var apiClient = new ManagementApiClient(Pitcher.Models.ConstantStrings.strToken, new Uri ("https://dev-dgdfgfdgf324.au.auth0.com/oauth/token"));
-            // var allUsers = await apiClient.Users.GetAllAsync(new Auth0.ManagementApi.Models.GetUsersRequest(), new Auth0.ManagementApi.Paging.PaginationInfo());
-            // var renderedUsers = allUsers.Select(u => new User
-            // {                
-            //     UserFirstName = u.FullName.Contains(' ') ? u.FullName.Split(' ')[0] : "no space",
-            //     UserLastName = u.FullName.Contains(' ') ? u.FullName.Split(' ')[1] : "no space",
-            //     UserContactEmail = u.Email
-            // }).ToList();            
-            // return Json(renderedUsers);
-
         }
 
         // GET: Users/Details/5
