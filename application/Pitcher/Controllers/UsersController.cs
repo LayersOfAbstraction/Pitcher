@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,10 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Auth0.ManagementApi;
+using Auth0.ManagementApi.Models;
+using Auth0.ManagementApi.Paging;
+using Example.Auth0.AuthenticationApi.Services;
+
 
 namespace Pitcher.Controllers
 {
@@ -18,11 +23,14 @@ namespace Pitcher.Controllers
     {        
         private readonly Auth0Token _Auth0Token;
         private readonly TeamContext _context;
+        private readonly IUserService _userService;
+        public IPagedList<Auth0.ManagementApi.Models.User> Users { get; private set; }
 
-        public UsersController(TeamContext context, Auth0Token auth0Token)
+        public UsersController(TeamContext context, Auth0Token auth0Token, IUserService userService)
         {
             _context = context;
             _Auth0Token = auth0Token;
+            _userService = userService;
         }
 
         public async Task Login(string returnUrl = "/")
@@ -83,17 +91,20 @@ namespace Pitcher.Controllers
 
         public async Task <IActionResult> GetAllAuth0Users()
         {
-            //TESTING - working
-            //
             var apiClient = new ManagementApiClient(_Auth0Token.strAuthToken, new Uri ("https://dev-dgdfgfdgf324.au.auth0.com/api/v2/"));
             var allUsers = await apiClient.Users.GetAllAsync(new Auth0.ManagementApi.Models.GetUsersRequest(), new Auth0.ManagementApi.Paging.PaginationInfo());
-            var renderedUsers = allUsers.Select(u => new User
+            var renderedUsers = allUsers.Select(u => new Pitcher.Models.User
             {                
                 UserFirstName = u.FullName.Contains(' ') ? u.FullName.Split(' ')[0] : "no space",
                 UserLastName = u.FullName.Contains(' ') ? u.FullName.Split(' ')[1] : "no space",
                 UserContactEmail = u.Email
             }).ToList();
             return Json(renderedUsers);
+        }
+
+        public async Task OnGet(CancellationToken cancellationToken)
+        {
+            Users = await _userService.GetUsersAsync(new GetUsersRequest(), new PaginationInfo(), cancellationToken);
         }
 
         // GET: Users/Details/5
@@ -131,7 +142,7 @@ namespace Pitcher.Controllers
         // COPY AND PASTE THIS METHOD CUSTOMIZATION INTO OTHER CONTROLLERS.  
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("UserLastName,UserFirstName,UserIsLeader,UserContactEmail,UserPhoneNumber,UserAddress,UserPostCode,UserCountry,UserMobileNumber,UserState,UserLogInName,UserPassword")] User user)
+        public async Task<IActionResult> Create([Bind("UserLastName,UserFirstName,UserIsLeader,UserContactEmail,UserPhoneNumber,UserAddress,UserPostCode,UserCountry,UserMobileNumber,UserState,UserLogInName,UserPassword")] Pitcher.Models.User user)
         {
                 if (ModelState.IsValid)
                 {
@@ -172,7 +183,7 @@ namespace Pitcher.Controllers
             }
 
             var userToUpdate = await _context.Users.FirstOrDefaultAsync(u => u.ID == id);
-            if (await TryUpdateModelAsync<User>(
+            if (await TryUpdateModelAsync<Pitcher.Models.User>(
                 userToUpdate,
                 //Empty string is a prefix for form field names.
                 "",
