@@ -1,11 +1,8 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
@@ -14,15 +11,12 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Serialization;
 using Auth0.ManagementApi;
-using System.Data.SqlClient;
 using System.Data.Common;
-using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Data.SqlClient;
-using Pitcher.Models;
+using Example.Auth0.AuthenticationApi.AccessTokenManagement;
+using Example.Auth0.AuthenticationApi.Services;
 
 namespace Pitcher
 {
@@ -122,7 +116,9 @@ namespace Pitcher
                 .AddNewtonsoftJson(options =>
                     options.SerializerSettings.ContractResolver =
                         new CamelCasePropertyNamesContractResolver());
-                services.AddSingleton(LoginAuthentication.Login(Configuration["Auth0:ClientId"], Configuration["Auth0:ClientSecret"], Configuration["Auth0:Domain"]));
+                //services.AddSingleton(LoginAuthentication.Login(Configuration["Auth0:ClientId"], Configuration["Auth0:ClientSecret"], Configuration["Auth0:Domain"]));
+                services.AddAccessTokenManagement(Configuration); //Adds 
+                services.AddTransient<IUserService, UserService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
