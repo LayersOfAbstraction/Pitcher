@@ -1,6 +1,7 @@
 using RestSharp;
 using Auth0.AuthenticationApi;
 
+
 namespace Pitcher.Models
 {
     public class LoginAuthentication
@@ -18,6 +19,7 @@ namespace Pitcher.Models
             // Get the access token
             var token =  authenticationApiClient.GetTokenAsync(new Auth0.AuthenticationApi.Models.ClientCredentialsTokenRequest
             {                
+                //Scope = 
                 ClientId = ClientID,
                 ClientSecret = ClientSecret,
                 Audience = "https://dev-dgdfgfdgf324.au.auth0.com/api/v2/"
