@@ -89,7 +89,8 @@ namespace Pitcher.Controllers
 
         public async Task <IActionResult> GetAllAuth0Users(CancellationToken cancellationToken)
         {
-            //Get Token.
+            // var apiClient = new ManagementApiClient(_Auth0Token.strAuthToken, new Uri ("https://dev-dgdfgfdgf324.au.auth0.com/api/v2/"));
+            // var allUsers = await apiClient.Users.GetAllAsync(new Auth0.ManagementApi.Models.GetUsersRequest(), new Auth0.ManagementApi.Paging.PaginationInfo());
             var allUsers = await _userService.GetUsersAsync(new GetUsersRequest(), new PaginationInfo(), cancellationToken);
             var renderedUsers = allUsers.Select(u => new Pitcher.Models.User
             {                
