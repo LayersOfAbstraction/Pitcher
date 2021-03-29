@@ -26,6 +26,7 @@ namespace Pitcher.Data
             modelBuilder.Entity<Problem>().ToTable("tblProblem");
             modelBuilder.Entity<Chat>().ToTable("tblChat");
             modelBuilder.Entity<Result>().ToTable("tblResult");
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(AccessTokenCacheConfiguration).Assembly);
         }        
     }
 }
