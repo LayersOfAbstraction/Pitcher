@@ -20,16 +20,14 @@ namespace Pitcher.Controllers
 {
 
     public class UsersController : Controller
-    {        
-        private readonly Auth0Token _Auth0Token;
+    {
         private readonly TeamContext _context;
         private readonly IUserService _userService;
         public IPagedList<Auth0.ManagementApi.Models.User> Users { get; private set; }
 
-        public UsersController(TeamContext context, Auth0Token auth0Token, IUserService userService)
+        public UsersController(TeamContext context, /*Auth0Token auth0Token,*/ IUserService userService)
         {
             _context = context;
-            _Auth0Token = auth0Token;
             _userService = userService;
         }
 
@@ -89,10 +87,10 @@ namespace Pitcher.Controllers
             return Json(_context.Users.ToList());
         }
 
-        public async Task <IActionResult> GetAllAuth0Users()
+        public async Task <IActionResult> GetAllAuth0Users(CancellationToken cancellationToken)
         {
-            var apiClient = new ManagementApiClient(_Auth0Token.strAuthToken, new Uri ("https://dev-dgdfgfdgf324.au.auth0.com/api/v2/"));
-            var allUsers = await apiClient.Users.GetAllAsync(new Auth0.ManagementApi.Models.GetUsersRequest(), new Auth0.ManagementApi.Paging.PaginationInfo());
+            //Get Token.
+            var allUsers = await _userService.GetUsersAsync(new GetUsersRequest(), new PaginationInfo(), cancellationToken);
             var renderedUsers = allUsers.Select(u => new Pitcher.Models.User
             {                
                 UserFirstName = u.FullName.Contains(' ') ? u.FullName.Split(' ')[0] : "no space",
