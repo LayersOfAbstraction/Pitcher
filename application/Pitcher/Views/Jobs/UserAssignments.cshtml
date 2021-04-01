@@ -68,7 +68,6 @@
     
     $.fn.dataTable.ext.errMode = 'throw';
     //Reveal table if button click successful.  
-    function buttonClick(){  
         document.getElementById('unassignedUsersTable').style.display = 'block'; 
         var id=@Model.ID
         $('#unassignedUsersTable').DataTable({
@@ -76,7 +75,7 @@
                 type: 'get',
                 'dataType': "json",
                 //Get users from UsersController.                  
-                "url": "@Url.Action("GetUnassignedUsersJobId")",
+                "url": "@Url.Action("GetUnassignedUsers")",
                 "dataSrc": function (result) {
                     return result;
                     }
@@ -88,15 +87,10 @@
                 {
                     "data": null,
                     "render": function (value) {
-                        return '<a href="/Users/Details/' + value.id + '"button type="button" class="btn btn-primary btn-block">Details</a> <br> '
-                            
-                            + '<a href="/Users/Edit/' + value.id + '"button type="button" class="btn btn-info btn-block">Edit </a> <br> ' 
-                            
-                            + '<a href="/Users/Delete/' + value.id + '"button type="button" class="btn btn-primary btn-block">Delete</a>';
+                        return  '<a href="/Users/................/' + value.id + '"button type="button" class="btn btn-primary btn-block">Assign</a>';
                     }
                 }
                 ]
-        })
-    };
+        });
     </script>
 }
