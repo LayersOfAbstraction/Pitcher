@@ -45,12 +45,48 @@ namespace Pitcher.Controllers
 
         public IActionResult GetAllUsersByJobId(int? ID)
         {
+
             if (ID == null)
             {
                 return NotFound();
             }                    
             var userlist = _context.Registrations.Where(r => r.JobID == ID).Select(r => r.User).ToList();
             return Json(userlist);
+        }
+
+
+
+
+        
+        /// <summary>
+        /// Creates a Registration to assign user to a currently displayed job.
+        /// </summary>
+        /// <param name="registration"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(int UserID, int JobID)
+        {
+            try
+            {
+                 Registration registration = new Registration();
+                if (ModelState.IsValid)
+                {
+                    _context.Add(registration);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                ViewData["JobID"] = new SelectList(_context.Jobs, "ID", "JobTitle", registration.JobID);
+                ViewData["UserID"] = new SelectList(_context.Users, "ID", "UserFullname", registration.UserID);
+            }
+            catch (DbUpdateException /* ex */)
+            {                
+                //Log the error (uncomment ex variable name and write a log.
+                ModelState.AddModelError("", "Unable to save changes. " +
+                "Try again, and if the problem persists " +
+                "see your system administrator.");
+            }
+            return View(registration);
         }
 
         public IActionResult GetUnassignedUsers()
