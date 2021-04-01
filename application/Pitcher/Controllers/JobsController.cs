@@ -53,7 +53,7 @@ namespace Pitcher.Controllers
             return Json(userlist);
         }
 
-        public IActionResult GetUnassignedUsersJobId(int? ID)
+        public IActionResult GetUnassignedUsers()
         {
             //1.After creation of tblJob record.
             //2.SELECT all from tblUser Where most recently created tblJob.Id and
