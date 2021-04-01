@@ -59,8 +59,7 @@ namespace Pitcher.Controllers
             //2.SELECT all from tblUser Where most recently created tblJob.Id and
             //tblRegistration.UserID does not match tblUserID
             //3.Display records
-            _context.Jobs.OrderByDescending(j => j.ID).FirstOrDefault();
-            //var userlist = _context.Registrations.Where(r => r.UserID != r.User.ID).Select(r => r.User).ToList();            
+            _context.Jobs.OrderByDescending(j => j.ID).FirstOrDefault();       
             var userlist = _context.Users.Where(u => !u.Registrations.Any());
             return Json(userlist);
         }
@@ -68,6 +67,16 @@ namespace Pitcher.Controllers
         // GET: Jobs/Details/5
         // COPY AND PASTE THIS METHOD CUSTOMIZATION INTO OTHER CONTROLLERS.  
         public IActionResult Details(int? ID)
+        {
+            if (ID == null)
+            {
+                return NotFound();
+            }
+            var job = _context.Jobs.Find(ID);
+            return View(job);
+        }
+
+        public IActionResult UserAssignments(int? ID)
         {
             if (ID == null)
             {
