@@ -37,15 +37,13 @@ namespace Pitcher.Controllers
             if (ID == null)
             {
                 return NotFound();
-            } 
-            
+            }            
             var problemlist = _context.Results.Where(r => r.JobID == ID).Select(r => r.Problem).ToList();
             return Json(problemlist);
         }
 
         public IActionResult GetAllUsersByJobId(int? ID)
         {
-
             if (ID == null)
             {
                 return NotFound();
@@ -53,10 +51,6 @@ namespace Pitcher.Controllers
             var userlist = _context.Registrations.Where(r => r.JobID == ID).Select(r => r.User).ToList();
             return Json(userlist);
         }
-
-
-
-
         
         /// <summary>
         /// Creates a Registration to assign user to a currently displayed job.
@@ -109,8 +103,7 @@ namespace Pitcher.Controllers
         // GET: Jobs/Create
         public IActionResult Create()
         {
-            var job = new Job();
-            return View(job);
+            return View();
         }
 
         // POST: Jobs/Create
