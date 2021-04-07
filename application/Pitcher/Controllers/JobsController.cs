@@ -55,7 +55,8 @@ namespace Pitcher.Controllers
         /// <summary>
         /// Creates a Registration to assign user to a currently displayed job.
         /// </summary>
-        /// <param name="registration"></param>
+        /// <param name="UserID"></param>
+        /// <param name="JobID"></param>
         /// <returns>The newly assigned user registration</returns>
         [HttpGet]
         public async Task<IActionResult> AssignUserRegistration(int UserID, int JobID)
