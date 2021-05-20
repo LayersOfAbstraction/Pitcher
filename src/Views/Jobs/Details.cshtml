@@ -1,0 +1,140 @@
+@model Pitcher.Models.Job
+@{ 
+    var problem = new Problem();
+}
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div>
+    <h4>Job</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.JobTitle)
+        </dt>
+        <dd class = "col-sm-10"> 
+            @Html.DisplayFor(model => model.JobTitle)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.JobDescription)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.JobDescription)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.JobStartDate)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.JobStartDate)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.JobDeadline)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.JobDeadline)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.JobIsComplete)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.JobIsComplete)
+        </dd>
+    </dl>
+</div>
+
+<table id="ProblemsTable" >
+    <br/>
+    <h4>Problem</h4>
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(problemmodel => problem.ID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(problemmodel => problem.ProblemTitle)
+            </th>
+            <th>
+                @Html.DisplayNameFor(problemmodel => problem.ProblemDescription)
+            </th>
+            <th>
+                @Html.DisplayNameFor(problemmodel => problem.ProblemStartDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(problemmodel => problem.ProblemFileAttachments)
+            </th>
+            <th>
+                @Html.DisplayNameFor(problemmodel => problem.ProblemSeverity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(problemmodel => problem.ProblemComplete)
+            </th>
+            <th>
+            </th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+@section scripts{
+    <script src="~/js/jquery.dataTables.min.js"></script>
+    <script>
+        $.fn.dataTable.ext.errMode = 'throw';
+        var id=@Model.ID
+        $('#ProblemsTable').DataTable({
+                "ajax": {
+                'type': 'get',
+                'data': { ID: id},
+                'dataType': "json",
+                "url": "@Url.Action("GetAllProblemByJobId")",
+                "dataSrc": function (result) {
+                    return result;
+                    }
+                },
+            "columns": [
+                { "data": "id"},
+                { "data": "problemTitle"},
+                { "data": "problemDescription",
+                  render: $.fn.dataTable.render.text()
+                },
+                { "data": "problemStartDate"},
+                { "data": "problemFileAttachments"},
+                { "data": "problemSeverity",
+                    "render": function (data) {
+                        if (data == 1) {
+                            return "Very Low";
+                        } else if (data == 2) {
+                            return "Low";                            
+                        } else if (data == 3) {
+                            return "Medium";                            
+                        } else if (data == 4) {
+                            return "High";                            
+                        } else if (data == 5) {
+                            return "Very High";                            
+                        }                        
+                    }
+                },
+                {
+                    "data": "problemComplete",
+                    "render": function (data) {
+                        if (data) {
+                            return "Is Complete";
+                        } else {
+                            return "Not Complete";
+                        }
+                    }
+                },
+                {
+                    "data": null,
+                    "render": function (value) {
+                        return '<a href="/Problems/Details/' + value.id + '"button type="button" class="btn btn-primary btn-block">Details</a> <br> '
+                            
+                            + '<a href="/Problems/Edit/' + value.id + '"button type="button" class="btn btn-info btn-block">Edit </a> <br> ' 
+                            
+                            + '<a href="/Problems/Delete/' + value.id + '"button type="button" class="btn btn-primary btn-block">Delete</a>';
+                    }
+                }
+                ]
+        });
+    </script>
+}
