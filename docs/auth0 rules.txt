@@ -1,0 +1,44 @@
+function setRolesToUser(user, context, callback) {
+
+  // Roles should only be set to verified users.
+  if (!user.email || !user.email_verified) {
+    return callback(null, user, context);
+  }
+
+  user.app_metadata = user.app_metadata || {};
+  // You can add a Role based on what you want
+  // In this case I check domain
+  const addRolesToUser = function (user) {
+    const endsWith = "admin";
+
+    if (user.app_metadata.roles.toString() === endsWith) {
+      return ['admin'];
+    }
+    return ['user'];
+  };
+
+  const roles = addRolesToUser(user);
+
+  user.app_metadata.roles = roles;
+  auth0.users.updateAppMetadata(user.user_id, user.app_metadata)
+    .then(function () {
+      context.idToken['https://schemas.Aussie_Tenant.com'] = user.app_metadata.roles;
+      callback(null, user, context);
+    })
+    .catch(function (err) {
+      callback(err);
+    });
+}
+
+
+
+
+
+
+app_metadata
+
+{
+  "roles": [
+    "admin"
+  ]
+}
