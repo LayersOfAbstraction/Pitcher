@@ -116,7 +116,6 @@ namespace Pitcher
                 .AddNewtonsoftJson(options =>
                     options.SerializerSettings.ContractResolver =
                         new CamelCasePropertyNamesContractResolver());
-                //services.AddSingleton(LoginAuthentication.Login(Configuration["Auth0:ClientId"], Configuration["Auth0:ClientSecret"], Configuration["Auth0:Domain"]));
                 services.AddAccessTokenManagement(Configuration); //Adds 
                 services.AddTransient<IUserService, UserService>();
         }
