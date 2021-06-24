@@ -118,7 +118,6 @@
         $('#registeredUsersTable').DataTable({
             "ajax": {
             'type': 'get',
-            //PROBLEM:Cannot get the related UserID of the Job.
             'data': { ID: id},
             'dataType': "json",                  
             "url": "@Url.Action("GetAssignedUsers")",
