@@ -82,19 +82,19 @@ namespace Pitcher.Controllers
             return Json(userlist);
         }
 
-        public async Task<IActionResult> UnassignUserRegistration(int UserID, int JobID)
+        public async Task<IActionResult> UnassignUserRegistration(int? UserID, int? JobID)
         {            
-            if(JobID == null)
+            if(JobID != null)
             {
-                return NotFound();
-            }
-            var registration = await _context.Registrations.OrderByDescending(j => j.ID)                
+                var registration = await _context.Registrations.OrderByDescending(j => j.ID)                
                 .AsNoTracking()
                 .Include(r => r.Job)
                 .Include(r => r.User)
                 //Retrives the selected entity.
                 .FirstOrDefaultAsync(m => m.ID == JobID);
-            if (registration == null)
+            }
+
+            if (JobID == null)
             {
                 ViewData["ErrorMessage"] =
                     "Delete failed. Try again, and if the problem persists " +
@@ -275,15 +275,15 @@ namespace Pitcher.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var registration = await _context.Registrations.FindAsync(id);
+            var job = await _context.Jobs.FindAsync(id);
 
-            if(registration == null)
+            if(job == null)
             {
                 return RedirectToAction(nameof(Index));
             }
             try
             {
-                _context.Registrations.Remove(registration);
+                _context.Jobs.Remove(job);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -293,9 +293,7 @@ namespace Pitcher.Controllers
                 return RedirectToAction(nameof(Delete), new {id = id, saveChangesError = true});
             }
         }
-
-
-
+        
         private bool JobExists(int id)
         {
             return _context.Jobs.Any(e => e.ID == id);
