@@ -52,6 +52,7 @@ namespace Pitcher.Controllers
             return Json(userlist);
         }
         
+#region User Registrations
         /// <summary>
         /// Creates a Registration to assign user to a currently displayed job.
         /// </summary>
@@ -82,25 +83,27 @@ namespace Pitcher.Controllers
             return Json(userlist);
         }
 
-        public async Task<IActionResult> UnassignUserRegistration(int? UserID, int? JobID)
-        {            
-            if(JobID != null)
+        //TO DO: Fix method.
+        public async Task<IActionResult> UnassignUserRegistration(int? RegistrationID, bool? saveChangesError = false)
+        {      
+            if(RegistrationID != null)
             {
-                var registration = await _context.Registrations.OrderByDescending(j => j.ID)                
+                return NotFound();
+            }
+              
+            var registration = await _context.Registrations
                 .AsNoTracking()
                 .Include(r => r.Job)
                 .Include(r => r.User)
-                //Retrives the selected entity.
-                .FirstOrDefaultAsync(m => m.ID == JobID);
-            }
+                .FirstOrDefaultAsync(m => m.ID == RegistrationID);
 
-            if (JobID == null)
+            if (RegistrationID == null)
             {
                 ViewData["ErrorMessage"] =
                     "Delete failed. Try again, and if the problem persists " +
                     "see your system administrator.";
             }
-            return RedirectToAction(nameof(UserAssignments), new{ID = JobID});
+            return View(registration);
         }
 
         [HttpPost, ActionName("UnassignUserRegistration")]
@@ -125,6 +128,8 @@ namespace Pitcher.Controllers
                 return RedirectToAction(nameof(Delete), new {id = id, saveChangesError = true});
             }
         }
+#endregion User Registrations
+
         // GET: Jobs/Details/5
         // COPY AND PASTE THIS METHOD CUSTOMIZATION INTO OTHER CONTROLLERS.  
         public IActionResult Details(int? ID)
