@@ -92,7 +92,8 @@
         var id=@Model.ID
         $('#unassignedUsersTable').DataTable({
                 "ajax": {
-                type: 'get',
+                'type': 'get',
+                'data': { ID: id},
                 'dataType': "json",
                 //Get users from UsersController.                  
                 "url": "@Url.Action("GetUnassignedUsers")",
@@ -132,7 +133,7 @@
             {
             "data": null,
             "render": function (value) {
-                return  '<a href="/Jobs/UnassignUserRegistration?UserID=' + value.id + '&JobID=' + id +' "button type="button" class="btn btn-primary btn-block">Unassign</a>';
+                return  '<a href="/Jobs/UnassignUserRegistration?RegistrationID=' + value.id + '"button type="button" class="btn btn-primary btn-block">Unassign</a>';
             }
                 }
             ]
