@@ -84,50 +84,38 @@ namespace Pitcher.Controllers
         }
 
         //TO DO: Fix method.
-        public async Task<IActionResult> UnassignUserRegistration(int? RegistrationID, bool? saveChangesError = false)
+        //TO DO: Fix method.
+        [HttpGet]
+        public async Task<IActionResult> UnassignUserRegistration(int RegistrationID)
         {      
-            if(RegistrationID != null)
-            {
-                return NotFound();
-            }
-              
-            var registration = await _context.Registrations
-                .AsNoTracking()
-                .Include(r => r.Job)
-                .Include(r => r.User)
-                .FirstOrDefaultAsync(m => m.ID == RegistrationID);
-
-            if (RegistrationID == null)
-            {
-                ViewData["ErrorMessage"] =
-                    "Delete failed. Try again, and if the problem persists " +
-                    "see your system administrator.";
-            }
-            return View(registration);
+            Registration registration = new Registration{ID = RegistrationID};
+            _context.Registrations.Remove(registration);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(UserAssignments), new{ID = RegistrationID});
         }
 
-        [HttpPost, ActionName("UnassignUserRegistration")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UnassignUserRegistration_Confirmed(int id)
-        {
-            var registration = await _context.Registrations.FindAsync(id);
+        // [HttpPost, ActionName("UnassignUserRegistration")]
+        // [ValidateAntiForgeryToken]
+        // public async Task<IActionResult> UnassignUserRegistration_Confirmed(int id)
+        // {
+        //     var registration = await _context.Registrations.FindAsync(id);
 
-            if(registration == null)
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            try
-            {
-                _context.Registrations.Remove(registration);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            catch(DbUpdateException /* ex */)
-            {
-                //Log the error (uncomment ex variable name and write a log.)
-                return RedirectToAction(nameof(Delete), new {id = id, saveChangesError = true});
-            }
-        }
+        //     if(registration == null)
+        //     {
+        //         return RedirectToAction(nameof(Index));
+        //     }
+        //     try
+        //     {
+        //         _context.Registrations.Remove(registration);
+        //         await _context.SaveChangesAsync();
+        //         return RedirectToAction(nameof(Index));
+        //     }
+        //     catch(DbUpdateException /* ex */)
+        //     {
+        //         //Log the error (uncomment ex variable name and write a log.)
+        //         return RedirectToAction(nameof(Delete), new {id = id, saveChangesError = true});
+        //     }
+        // }
 #endregion User Registrations
 
         // GET: Jobs/Details/5
