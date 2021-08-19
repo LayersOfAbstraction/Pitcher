@@ -1,4 +1,3 @@
-using RestSharp;
 using Auth0.AuthenticationApi;
 
 
