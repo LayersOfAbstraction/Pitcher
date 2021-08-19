@@ -5,10 +5,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
 using Pitcher.Data;
 using Pitcher.Models;
 using Pitcher.Models.TeamViewModels;
-
+using Microsoft.EntityFrameworkCore.SqlServer;
 namespace Pitcher.Controllers
 {
     public class JobsController : Controller
@@ -69,6 +70,11 @@ namespace Pitcher.Controllers
             return RedirectToAction(nameof(UserAssignments), new{ID = JobID});
         }
 
+        /// <summary>
+        /// Action that displays table showing unassigned users
+        /// to currently selected job.
+        /// </summary>
+        /// <returns>A list of unassigned users for currently selected Job</returns>
         public IActionResult GetUnassignedUsers()
         {
             _context.Jobs.OrderByDescending(j => j.ID).FirstOrDefault();       
@@ -76,58 +82,51 @@ namespace Pitcher.Controllers
             return Json(userlist);
         }
 
+        /// <summary>
+        /// Action that displays table showing assigned users
+        /// </summary>
+        /// <returns>A list of users assigned to currently selected Job</returns>
         public IActionResult GetAssignedUsers()
         {
-            _context.Jobs.OrderByDescending(j => j.ID).FirstOrDefault();       
+            try
+            {
+                _context.Jobs.OrderByDescending(j => j.ID).FirstOrDefault();       
+                
+            }
+            
+            catch(DbUpdateException /* ex */)
+            {
+                //Log the error (uncomment ex variable name and write a log).
+                ModelState.AddModelError("", "Unable to save changes. " +
+                "Try again, and if the problem persists " +
+                "See your system administrator.");
+            }
             var userlist = _context.Users.Where(u => u.Registrations.Any());
             return Json(userlist);
         }
 
-        //TO DO: Fix method.
-        //TO DO: Fix method.
+        //TO DO: Fix method below.
+
+        /// <summary>
+        /// NullReferenceException: Object reference not set to an instance of an object.
+        /// This method unassign the registration in memory for the currently selected Job.
+        /// </summary>
+        /// <param name="RegistrationID"></param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> UnassignUserRegistration(int RegistrationID)
-        {      
-            Registration registration = new Registration{ID = RegistrationID};
-            _context.Registrations.Remove(registration);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(UserAssignments), new{ID = RegistrationID});
-        }
-
-        // [HttpPost, ActionName("UnassignUserRegistration")]
-        // [ValidateAntiForgeryToken]
-        // public async Task<IActionResult> UnassignUserRegistration_Confirmed(int id)
-        // {
-        //     var registration = await _context.Registrations.FindAsync(id);
-
-        //     if(registration == null)
-        //     {
-        //         return RedirectToAction(nameof(Index));
-        //     }
-        //     try
-        //     {
-        //         _context.Registrations.Remove(registration);
-        //         await _context.SaveChangesAsync();
-        //         return RedirectToAction(nameof(Index));
-        //     }
-        //     catch(DbUpdateException /* ex */)
-        //     {
-        //         //Log the error (uncomment ex variable name and write a log.)
-        //         return RedirectToAction(nameof(Delete), new {id = id, saveChangesError = true});
-        //     }
-        // }
-#endregion User Registrations
-
-        // GET: Jobs/Details/5
-        // COPY AND PASTE THIS METHOD CUSTOMIZATION INTO OTHER CONTROLLERS.  
-        public IActionResult Details(int? ID)
         {
-            if (ID == null)
+            var user = _context.Users.Include(c => c.Registrations).FirstOrDefault(c => c.ID == RegistrationID);
+            foreach (var item in user.Registrations)
             {
-                return NotFound();
+                if (user!=null)
+                {
+                     _context.Entry(item).State = EntityState.Deleted; //delete items from the Join table(registrations).  
+                                 //_context.Entry(user).State = EntityState.Deleted; //delete the user //
+                    await _context.SaveChangesAsync();             
+                }               
             }
-            var job = _context.Jobs.Find(ID);
-            return View(job);
+            return RedirectToAction(nameof(UserAssignments), new{ID = RegistrationID});
         }
 
         /// <summary>
@@ -137,6 +136,19 @@ namespace Pitcher.Controllers
         /// <param name="ID"></param>
         /// <returns>The currently selected Job in memory</returns>
         public IActionResult UserAssignments(int? ID)
+        {
+            if (ID == null)
+            {
+                return NotFound();
+            }
+            var job = _context.Jobs.Find(ID);
+            return View(job);
+        }
+#endregion User Registrations
+
+        // GET: Jobs/Details/5
+        // COPY AND PASTE THIS METHOD CUSTOMIZATION INTO OTHER CONTROLLERS.  
+        public IActionResult Details(int? ID)
         {
             if (ID == null)
             {
