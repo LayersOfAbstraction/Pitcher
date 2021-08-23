@@ -88,19 +88,8 @@ namespace Pitcher.Controllers
         /// <returns>A list of users assigned to currently selected Job</returns>
         public IActionResult GetAssignedUsers()
         {
-            try
-            {
-                _context.Jobs.OrderByDescending(j => j.ID).FirstOrDefault();       
-                
-            }
-            
-            catch(DbUpdateException /* ex */)
-            {
-                //Log the error (uncomment ex variable name and write a log).
-                ModelState.AddModelError("", "Unable to save changes. " +
-                "Try again, and if the problem persists " +
-                "See your system administrator.");
-            }
+            _context.Jobs.OrderByDescending(j => j.ID).FirstOrDefault();       
+
             var userlist = _context.Users.Where(u => u.Registrations.Any());
             return Json(userlist);
         }
@@ -114,19 +103,15 @@ namespace Pitcher.Controllers
         /// <param name="RegistrationID"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> UnassignUserRegistration(int RegistrationID)
+        public async Task<IActionResult> UnassignUserRegistration(int UserID, int JobID)
         {
-            var user = _context.Users.Include(c => c.Registrations).FirstOrDefault(c => c.ID == RegistrationID);
-            foreach (var item in user.Registrations)
-            {
-                if (user!=null)
-                {
-                     _context.Entry(item).State = EntityState.Deleted; //delete items from the Join table(registrations).  
-                                 //_context.Entry(user).State = EntityState.Deleted; //delete the user //
-                    await _context.SaveChangesAsync();             
-                }               
-            }
-            return RedirectToAction(nameof(UserAssignments), new{ID = RegistrationID});
+            Registration registration = _context.Registrations.Single(c => c.UserID == UserID && c.JobID == JobID);     
+
+                        _context.Entry(registration).State = EntityState.Deleted; //delete items from the Join table(registrations).  
+                                    //_context.Entry(user).State = EntityState.Deleted; //delete the user //
+                        await _context.SaveChangesAsync();
+                             
+            return RedirectToAction(nameof(UserAssignments), new{ID = JobID});
         }
 
         /// <summary>
