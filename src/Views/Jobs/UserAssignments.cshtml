@@ -93,7 +93,7 @@
 @section scripts{
     <script src="~/js/jquery.dataTables.min.js"></script>
     <script>    
-    $.fn.dataTable.ext.errMode = 'throw';
+    $.fn.dataTable.ext.errMode = 'throw';    
     //Reveal table if button click successful.  
     document.getElementById('unassignedUsersTable').style.display = 'block'; 
     var id = @(Model == null ? 0 : Model.ID)
@@ -119,6 +119,7 @@
     });
 
     document.getElementById('registeredUsersTable').style.display = 'block';
+    
     $('#registeredUsersTable').DataTable({
         "ajax": {                 
         "url": "@Url.Action("GetAssignedUsers")",
@@ -133,7 +134,7 @@
         {
         "data": null,
         "render": function (value) {
-            return  '<a href="/Jobs/UnassignUserRegistration?RegistrationID=' + value.id + ' "button type="button" class="btn btn-primary btn-block">Unassign</a>';
+            return  '<a href="/Jobs/UnassignUserRegistration?UserID=' + value.id + '&JobID=' + id +' "button type="button" class="btn btn-primary btn-block">Unassign</a>';
         }
             }
         ]
