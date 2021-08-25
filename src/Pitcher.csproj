@@ -9,7 +9,7 @@
     <PackageReference Include="Auth0.AuthenticationApi" Version="7.7.0" />
     <PackageReference Include="Auth0.ManagementApi" Version="7.0.9" />
     <PackageReference Include="DataTables-Editor-Server" Version="1.9.5" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.9" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="5.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.0" />
