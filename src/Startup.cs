@@ -116,7 +116,7 @@ namespace Pitcher
                 .AddNewtonsoftJson(options =>
                     options.SerializerSettings.ContractResolver =
                         new CamelCasePropertyNamesContractResolver());
-                services.AddAccessTokenManagement(Configuration); //Adds 
+                services.AddAccessTokenManagement(Configuration); 
                 services.AddTransient<IUserService, UserService>();
         }
 
@@ -148,7 +148,9 @@ namespace Pitcher
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }
