@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace FileUpload.MVC.Models
+namespace Pitcher.Models
 {
     public abstract class FileModel
     {

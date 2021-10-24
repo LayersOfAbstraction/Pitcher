@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace FileUpload.MVC.Models
+namespace Pitcher.Models
 {
     public class FileOnFileSystemModel : FileModel
     {
