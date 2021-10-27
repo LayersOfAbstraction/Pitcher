@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -24,6 +26,63 @@ namespace Pitcher.Controllers
         {
             return View();
         }
+
+
+#region File System Upload functions
+        [HttpPost]
+        public async Task<IActionResult> UploadToFileSystem(List<IFormFile> files)
+        {
+            foreach (var file in files)
+            {
+                //Get the base Path, i.e, The Current Directory of the application + /Files/.
+                var basePath = Path.Combine(Directory.GetCurrentDirectory() + "\\Files\\");
+
+                //Checks if the base path directory exists, else creates it.
+                bool basePathExists = System.IO.Directory.Exists(basePath);
+                if (!basePathExists) Directory.CreateDirectory(basePath);
+                //Gets the file name without the extension.
+                var fileName = Path.GetFileNameWithoutExtension(file.FileName);
+                //Combines the base path with the file name.
+                var filePath = Path.Combine(basePath, file.FileName);
+                //If the file doesnt exist in the generated path, we use a filestream object, and create a new file, and then copy the contents to it.
+                var extension = Path.GetExtension(file.FileName);
+
+                if (!System.IO.File.Exists(filePath))
+                {
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await file.CopyToAsync(stream);
+                    }
+                    //Create a new Problem object with required values.
+                    var fileMode = new Problem
+                    {
+                        ProblemFileAttachments = filePath
+                    };
+                    //Inserts this model to the db via the context instance of efcore.
+                    _context.Add(fileMode);
+                    _context.SaveChanges();
+                }
+            }
+            //Loads all the File data to an object and sets a message in the TempData.
+            TempData["Message"] = "File successfully uploaded to File System.";
+            return RedirectToAction("Index");
+        }
+
+        public async Task<IActionResult> DeleteFileFromFileSystem(int id)
+        {
+
+            var file = await _context.Problems.Where(x => x.ID == id).FirstOrDefaultAsync();
+            if (file == null) return null;
+            if (System.IO.File.Exists(file.ProblemFileAttachments))
+            {
+                System.IO.File.Delete(file.ProblemFileAttachments);
+            }
+            _context.Remove(file);
+            _context.SaveChanges();
+            TempData["Message"] = $"Removed {file.ProblemFileAttachments} successfully from File System.";
+            return RedirectToAction("Index");
+        }
+#endregion File System Upload functions
 
         public IActionResult GetAllProblems()
         {
@@ -93,7 +152,8 @@ namespace Pitcher.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ID,ProblemTitle,ProblemDescription,ProblemStartDate,ProblemFileAttachments,ProblemSeverity,ProblemComplete")] Problem problem)
-        {
+        {      
+
             if (id != problem.ID)
             {
                 return NotFound();
@@ -146,6 +206,7 @@ namespace Pitcher.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var problem = await _context.Problems.FindAsync(id);
+
             _context.Problems.Remove(problem);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
