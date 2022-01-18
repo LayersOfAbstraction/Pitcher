@@ -25,7 +25,7 @@ namespace Pitcher
                 try
                 {
                     var context = services.GetRequiredService<TeamContext>();
-                    DbInitializer.Initialize(context);
+                    //DbInitializer.Initialize(context);
                 }
                 catch (Exception ex)
                 {
