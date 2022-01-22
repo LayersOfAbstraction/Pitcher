@@ -29,6 +29,7 @@ namespace Pitcher.Controllers
 
 
 #region File System Upload functions
+
         [HttpPost]
         public async Task<IActionResult> UploadToFileSystem(List<IFormFile> files)
         {
@@ -68,6 +69,19 @@ namespace Pitcher.Controllers
             return RedirectToAction("Index");
         }
 
+        public async Task<IActionResult> DownloadFileFromFileSystem(int id)
+        {
+
+            var file = await _context.Problems.Where(x => x.ID == id).FirstOrDefaultAsync();
+            if (file == null) return null;
+            var memory = new MemoryStream();
+            using (var stream = new FileStream(file.ProblemFileAttachments, FileMode.Open))
+            {
+                await stream.CopyToAsync(memory);
+            }
+            memory.Position = 0;
+            return File(memory, file.ProblemFileAttachments);
+        }
         public async Task<IActionResult> DeleteFileFromFileSystem(int id)
         {
 
