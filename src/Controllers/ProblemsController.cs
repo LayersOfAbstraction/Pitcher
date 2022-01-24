@@ -31,7 +31,7 @@ namespace Pitcher.Controllers
 #region File System Upload functions
 
         [HttpPost]
-        public async Task<IActionResult> UploadToFileSystem(List<IFormFile> files)
+        public async Task<IActionResult> UploadToFileSystem(List<IFormFile> files/*, int? id*/)
         {
             foreach (var file in files)
             {
@@ -55,12 +55,13 @@ namespace Pitcher.Controllers
                         await file.CopyToAsync(stream);
                     }
                     //Create a new Problem object with required values.
-                    var fileMode = new Problem
+                    //var problem = await _context.Problems.FindAsync(id);
+                    var problem = new Problem
                     {
                         ProblemFileAttachments = filePath
                     };
                     //Inserts this model to the db via the context instance of efcore.
-                    _context.Add(fileMode);
+                    _context.Problems.Add(problem);
                     _context.SaveChanges();
                 }
             }
@@ -167,6 +168,7 @@ namespace Pitcher.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ID,ProblemTitle,ProblemDescription,ProblemStartDate,ProblemFileAttachments,ProblemSeverity,ProblemComplete")] Problem problem)
         {      
+            List<IFormFile> iFormFile = new List<IFormFile>();
 
             if (id != problem.ID)
             {
@@ -176,9 +178,10 @@ namespace Pitcher.Controllers
             if (ModelState.IsValid)
             {
                 try
-                {
+                {                    
                     _context.Update(problem);
                     await _context.SaveChangesAsync();
+                    //await UploadToFileSystem(iFormFile, problem.ID);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
