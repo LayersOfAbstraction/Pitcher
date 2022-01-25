@@ -49,6 +49,6 @@ namespace Pitcher.Models
         public ICollection<Result> Result {get;set;}
 
         public ICollection<Chat> Chat {get;set;}
-        // public List<Problem> ProblemFileModel {get; set;}
+        //public List<Problem> ProblemFileModel {get; set;}
     }
 }
