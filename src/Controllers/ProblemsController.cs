@@ -31,7 +31,8 @@ namespace Pitcher.Controllers
 #region File System Upload functions
 
         [HttpPost]
-        public async Task<IActionResult> UploadToFileSystem(List<IFormFile> files/*, int? id*/)
+        public async Task<IActionResult> UploadToFileSystem(List<IFormFile> files, int? id, string title, 
+            string description, DateTime dateTime, int severity)
         {
             foreach (var file in files)
             {
@@ -55,12 +56,16 @@ namespace Pitcher.Controllers
                         await file.CopyToAsync(stream);
                     }
                     //Create a new Problem object with required values.
-                    //var problem = await _context.Problems.FindAsync(id);
-                    var problem = new Problem
+                    var problem = await _context.Problems.FindAsync(id);
+                    problem = new Problem
                     {
-                        ProblemFileAttachments = filePath
+                        ProblemFileAttachments = filePath,
+                        ProblemTitle = title,
+                        ProblemDescription = description,
+                        ProblemStartDate = dateTime,
+                        ProblemSeverity = severity
                     };
-                    //Inserts this model to the db via the context instance of efcore.
+                    //Inserts this model to the db via the context instance of EF Core.
                     _context.Problems.Add(problem);
                     _context.SaveChanges();
                 }
@@ -168,6 +173,7 @@ namespace Pitcher.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ID,ProblemTitle,ProblemDescription,ProblemStartDate,ProblemFileAttachments,ProblemSeverity,ProblemComplete")] Problem problem)
         {      
+            //Used for file attachment upload.
             List<IFormFile> iFormFile = new List<IFormFile>();
 
             if (id != problem.ID)
@@ -181,7 +187,9 @@ namespace Pitcher.Controllers
                 {                    
                     _context.Update(problem);
                     await _context.SaveChangesAsync();
-                    //await UploadToFileSystem(iFormFile, problem.ID);
+                    //Upload or update any attachments user inserted. 
+                    await UploadToFileSystem(iFormFile ,problem.ID, problem.ProblemTitle, problem.ProblemDescription,
+                        problem.ProblemStartDate, problem.ProblemSeverity);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
