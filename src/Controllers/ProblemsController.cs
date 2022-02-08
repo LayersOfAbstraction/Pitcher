@@ -171,10 +171,9 @@ namespace Pitcher.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,ProblemTitle,ProblemDescription,ProblemStartDate,ProblemFileAttachments,ProblemSeverity,ProblemComplete")] Problem problem)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,ProblemTitle,ProblemDescription,ProblemStartDate,ProblemFileAttachments,ProblemSeverity,ProblemComplete")] Problem problem, List<IFormFile> iFormFile)
         {      
             //Used for file attachment upload.
-            List<IFormFile> iFormFile = new List<IFormFile>();
 
             if (id != problem.ID)
             {
