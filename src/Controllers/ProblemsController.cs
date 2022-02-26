@@ -171,7 +171,7 @@ namespace Pitcher.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,ProblemTitle,ProblemDescription,ProblemStartDate,ProblemFileAttachments,ProblemSeverity,ProblemComplete")] Problem problem, List<IFormFile> iFormFile)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,ProblemTitle,ProblemDescription,ProblemStartDate,ProblemFileAttachments,ProblemSeverity,ProblemComplete")] Problem problem, ProblemInputModel probInputModel)
         {      
             //Used for file attachment upload.
 
@@ -187,7 +187,8 @@ namespace Pitcher.Controllers
                     _context.Update(problem);
                     await _context.SaveChangesAsync();
                     //Upload or update any attachments user inserted. 
-                    await UploadToFileSystem(iFormFile ,problem.ID, problem.ProblemTitle, problem.ProblemDescription,
+                    //NOTICE: I am using 
+                    await UploadToFileSystem(probInputModel.ProblemFileAttachments ,problem.ID, problem.ProblemTitle, problem.ProblemDescription,
                         problem.ProblemStartDate, problem.ProblemSeverity);
                 }
                 catch (DbUpdateConcurrencyException)
