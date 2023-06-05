@@ -3,7 +3,7 @@ Pitcher is a simple application that will allow your team to operate more effect
 
 # User Job System
 
-![User Job System](DemoImages/UserJobSystem.gif)
+<!-- ![User Job System](DemoImages/UserJobSystem.gif) -->
 
 
 Standard users that the admin creates can create problems about the project that admin has assigned them to do. Each job can have it's own chat feature that allows users assigned to problem to clarify the problem's cause and what needs to be done.

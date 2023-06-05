@@ -1,0 +1,63 @@
+@model Pitcher.Models.Registration
+@{
+    ViewData["Title"] = "Registrations";
+}   
+<h1>Registrations</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table id="registrationTable" >
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.RegistrationDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.User)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Job)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+@section scripts{ 
+    <script>    
+        $.fn.dataTable.ext.errMode = 'throw';
+        function renderDT_RowId (data) 
+        {                    
+          return data.replace( 'row_', '' );
+        };
+        var oTable = $('#registrationTable').DataTable({
+            "ajax": {
+                type: "POST",
+                "url": "@Url.Action("LeftJoinJobsAndUsersOntoRegistrations")"
+            },
+            "columns": [
+                { "data": "tblRegistration.registrationDate"},                
+                {
+                    "data": "userFullname",
+                    "render": function (data, type, row, meta) 
+                    {
+                        return `${row.tblUser.userFirstName} ${row.tblUser.userLastName}`
+                    }
+                },
+                { "data": "tblJob.jobTitle"},
+                {
+                    "data": null,
+                    "render": function (value) {
+                        return '<a href="/Registrations/Details/' + renderDT_RowId(value.dT_RowId) + '"button type="button" class="btn btn-primary btn-block">Details</a> <br> '
+                            
+                            + '<a href="/Registrations/Edit/' + renderDT_RowId(value.dT_RowId) + '"button type="button" class="btn btn-info btn-block">Edit </a> <br> ' 
+                            
+                            
+                            + '<a href="/Registrations/Delete/' + renderDT_RowId(value.dT_RowId) + '"button type="button" class="btn btn-primary btn-block">Delete</a>';
+                    }
+                }
+                ]
+        });
+    </script>
+}

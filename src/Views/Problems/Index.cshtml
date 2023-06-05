@@ -1,0 +1,100 @@
+
+@model Pitcher.Models.Problem
+@{
+    ViewData["Title"] = "Problems";
+}   
+<h1>Problems</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table id="problemTable" >
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProblemTitle)
+            </th>
+            <th>
+                <span style="white-space: pre-line">@Html.DisplayNameFor(model => model.ProblemDescription)</span>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProblemStartDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProblemFileAttachments)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProblemSeverity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProblemComplete)
+            </th>
+            <th>
+            </th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+@section scripts{ 
+    <script src="~/js/jquery.dataTables.min.js"></script>
+    <script>
+        $.fn.dataTable.ext.errMode = 'throw';
+        var oTable = $('#problemTable').DataTable({
+                "ajax": {
+                type: 'get',
+                'dataType': "json",
+                "url": "@Url.Action("GetAllProblems")",
+                "dataSrc": function (result) {
+                    return result;
+                    }
+                },
+            "columns": [
+                { "data": "id"},
+                { "data": "problemTitle"},
+                { "data": "problemDescription",
+                  render: $.fn.dataTable.render.text()
+                },
+                { "data": "problemStartDate"},
+                { "data": "problemFileAttachments"},
+                { "data": "problemSeverity",
+                    "render": function (data) {
+                        if (data == 1) {
+                            return "Very Low";
+                        } else if (data == 2) {
+                            return "Low";                            
+                        } else if (data == 3) {
+                            return "Medium";                            
+                        } else if (data == 4) {
+                            return "High";                            
+                        } else if (data == 5) {
+                            return "Very High";                            
+                        }                        
+                    }
+                },
+                {
+                    "data": "problemComplete",
+                    "render": function (data) {
+                        if (data) {
+                            return "Is Complete";
+                        } else {
+                            return "Not Complete";
+                        }
+                    }
+                },
+                {
+                    "data": null,
+                    "render": function (value) {
+                        return '<a href="/Problems/Details/' + value.id + '"button type="button" class="btn btn-primary btn-block">Details</a> <br> '
+                            
+                            + '<a href="/Problems/Edit/' + value.id + '"button type="button" class="btn btn-info btn-block">Edit </a> <br> ' 
+                            
+                            + '<a href="/Problems/Delete/' + value.id + '"button type="button" class="btn btn-primary btn-block">Delete</a>';
+                    }
+                }
+                ]
+        });
+    </script>
+}

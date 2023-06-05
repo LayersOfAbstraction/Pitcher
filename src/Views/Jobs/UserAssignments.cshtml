@@ -1,0 +1,143 @@
+@model Pitcher.Models.Job
+@{ 
+    var user = new User();
+}
+@{
+    ViewData["Title"] = "UserAssignments";
+}
+<div>
+    <h4>Job</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.JobTitle)
+        </dt>
+        <dd class = "col-sm-10"> 
+            @Html.DisplayFor(model => model.JobTitle)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.JobDescription)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.JobDescription)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.JobStartDate)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.JobStartDate)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.JobDeadline)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.JobDeadline)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.JobIsComplete)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.JobIsComplete)
+        </dd>
+    </dl>
+</div>
+<h3>Unassigned Users</h3>
+<table id="unassignedUsersTable" style='display: none'>
+<thead>
+        <tr>
+            <th>
+               @Html.DisplayNameFor(model => user.UserFirstName)
+            </th>        
+            <th>
+               @Html.DisplayNameFor(model => user.UserLastName)
+            </th>
+            <th>
+               @Html.DisplayNameFor(model => user.UserContactEmail)
+            </th>
+            <th>                
+            </th>
+        </tr>
+    </thead>
+    @if(user == null)
+    {
+         <script type="text/javascript">
+            alert("Model empty");
+        </script>        
+    }
+    else
+    {
+        <tbody></tbody>
+    }
+</table>
+
+<h3>Assigned Users</h3>
+<table id="registeredUsersTable" style="display: none">
+<thead>
+        <tr>
+                <th>
+                @Html.DisplayNameFor(model => user.UserFirstName)
+                </th>        
+                <th>
+                @Html.DisplayNameFor(model => user.UserLastName)
+                </th>
+                <th>
+                @Html.DisplayNameFor(model => user.UserContactEmail)
+                </th>
+            <th>                
+            </th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+@section scripts{
+    <script src="~/js/jquery.dataTables.min.js"></script>
+    <script>    
+    $.fn.dataTable.ext.errMode = 'throw';    
+    //Reveal table if button click successful.  
+    document.getElementById('unassignedUsersTable').style.display = 'block'; 
+    var id = @(Model == null ? 0 : Model.ID)
+    $('#unassignedUsersTable').DataTable({
+            "ajax": {
+            //Get users from UsersController.                  
+            "url": "@Url.Action("GetUnassignedUsers")",
+            "dataSrc": function (result) {
+                return result;
+                }
+            },            
+        "columns": [                
+            { "data": "userFirstName"},
+            { "data": "userLastName"},
+            { "data": "userContactEmail"},
+            {
+                "data": null,
+                "render": function (value) {
+                    return  '<a href="/Jobs/AssignUserRegistration?UserID=' + value.id + '&JobID=' + id +' "button type="button" class="btn btn-primary btn-block">Assign</a>';
+                }
+            }
+            ]
+    });
+
+    document.getElementById('registeredUsersTable').style.display = 'block';
+    
+    $('#registeredUsersTable').DataTable({
+        "ajax": {                 
+        "url": "@Url.Action("GetAssignedUsers")",
+        "dataSrc": function (result) {
+            return result;
+            }
+        },            
+        "columns": [                
+        { "data": "userFirstName"},
+        { "data": "userLastName"},
+        { "data": "userContactEmail"},
+        {
+        "data": null,
+        "render": function (value) {
+            return  '<a href="/Jobs/UnassignUserRegistration?UserID=' + value.id + '&JobID=' + id +' "button type="button" class="btn btn-primary btn-block">Unassign</a>';
+        }
+            }
+        ]
+    });
+    </script>
+}
