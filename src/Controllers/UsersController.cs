@@ -14,7 +14,7 @@ using Auth0.ManagementApi;
 using Auth0.ManagementApi.Models;
 using Auth0.ManagementApi.Paging;
 using Example.Auth0.AuthenticationApi.Services;
-
+using Auth0.AspNetCore.Authentication;
 
 namespace Pitcher.Controllers
 {
@@ -33,6 +33,9 @@ namespace Pitcher.Controllers
 
         public async Task Login(string returnUrl = "/")
         {
+            var authenticationProperties = new LoginAuthenticationPropertiesBuilder()
+                .WithRedirectUri(returnUrl)
+                .Build();
             await HttpContext.ChallengeAsync("Auth0", new AuthenticationProperties() {RedirectUri = returnUrl});
         }
 
