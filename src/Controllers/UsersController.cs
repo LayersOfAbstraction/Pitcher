@@ -25,7 +25,7 @@ namespace Pitcher.Controllers
         private readonly IUserService _userService;
         public IPagedList<Auth0.ManagementApi.Models.User> Users { get; private set; }
 
-        public UsersController(TeamContext context, /*Auth0Token auth0Token,*/ IUserService userService)
+        public UsersController(TeamContext context, IUserService userService)
         {
             _context = context;
             _userService = userService;
