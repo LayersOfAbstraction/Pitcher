@@ -35,9 +35,9 @@ So I realized I could have 2 images. One for development and one for production.
 
 So in a nutshell the both the development and production workflows could look roughly something like this. 
 
-
-
 ## Persisting data to storage in AWS
 
 You only need to then worry about how to manage the updated database schema changes pulled from ECS. Apparently
 [this link](https://stackoverflow.com/questions/65304031/what-is-the-easiest-way-to-download-a-file-out-of-an-ecs-container-to-local-mach)shows how we can do this in the AWS CLI. 
+
+![AWS development environment diagram](docs\AWS_SQL_Server_Container_Hosting_Strategy.md)
