@@ -1,11 +1,11 @@
 ---
 layout: post
-title:  "AWS_SQL_Server_CONTAINER_HOSTING_STRATEGY"
+title:  "My AWS SQL Server Container Hosting Strategy for 2023"
 date: "2023-09-27"
 published: false
 ---
 
-# AWS SQL Server container hosting and deployment strategy.
+# My AWS SQL Server Container Hosting Strategy For 2023.
 
 ## Introduction 
 
@@ -17,7 +17,7 @@ I want to centralize development in one place. Currently the docker image contai
 
 ## Initializing development
 
-Here's some advise the Bing AI gave me:
+Here's some advise the Bing AI gave me in terms of having a good developer workflow:
 
 > 1. Here’s a simple workflow:
 > 
@@ -25,6 +25,13 @@ Here's some advise the Bing AI gave me:
 > 
 > 3. Build Docker Image: Build a Docker image of your application.
 > 
-> 4. Push to Registry: Push this Docker image to a Docker registry. This could be Docker Hub, AWS ECR, or any other Docker-compatible registry.
+> 4. Push to Registry: AWS ECR, or any other Docker-compatible registry.
 
+Here's the rest upon further prompting
 
+> 5. Deploy on ECS: Use Amazon Elastic Container Service (ECS) to deploy your application from the Docker image stored in ECR in your environment.
+
+So I realized I could have 2 images. One for development and one for production.
+
+The only need to then worry about now is knowing how to have updated database schema changes pulled from ECS and how to manage it. Apparently
+[this link](https://stackoverflow.com/questions/65304031/what-is-the-easiest-way-to-download-a-file-out-of-an-ecs-container-to-local-mach)shows how we can do this in the AWS CLI.
