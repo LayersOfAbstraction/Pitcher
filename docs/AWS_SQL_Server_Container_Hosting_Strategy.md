@@ -7,6 +7,9 @@ published: false
 
 # A Minimal AWS Container Workflow
 
+![Picture of girl with lightbulb sign](<images/pexels-andrea-piacquadio-3758105 (1).jpg>)
+Photo by [Andrea Piacquadio](https://www.pexels.com/photo/woman-draw-a-light-bulb-in-white-board-3758105/) on Pexels
+
 ## Introduction 
 
 I wanted to use the AWS Elastic Container Registry as I thought I could use my container from there during development in the cloud and deploy later. 
