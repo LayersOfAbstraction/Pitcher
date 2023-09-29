@@ -11,7 +11,7 @@ published: false
 
 I wanted to use the AWS Elastic Container Registry as I thought I could use my container from there during development in the cloud and deploy later. 
 
-I need to migrate AWS. Why? I want to get out of my apartment to use this container so I can develop on my MacBook Air by day and develop on my home computer in the evening or if it was raining. So I want to develop on more than one machine without having to have 2 different containers on two different computers makes sense?
+I need to migrate to AWS. Why? I want to get out of my apartment to use this container so I can develop on my MacBook Air by day and develop on my home computer in the evening or if it was raining. So I want to develop on more than one machine without having to have 2 different containers on two different computers, makes sense?
 
 I want to centralize development in one place. Currently the docker image containing the database sits on my home computer.
 
@@ -84,3 +84,5 @@ And so the result would be like in this image.
 To recap, the process involves pushing the image to ECR, running the container in ECS, backing up the database to S3, and then downloading it to our local machine.
 
 7. We can then create a new image for production with a different version tag, push it to the same AWS ECR instance and then create a new instance for ECS and S3. It would be very similar to our development environment.
+
+What do you think about this strategy? Good workflow? Let me know in the comments.
