@@ -17,19 +17,21 @@ I want to centralize development in one place. Currently the docker image contai
 
 ## Initializing development
 
-Here's some advise the Bing AI gave me in terms of having a good developer workflow. I still had to make some edits to generalize things:
+Here's the breakdown of a workflow designed purely for basic low-cost development.
 
-> 1. Develop Locally: Develop your application on your local machine and containerize it using Docker.
-> 
-> 2. Build Docker Image: Build a Docker image of your application.
-> 
-> 3. Push to Registry: AWS ECR, or any other Docker-compatible registry.
+1. Develop Locally: Develop your application on your local machine and containerize it using Docker.
+ 
+2. Build Docker Image: Build a Docker image of your application.
+ 
+3. Push to Registry: AWS ECR, or any other Docker-compatible registry.
+
+ We need ECR with container images. If we just put the image on more basic cloud storage like EC2, we would have to do things like install docker on that instance and manually figure out what instance type we want to use.
 
 Here's the rest upon further prompting.
 
-> 4. Deploy on ECS: Use Amazon Elastic Container Service (ECS) to deploy your application from the Docker image stored in ECR in your environment.
+> 4. Deploy on ECS: Use Amazon Elastic Container Service (ECS) to deploy your application from the Docker image stored in Amazon Elastic Container Service in your environment.
 
-So I realized I could have 2 images. One for development and one for production.
+So I realized I could have 2 images. One for development and one for production. Just to be clear, ECR is for images only. We cannot push containers to ECR.
 
 So in a nutshell, both the development and production workflows could look roughly something like this diagram I made. 
 
@@ -37,7 +39,7 @@ So in a nutshell, both the development and production workflows could look rough
 
 So we have solved setting up the initial development environment to host our container. The problem this doesn't solve however is data persistance. AWS has [a great blog](https://docs.aws.amazon.com/AmazonECS/latest/bestpracticesguide/storage.html) about how it works with containers. 
 
-In a nutshell we cannot persist data into the container as containers have their own embedded writeable layer which gets destroyed when the container is terminated. 
+In a nutshell we cannot persist data into the container as containers have their own embedded writeable layer which gets destroyed when the container's state is terminated. 
 
 Which means we cannot save the container's data inside ECS. We have to store the container's data outside of it elsewhere in another service. We may need this in case we wish to update the database schema and preserve it's data.
 
@@ -55,7 +57,7 @@ It's apparently their best seller in terms of scalability, security and availabi
 
 You also set the desired storage classes for your S3 instance. So storage classes are basically there for whatever user case you may have. 
 
-So you could have classes for frequently accessed objects which would be more expensive like S3 Standard. And objects accessed infrequently would fall under classes like S3 One Zone-IA. 
+So you could have classes for frequently accessed objects in production which would be more expensive like S3 Standard. And objects accessed infrequently would fall under classes like S3 One Zone-IA. 
 
 AWS mention [here](https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html) that:
 
@@ -64,15 +66,21 @@ AWS mention [here](https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage
 I may make changes to my personal database schema.
 But I haven't updated my database in a long time so this section makes sense for me. 
 
-Of course in a real industry you would likely use a higher class of S3 and not this class even though it's the cheapest. Here's why.
+Of course in production you would likely use a higher class of S3 and not this class even though it's the cheapest. Here's why.
 
 > S3 One Zone-IA - Amazon S3 stores the object data in only one Availability Zone, which makes it less expensive than S3 Standard-IA. However, the data is not resilient to the physical loss of the Availability Zone resulting from disasters, such as earthquakes and floods.
 
 ## The completing workflow
 
-If we continue from our Initializing development heading we mentioned a workflow. We are now on step 5 of that workflow.
+If we continue from our **Initializing development** heading we mentioned a workflow. We are now on step 5 of that workflow.
 
-5. Now from ECS you can pour the container data into your S3 bucket. 
-6. From S3 you can pour the data to your local computer, manipulate the database schema, containerize it and begin the iteration again of uploading it to AWS Elastic Container Registry.
+5. Now from ECS you can export the container data into your S3 bucket. 
+6. From S3 you can export the data to your local computer, manipulate the database schema, containerize it in a new image and begin the iteration again of uploading it to AWS Elastic Container Registry until the development is complete.
 
-And so the result would be like this.
+And so the result would be like in this image. 
+
+![The complete AWS development workflow](../docs/images/AWS_diagram_for_initial_development_complete.png)
+
+To recap, the process involves pushing the image to ECR, running the container in ECS, backing up the database to S3, and then downloading it to our local machine.
+
+7. We can then create a new image for production with a different version tag, push it to the same AWS ECR instance and then create a new instance for ECS and S3. It would be very similar to our development environment.
