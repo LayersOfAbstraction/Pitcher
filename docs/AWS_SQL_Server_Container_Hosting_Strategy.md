@@ -1,11 +1,11 @@
 ---
 layout: post
-title:  "A Minimal AWS Container Hosting Strategy"
+title:  "A Minimal AWS Container Workflow"
 date: "2023-09-27"
 published: false
 ---
 
-# A Minimal AWS Container Hosting Strategy
+# A Minimal AWS Container Workflow
 
 ## Introduction 
 
