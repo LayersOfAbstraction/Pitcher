@@ -1,11 +1,11 @@
 ---
 layout: post
-title:  "My minimal AWS SQL Server Container Hosting Strategy for 2023"
+title:  "A Minimal AWS Container Hosting Strategy"
 date: "2023-09-27"
 published: false
 ---
 
-# My minimal AWS SQL Server Container Hosting Strategy For 2023.
+# A Minimal AWS Container Hosting Strategy
 
 ## Introduction 
 
