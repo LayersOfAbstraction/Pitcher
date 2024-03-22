@@ -187,7 +187,6 @@ namespace Pitcher.Controllers
                     _context.Update(problem);
                     await _context.SaveChangesAsync();
                     //Upload or update any attachments user inserted. 
-                    //NOTICE: I am using 
                     await UploadToFileSystem(probInputModel.ProblemFileAttachments ,problem.ID, problem.ProblemTitle, problem.ProblemDescription,
                         problem.ProblemStartDate, problem.ProblemSeverity);
                 }
